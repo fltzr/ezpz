@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN npm i -g npm@latest
 
-ARG USERNAME=node
+ARG USERNAME=ezpz
 ARG USER_UID=1000
 ARG USER_GID=${USER_UID}
 
