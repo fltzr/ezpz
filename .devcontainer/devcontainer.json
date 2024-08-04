@@ -1,0 +1,40 @@
+{
+  "name": "ezpz dev container",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "forwardPorts": [3000],
+  "containerEnv": {
+    "NODE_ENV": "development"
+  },
+  "remoteUser": "node",
+  "initializeCommand": "npm i",
+  "postCreateCommand": "npm run dev",
+  "postStartCommand": "echo 'Started ezpz dev container.'",
+  "shutdownAction": "stopContainer",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "editor.formatOnSave": true,
+        "prettier.requireConfig": true
+      },
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "github.vscode-pull-request-github"
+      ]
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:1": {}
+  },
+  "mounts": [
+    "source=/var/run/docker.sock, target=/var/run/docker.sock, type=bind"
+  ],
+  "remoteEnv": {
+    "GIT_COMMITTER_NAME": "fltzr"
+  }
+}
