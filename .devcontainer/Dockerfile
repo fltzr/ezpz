@@ -11,4 +11,17 @@ RUN apt-get update && apt-get install -y \
 
 RUN npm i -g npm@latest
 
-USER ezpz
+ARG USERNAME=ez
+ARG USER_UID=1005
+ARG USER_GID=${USER_UID}
+
+RUN if ! id -u $USERNAME > /dev/null 2>&; then \
+      groupadd --gid $USER_GID $USERNAME && \
+      useradd --gid $USER_GID --uid $USER_UID -m $USERNAME && \
+      apt-get update && apt-get install -y sudo && \
+      echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME && \
+      chmod 0400 /etc/sudoers.d/$USERNAME; \
+      else echo "User $USERNAME already exists."; \
+      fi
+
+USER ${USERNAME}
