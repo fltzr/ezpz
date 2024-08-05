@@ -8,6 +8,7 @@
   "containerEnv": {
     "NODE_ENV": "development"
   },
+  "remoteUser": "ez",
   "initializeCommand": "npm i",
   "postCreateCommand": "npm run dev",
   "postStartCommand": "echo 'Started ezpz dev container.'",
