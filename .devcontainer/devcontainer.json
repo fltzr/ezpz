@@ -4,7 +4,7 @@
     "dockerfile": "Dockerfile",
     "context": ".."
   },
-  "forwardPorts": [3000],
+  "forwardPorts": [5173],
   "containerEnv": {
     "NODE_ENV": "development"
   },
