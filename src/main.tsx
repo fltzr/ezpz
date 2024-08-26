@@ -1,9 +1,9 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { App } from './app/app';
+import { App } from './app';
 
 import '@cloudscape-design/global-styles/index.css';
-import './index.css';
+import './styles/index.scss';
 
 const root = document.querySelector('#app');
 
