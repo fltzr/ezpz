@@ -41,6 +41,7 @@ const getBudgetStatus = (amount: number, budget: number) => {
 export const createBudgetTableColumnDefinitions = (
   items: ReadonlyArray<BudgetTableItem>,
   actions: {
+    handleAddBudgetLineItem: (item: BudgetTableItem) => void;
     handleDeleteCategory: (item: BudgetTableItem) => void;
   }
 ): TableProps.ColumnDefinition<BudgetTableItem>[] => {
@@ -105,6 +106,7 @@ export const createBudgetTableColumnDefinitions = (
           items={item.parentId === null ? [
             { id: 'rename-category', text: 'Rename category', iconName: 'edit' },
             { id: 'delete-category', text: 'Delete category', iconName: 'delete-marker' },
+            { id: 'add-budget-line-item', text: 'Add budget line item', iconName: 'add-plus' }
           ] : [
             { id: 'edit', text: 'Edit', iconName: 'edit' },
             { id: 'delete', text: 'Delete', iconName: 'delete-marker' },
@@ -114,6 +116,9 @@ export const createBudgetTableColumnDefinitions = (
             switch (detail.id) {
               case 'delete-category':
                 actions.handleDeleteCategory(item);
+                break;
+              case 'add-budget-line-item':
+                actions.handleAddBudgetLineItem(item);
                 break;
               default:
                 break;
