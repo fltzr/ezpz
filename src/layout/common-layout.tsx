@@ -2,13 +2,13 @@ import { Outlet } from 'react-router-dom';
 import {
   AppLayout,
   BreadcrumbGroup,
-  Flashbar,
   SideNavigation,
 } from '@cloudscape-design/components';
 import I18nProvider from '@cloudscape-design/components/i18n';
 import messages from '@cloudscape-design/components/i18n/messages/all.en';
 
 import { GlobalHeader } from './header';
+import { Notifications } from '../common/components/notifications';
 
 const CommonLayout = () => {
   const breadcrumbs = [''];
@@ -20,7 +20,7 @@ const CommonLayout = () => {
       <div id="c">
         <AppLayout
           headerSelector="#h"
-          notifications={<Flashbar items={[]} />}
+          notifications={<Notifications />}
           breadcrumbs={breadcrumbs ? <BreadcrumbGroup items={[]} /> : undefined}
           navigation={<SideNavigation activeHref={activeHref} />}
           content={<Outlet />}
