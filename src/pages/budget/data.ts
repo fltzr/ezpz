@@ -2,7 +2,7 @@ export type BudgetTableItem = {
   id: string;
   name: string;
   amount?: number;
-  children?: BudgetTableItem[];
+  budget?: number;
   parentId: string | null;
 };
 
@@ -10,6 +10,7 @@ export default [
   {
     id: 'expenses',
     name: 'Expenses',
+    budget: 20000,
     parentId: null,
   },
   {
@@ -28,6 +29,7 @@ export default [
   {
     id: 'transportation',
     name: 'Transportation',
+    budget: 15000,
     parentId: null,
   },
   {
@@ -46,6 +48,7 @@ export default [
   {
     id: 'savings',
     name: 'Savings',
+    budget: 30000,
     parentId: null,
   },
   {
