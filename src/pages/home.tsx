@@ -2,7 +2,7 @@ import { SpaceBetween, Container } from '@cloudscape-design/components';
 
 const HomePage = () => {
   return (
-    <SpaceBetween size="xxl">
+    <SpaceBetween size='xxl'>
       <Container>Container!</Container>
     </SpaceBetween>
   );

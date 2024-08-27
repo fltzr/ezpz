@@ -15,11 +15,11 @@ const CommonLayout = () => {
   const activeHref = '';
 
   return (
-    <I18nProvider locale="en" messages={[messages]}>
+    <I18nProvider locale='en' messages={[messages]}>
       <GlobalHeader />
-      <div id="c">
+      <div id='c'>
         <AppLayout
-          headerSelector="#h"
+          headerSelector='#h'
           notifications={<Notifications />}
           breadcrumbs={breadcrumbs ? <BreadcrumbGroup items={[]} /> : undefined}
           navigation={<SideNavigation activeHref={activeHref} />}

@@ -11,11 +11,10 @@ const routes: RouteObject[] = [
     children: [
       {
         index: true,
-        lazy: () => import('./pages/budget'),
+        lazy: () => import('./pages/budget/view'),
       },
     ],
   },
 ];
 
-export const router: RouterProviderProps['router'] =
-  createBrowserRouter(routes);
+export const router: RouterProviderProps['router'] = createBrowserRouter(routes);
