@@ -28,7 +28,6 @@ import { EditBudgetItemModal } from './components/edit-budget-item-modal';
 
 const ViewBudgetPage = () => {
   let totalBudget = Number(localStorage.getItem('amount-to-budget')) ?? 0;
-
   const {
     data,
     isLoading,
@@ -93,7 +92,10 @@ const ViewBudgetPage = () => {
               <Header
                 variant='h1'
                 actions={
-                  <Button variant='primary' onClick={() => openModal('addCategory')}>
+                  <Button
+                    variant='primary'
+                    iconName='add-plus'
+                    onClick={() => openModal('addCategory')}>
                     Add category
                   </Button>
                 }>

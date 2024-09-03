@@ -8,7 +8,7 @@ export const useIncomeApi = () => {
   const queryClient = useQueryClient();
   const { addNotification } = useNotificationStore();
 
-  const { data, isLoading, error } = useQuery({
+  const { data, refetch, isLoading, error } = useQuery({
     queryKey: ['income-sources'],
     queryFn: api.fetchIncomeSources,
   });
@@ -44,11 +44,14 @@ export const useIncomeApi = () => {
     },
     onSuccess: (_, updatedIncomeSource) => {
       queryClient.refetchQueries({ queryKey: ['income-sources'] });
+      const data = queryClient.getQueryData<IncomeSource[]>(['income-sources']);
 
       addNotification({
         id: nanoid(5),
         type: 'success',
-        message: `Updated income source: ${updatedIncomeSource.income_source_name}`,
+        message: `Updated income source: ${
+          data?.find((source) => source.id === updatedIncomeSource.id)?.income_source_name
+        }`,
       });
     },
     onError: (error) => {
@@ -61,23 +64,25 @@ export const useIncomeApi = () => {
   });
 
   const deleteIncomeSourceMutation = useMutation({
-    mutationFn: async (incomeSource: IncomeSource) => {
-      await api.deleteIncomeSource(incomeSource.id);
+    mutationFn: async (incomeSources: IncomeSource[]) => {
+      await Promise.all(incomeSources.map((source) => api.deleteIncomeSource(source.id)));
     },
-    onSuccess: (_, deletedIncomeSource) => {
+    onSuccess: (_, deletedIncomeSources) => {
       queryClient.refetchQueries({ queryKey: ['income-sources'] });
 
       addNotification({
         id: nanoid(5),
         type: 'success',
-        message: `Deleted income source: ${deletedIncomeSource.income_source_name}`,
+        message: `Deleted ${deletedIncomeSources.length} income source${
+          deletedIncomeSources.length > 1 ? 's' : ''
+        }`,
       });
     },
     onError: (error) => {
       addNotification({
         id: nanoid(5),
         type: 'error',
-        message: `Failed to delete income source: ${error.message}`,
+        message: `Failed to delete income source(s): ${error.message}`,
       });
     },
   });
@@ -88,12 +93,13 @@ export const useIncomeApi = () => {
   const handleUpdateIncomeSource = (incomeSourceUpdates: IncomeSourceUpdate) => {
     updateIncomeSourceMutation.mutate(incomeSourceUpdates);
   };
-  const handleDeleteIncomeSource = (incomeSource: IncomeSource) => {
-    deleteIncomeSourceMutation.mutate(incomeSource);
+  const handleDeleteIncomeSource = (incomeSources: IncomeSource[]) => {
+    deleteIncomeSourceMutation.mutate(incomeSources);
   };
 
   return {
     data,
+    refetch,
     isLoading,
     error,
     handleAddIncomeSource,

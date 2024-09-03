@@ -1,7 +1,14 @@
 import { useState } from 'react';
 import type { BudgetItem, BudgetTableItem, Category } from '../utils/types';
 
-type ModalType = 'addCategory' | 'addBudgetItem' | 'editBudgetItem' | 'deleteItem';
+type ModalType =
+  | 'addIncomeSource'
+  | 'updateIncomeSource'
+  | 'deleteIncomeSource'
+  | 'addCategory'
+  | 'addBudgetItem'
+  | 'editBudgetItem'
+  | 'deleteItem';
 
 type ModalState = {
   type: ModalType | null;

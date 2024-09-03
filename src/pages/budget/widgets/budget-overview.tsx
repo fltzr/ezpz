@@ -1,23 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Container,
   Header,
-  Box,
-  Input,
-  Button,
   KeyValuePairs,
   SpaceBetween,
-  Spinner,
   StatusIndicator,
+  Table,
+  ExpandableSection,
+  ButtonDropdown,
+  Input,
 } from '@cloudscape-design/components';
 
 import { formatCurrency } from '../../../common/utils/format-currency';
 import { useBudgetApi } from '../hooks/use-budget-api';
-import { isBudgetItem } from '../utils/types';
-import { BudgetPercentageChart } from './budget-percentage-chart';
+import { IncomeSource, isBudgetItem } from '../utils/types';
+import { useIncomeApi } from '../hooks/use-income-api';
+import { useModals } from '../hooks/use-modals';
+import { AddIncomeSourceModal } from '../modals/add-income-source';
+import { DeleteIncomeSourceModal } from '../modals/delete-income-source';
 
-const getBudgetStatus = (amount: number, budget: number) => {
-  const difference = amount - budget;
+const getBudgetStatus = (amountSpent: number, budgetAmount?: number) => {
+  if (!budgetAmount) {
+    return <StatusIndicator type='warning'>No income set!</StatusIndicator>;
+  }
+
+  const difference = amountSpent - budgetAmount;
   const differenceFormatted = formatCurrency(Math.abs(difference));
 
   if (difference < 0)
@@ -32,83 +39,208 @@ const getBudgetStatus = (amount: number, budget: number) => {
 };
 
 export const BudgetOverview = () => {
-  const { data, isLoading } = useBudgetApi();
+  const [selectedItems, setSelectedItems] = useState<IncomeSource[]>([]);
+  const { modalState, openModal, closeModal } = useModals();
+  const { data } = useBudgetApi();
+  const {
+    data: incomeSources,
+    isLoading: loadingIncomeSources,
+    refetch,
+    handleAddIncomeSource,
+    handleUpdateIncomeSource,
+    handleDeleteIncomeSource,
+  } = useIncomeApi();
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [amountToBudget, setAmountToBudget] = useState(0);
-  const [newAmountToBudget, _setNewAmountToBudget] = useState(amountToBudget);
-
+  const amountToBudget = incomeSources?.reduce(
+    (acc, curr) => (acc = acc + curr.projected_amount),
+    0
+  );
   const amountSpent =
     data?.reduce(
       (acc, curr) => (isBudgetItem(curr) ? acc + curr.projected_amount : acc),
       0
     ) ?? 0;
 
-  useEffect(() => {
-    if (amountToBudget === 0) {
-      const amount = Number(localStorage.getItem('amount-to-budget') ?? 0);
-      setAmountToBudget(amount);
-    }
-  }, []);
-
   return (
-    <Container
-      fitHeight
-      header={<Header variant='h2'>Overview</Header>}
-      footer={
-        isEditing ? (
-          <Box float='right'>
-            <SpaceBetween direction='horizontal' size='m'>
-              <Button onClick={() => setIsEditing(false)}>Cancel</Button>
-              <Button
-                variant='primary'
-                disabled={newAmountToBudget === amountToBudget}
-                onClick={() => {
-                  setIsEditing(false);
+    <>
+      <Container fitHeight header={<Header variant='h2'>Overview</Header>}>
+        <SpaceBetween size='l'>
+          <KeyValuePairs
+            columns={3}
+            items={[
+              {
+                label: 'Amount to budget',
+                value: formatCurrency(amountToBudget),
+              },
+              { label: 'Amount spent', value: formatCurrency(amountSpent) },
+              {
+                label: 'Amount left',
+                value: getBudgetStatus(amountSpent, amountToBudget),
+              },
+            ]}
+          />
+          <ExpandableSection
+            defaultExpanded
+            disableContentPaddings
+            headerText='Income sources'
+            headerActions={
+              <ButtonDropdown
+                variant='normal'
+                items={[
+                  { id: 'add', text: 'Add income source', iconName: 'add-plus' },
+                  {
+                    id: 'update',
+                    text: 'Update',
+                    iconName: 'edit',
+                    disabled: selectedItems.length === 0 || selectedItems.length > 1,
+                    disabledReason:
+                      selectedItems.length > 1
+                        ? 'Multiple income sources are selected.'
+                        : 'No income sources are selected.',
+                  },
+                  {
+                    id: 'delete',
+                    text: `Delete ${
+                      selectedItems.length !== 0 ? `(${selectedItems.length})` : ''
+                    }`,
+                    iconName: 'delete-marker',
+                    disabled: selectedItems.length === 0,
+                    disabledReason:
+                      selectedItems.length > 1
+                        ? 'Multiple income sources are selected.'
+                        : 'No income sources are selected.',
+                  },
+                  {
+                    id: 'refresh',
+                    text: 'Refresh',
+                    iconName: 'refresh',
+                  },
+                ]}
+                onItemClick={(event) => {
+                  switch (event.detail.id) {
+                    case 'add':
+                      openModal('addIncomeSource');
+                      break;
+                    case 'delete':
+                      openModal('deleteIncomeSource');
+                      break;
+                    case 'refresh':
+                      refetch();
+                      break;
+                    default:
+                      break;
+                  }
                 }}>
-                Save
-              </Button>
-            </SpaceBetween>
-          </Box>
-        ) : undefined
-      }>
-      {isLoading ? (
-        <Spinner size='normal' />
-      ) : (
-        <>
-          {isEditing ? (
-            <Input
-              value={amountToBudget.toString()}
-              onChange={(e) => setAmountToBudget(Number(e.detail.value))}
-            />
-          ) : (
-            <KeyValuePairs
-              columns={3}
-              items={[
+                Actions
+              </ButtonDropdown>
+            }>
+            <Table
+              variant='full-page'
+              selectionType='multi'
+              loading={loadingIncomeSources}
+              items={incomeSources ?? []}
+              columnDefinitions={[
                 {
-                  label: 'Amount to budget',
-                  value: formatCurrency(amountToBudget),
-                  info: (
-                    <Button
-                      variant='inline-icon'
-                      disabled={isEditing || isLoading}
-                      iconName='edit'
-                      onClick={() => {
-                        setIsEditing(true);
-                      }}
-                    />
-                  ),
+                  id: 'name',
+                  header: 'Source',
+                  cell: (item) => item.income_source_name,
+                  editConfig: {
+                    editingCell: (item, ctx) => (
+                      <Input
+                        placeholder={
+                          item.income_source_name ?? 'e.g., Paycheck, Babysitting, Stocks'
+                        }
+                        value={ctx.currentValue ?? item.income_source_name}
+                        onChange={(event) => ctx.setValue(event.detail.value)}
+                      />
+                    ),
+                    validation: (item, value) => {
+                      if (value?.length < 1) {
+                        return 'Invalid income source name!';
+                      }
+
+                      if (item.income_source_name === value) {
+                        return 'Name must be different to update!';
+                      }
+
+                      return undefined;
+                    },
+                  },
                 },
-                { label: 'Amount spent', value: formatCurrency(amountSpent) },
                 {
-                  label: 'Amount left',
-                  value: getBudgetStatus(amountSpent, amountToBudget),
+                  id: 'projected_amount',
+                  header: 'Projected amount',
+                  cell: (item) => formatCurrency(item.projected_amount),
+                  editConfig: {
+                    editingCell: (item, ctx) => (
+                      <Input
+                        type='number'
+                        inputMode='decimal'
+                        placeholder={String(item.projected_amount) ?? 'Estimated income'}
+                        value={String(ctx.currentValue ?? item.projected_amount)}
+                        onChange={(event) => ctx.setValue(Number(event.detail.value))}
+                      />
+                    ),
+                    validation: (_, value: string) => {
+                      if (!value) return undefined;
+
+                      const isValidNumber = isFinite(Number(value));
+
+                      if (!isValidNumber) {
+                        return 'Invalid type.';
+                      }
+
+                      if (Number(value) < 0) {
+                        return 'Projected value must be a non-negative value!';
+                      }
+
+                      return undefined;
+                    },
+                  },
                 },
               ]}
+              selectedItems={selectedItems}
+              onSelectionChange={(event) => setSelectedItems(event.detail.selectedItems)}
+              submitEdit={(item, column, newValue) => {
+                type UpdateFields = Pick<
+                  IncomeSource,
+                  'income_source_name' | 'projected_amount'
+                >;
+                const updateField: Record<string, keyof UpdateFields> = {
+                  name: 'income_source_name',
+                  projected_amount: 'projected_amount',
+                };
+
+                handleUpdateIncomeSource({
+                  id: item.id,
+                  [updateField[column.id as string]]: newValue,
+                });
+              }}
+              empty={
+                incomeSources ? (
+                  <StatusIndicator type='info'>No matching items found!</StatusIndicator>
+                ) : (
+                  getBudgetStatus(0)
+                )
+              }
             />
-          )}
-        </>
-      )}
-    </Container>
+          </ExpandableSection>
+        </SpaceBetween>
+      </Container>
+      <AddIncomeSourceModal
+        visible={modalState.type === 'addIncomeSource'}
+        onClose={closeModal}
+        onAdd={handleAddIncomeSource}
+      />
+      <DeleteIncomeSourceModal
+        visible={modalState.type === 'deleteIncomeSource'}
+        items={selectedItems}
+        onClose={closeModal}
+        onDelete={(sources) => {
+          handleDeleteIncomeSource(sources);
+          setSelectedItems([]);
+        }}
+      />
+    </>
   );
 };
