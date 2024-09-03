@@ -1,6 +1,11 @@
 import type { Database } from '../../../supabase';
 
-export type incomeSource = Database['public'][''];
+export type IncomeSource = Database['public']['Tables']['income_sources']['Row'];
+export type IncomeSourceInsert = Omit<
+  Database['public']['Tables']['income_sources']['Insert'],
+  'id' | 'created_at'
+>;
+export type IncomeSourceUpdate = Database['public']['Tables']['income_sources']['Update'];
 
 export type Category = Database['public']['Tables']['categories']['Row'] & {
   total?: number;

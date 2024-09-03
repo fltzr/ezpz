@@ -62,19 +62,19 @@ export type Database = {
       income_sources: {
         Row: {
           created_at: string;
-          id: number;
+          id: string;
           income_source_name: string;
           projected_amount: number;
         };
         Insert: {
           created_at?: string;
-          id?: number;
+          id?: string;
           income_source_name: string;
           projected_amount: number;
         };
         Update: {
           created_at?: string;
-          id?: number;
+          id?: string;
           income_source_name?: string;
           projected_amount?: number;
         };
