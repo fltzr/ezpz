@@ -1,3 +1,9 @@
+@use '@cloudscape-design/design-tokens' as cs;
+
+body.awsui-dark-mode {
+  background-color: cs.$color-background-layout-main;
+}
+
 #app > #c {
   padding-top: 40px;
 }

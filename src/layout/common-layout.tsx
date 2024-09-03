@@ -19,10 +19,12 @@ const CommonLayout = () => {
       <GlobalHeader />
       <div id='c'>
         <AppLayout
+          stickyNotifications
           headerSelector='#h'
           notifications={<Notifications />}
           breadcrumbs={breadcrumbs ? <BreadcrumbGroup items={[]} /> : undefined}
           navigation={<SideNavigation activeHref={activeHref} />}
+          navigationOpen={false}
           content={<Outlet />}
         />
       </div>

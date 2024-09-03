@@ -1,78 +1,134 @@
 import { useCollection } from '@cloudscape-design/collection-hooks';
-import { Button, Header, Table } from '@cloudscape-design/components';
+import {
+  Button,
+  Container,
+  Grid,
+  Header,
+  SpaceBetween,
+  Table,
+} from '@cloudscape-design/components';
 
 import { useBudgetState } from './hooks/use-budget-state';
-import { useModals } from './hooks/use-modals';
 import { createBudgetTableColumnDefinitions } from './utils/table-configs';
-import type { BudgetTableItem } from './utils/data';
+import {
+  BudgetItem,
+  Category,
+  isCategoryItem,
+  type BudgetTableItem,
+} from './utils/types';
+import { ViewBudgetHeader } from './components/header';
+
+import { BudgetOverview } from './widgets/budget-overview';
+import { useModals } from './hooks/use-modals';
 import { AddCategoryModal } from './components/add-category-modal';
-import { DeleteCategoryModal } from './components/delete-category-modal';
+import { DeleteItemModal } from './components/delete-item-modal';
+import { AddBudgetItemModal } from './components/add-budget-item-modal';
+import { BudgetPercentageChart } from './widgets/budget-percentage-chart';
+import { EditBudgetItemModal } from './components/edit-budget-item-modal';
 
 const ViewBudgetPage = () => {
+  let totalBudget = Number(localStorage.getItem('amount-to-budget')) ?? 0;
+
   const {
     data,
-    categoryToDelete,
-    setCategoryToDelete,
-    // budgetLineItemToDelete,
-    // setBudgetLineItemToDelete,
+    isLoading,
+    // error,
     handleAddCategory,
-    handleAddBudgetLineItem,
-    handleSubmitEdit,
-    handleDeleteCategory,
-    // handleDeleteBudgetLineItem,
+    handleAddBudgetItem,
+    handleUpdateBudgetItem,
+    handleSubmitInlineEdit,
+    handleDeleteItem,
   } = useBudgetState();
 
-  const { modals, openModal, closeModal } = useModals();
-
-  const { items, collectionProps } = useCollection(data, {
+  const { items, collectionProps } = useCollection(data ?? [], {
     selection: {},
     sorting: {},
     expandableRows: {
-      getId: (item) => item.id,
-      getParentId: (item) => item.parentId,
+      getId: (item: BudgetTableItem) => item.id,
+      getParentId: (item: BudgetTableItem) =>
+        isCategoryItem(item) ? null : String(item.category_id),
     },
   });
 
+  const { modalState, openModal, closeModal } = useModals();
+
   return (
     <>
-      <Table
-        enableKeyboardNavigation
-        resizableColumns
-        variant='container'
-        selectionType='single'
-        items={items}
-        columnDefinitions={createBudgetTableColumnDefinitions(items, {
-          handleAddBudgetLineItem: (item: BudgetTableItem) =>
-            handleAddBudgetLineItem(item, ''),
-          handleDeleteCategory: (item: BudgetTableItem) => {
-            setCategoryToDelete(item);
-            openModal('deleteCategory')();
-          },
-        })}
-        submitEdit={handleSubmitEdit}
-        header={
-          <Header
-            variant='h1'
-            actions={
-              <Button variant='primary' onClick={() => openModal('addCategory')()}>
-                Add category
-              </Button>
-            }>
-            Budget
-          </Header>
-        }
-        {...collectionProps}
-      />
+      <SpaceBetween size='m'>
+        <ViewBudgetHeader />
+        <Grid
+          gridDefinition={[
+            { colspan: { l: 8, m: 8, default: 12 } },
+            { colspan: { l: 4, m: 4, default: 12 } },
+            { colspan: { l: 12, m: 12, default: 12 } },
+          ]}>
+          <BudgetOverview />
+          <Container>
+            <BudgetPercentageChart
+              isLoading={isLoading}
+              data={data}
+              totalBudget={totalBudget}
+            />
+          </Container>
+          <Table
+            enableKeyboardNavigation
+            loading={isLoading}
+            variant='container'
+            selectionType='single'
+            items={items}
+            submitEdit={handleSubmitInlineEdit}
+            columnDefinitions={createBudgetTableColumnDefinitions({
+              handleAddBudgetLineItem: (item: Category) => {
+                openModal('addBudgetItem', { category: item });
+              },
+              handleEditBudgetItem: (item) => {
+                openModal('editBudgetItem', { budgetItem: item });
+              },
+              handleDeleteItem: (item) => {
+                console.log(item);
+                openModal('deleteItem', { item });
+              },
+            })}
+            header={
+              <Header
+                variant='h1'
+                actions={
+                  <Button variant='primary' onClick={() => openModal('addCategory')}>
+                    Add category
+                  </Button>
+                }>
+                Budget
+              </Header>
+            }
+            {...collectionProps}
+          />
+        </Grid>
+      </SpaceBetween>
       <AddCategoryModal
-        visible={modals.addCategory}
-        onClose={closeModal('addCategory')}
+        visible={modalState.type === 'addCategory'}
+        onClose={closeModal}
         onAdd={handleAddCategory}
       />
-      <DeleteCategoryModal
-        category={categoryToDelete}
-        visible={modals.deleteCategory}
-        onClose={closeModal('deleteCategory')}
-        onDelete={handleDeleteCategory}
+      <AddBudgetItemModal
+        visible={modalState.type === 'addBudgetItem'}
+        onClose={closeModal}
+        onAdd={handleAddBudgetItem}
+        category={modalState.props?.category as Category}
+      />
+      <EditBudgetItemModal
+        visible={modalState.type === 'editBudgetItem'}
+        onClose={closeModal}
+        onEdit={handleUpdateBudgetItem}
+        item={modalState.props?.budgetItem as BudgetItem}
+      />
+      <DeleteItemModal
+        visible={modalState.type === 'deleteItem'}
+        onClose={closeModal}
+        onDelete={() => {
+          modalState.props?.item && handleDeleteItem(modalState.props.item);
+          closeModal();
+        }}
+        item={modalState.props?.item}
       />
     </>
   );

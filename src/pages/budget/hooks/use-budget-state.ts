@@ -1,95 +1,171 @@
-import { useState } from 'react';
 import { nanoid } from 'nanoid';
-import { TableProps } from '@cloudscape-design/components';
+import type { TableProps } from '@cloudscape-design/components';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNotificationStore } from '../../../common/state/notifications';
-import data, { type BudgetTableItem } from '../utils/data';
+import * as api from '../api/budget-queries';
 import { calculateCategoryTotals } from '../utils/table-configs';
+import {
+  type BudgetTableItem,
+  isCategoryItem,
+  isBudgetItem,
+  CategoryInsert,
+  BudgetItemInsert,
+  BudgetItemUpdate,
+} from '../utils/types';
 
 export const useBudgetState = () => {
-  const [syntheticData, setSyntheticData] = useState<ReadonlyArray<BudgetTableItem>>(
-    calculateCategoryTotals(data)
-  );
-  const [categoryToDelete, setCategoryToDelete] = useState<BudgetTableItem | null>(null);
-  const [budgetLineItemToDelete, setBudgetLineItemToDelete] =
-    useState<BudgetTableItem | null>(null);
-
+  const queryClient = useQueryClient();
   const { addNotification } = useNotificationStore();
 
-  const handleAddCategory = (category: BudgetTableItem) => {
-    setSyntheticData((prev) => [...prev, category]);
-    addNotification({
-      id: nanoid(5),
-      type: 'success',
-      message: `Added category: ${category.name}`,
-    });
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['budget-items'],
+    queryFn: api.fetchBudgetData,
+    select: calculateCategoryTotals,
+  });
+
+  const addCategoryMutation = useMutation({
+    mutationFn: api.addCategory,
+    onSuccess: (newCategory) => {
+      queryClient.setQueryData<BudgetTableItem[]>(['budget-items'], (old) =>
+        calculateCategoryTotals(old ? [...old, newCategory] : [newCategory])
+      );
+      addNotification({
+        id: nanoid(5),
+        type: 'success',
+        message: `Added category: ${newCategory.category_name}`,
+      });
+    },
+    onError: (error: Error) => {
+      addNotification({
+        id: nanoid(5),
+        type: 'error',
+        message: error.message,
+      });
+    },
+  });
+
+  const addBudgetItemMutation = useMutation({
+    mutationFn: api.addBudgetItem,
+    onSuccess: (newItem) => {
+      queryClient.setQueryData<BudgetTableItem[]>(['budget-items'], (old) => {
+        if (!old) return [newItem];
+        const updatedItems = [...old];
+        const categoryIndex = updatedItems.findIndex(
+          (item) => isCategoryItem(item) && item.id === newItem.category_id
+        );
+
+        if (categoryIndex !== -1) {
+          updatedItems.splice(categoryIndex + 1, 0, newItem);
+        } else {
+          updatedItems.push(newItem);
+        }
+
+        return calculateCategoryTotals(updatedItems);
+      });
+      addNotification({
+        id: nanoid(5),
+        type: 'success',
+        message: `Added budget item: ${newItem.budget_item_name}`,
+      });
+    },
+    onError: (error: Error) => {
+      addNotification({
+        id: nanoid(5),
+        type: 'error',
+        message: error.message,
+      });
+    },
+  });
+
+  const updateItemMutation = useMutation({
+    mutationFn: async (item: BudgetItemUpdate) => {
+      console.log(`updateItemMutation: `, item);
+      await api.updateBudgetItem(item.id!, {
+        budget_item_name: item.budget_item_name,
+        projected_amount: item.projected_amount,
+        category_id: item.category_id,
+      });
+    },
+    onSuccess: (_, updatedItem) => {
+      queryClient.refetchQueries({ queryKey: ['budget-items'] });
+
+      addNotification({
+        id: nanoid(5),
+        type: 'success',
+        message: `Updated budget item: ${updatedItem.budget_item_name}`,
+      });
+    },
+    onError: (error: Error) => {
+      addNotification({
+        id: nanoid(5),
+        type: 'error',
+        message: error.message,
+      });
+    },
+  });
+
+  const deleteItemMutation = useMutation({
+    mutationFn: async (item: BudgetTableItem) => {
+      if (isCategoryItem(item)) {
+        await api.deleteCategory(item.id);
+      } else if (isBudgetItem(item)) {
+        await api.deleteBudgetItem(item.id);
+      }
+    },
+    onSuccess: (_, deletedItem) => {
+      queryClient.refetchQueries({ queryKey: ['budget-items'] });
+
+      addNotification({
+        id: nanoid(5),
+        type: 'success',
+        message: `Deleted ${isCategoryItem(deletedItem) ? 'category' : 'budget item'}: ${
+          isCategoryItem(deletedItem)
+            ? deletedItem.category_name
+            : deletedItem.budget_item_name
+        }`,
+      });
+    },
+    onError: (error: Error) => {
+      addNotification({
+        id: nanoid(5),
+        type: 'error',
+        message: error.message,
+      });
+    },
+  });
+
+  const handleAddCategory = (category: CategoryInsert) => {
+    addCategoryMutation.mutate(category);
+  };
+  const handleAddBudgetItem = (item: BudgetItemInsert) => {
+    addBudgetItemMutation.mutate(item);
   };
 
-  const handleAddBudgetLineItem = (item: BudgetTableItem, categoryName: string) => {
-    if (!item.parentId) return;
-
-    const newItem = { ...item, id: nanoid(5), parentId: item.parentId ?? null };
-    setSyntheticData((prev) => [...prev, newItem]);
-    addNotification({
-      id: nanoid(5),
-      type: 'success',
-      message: `Added budget line item ${newItem.name} to ${categoryName}`,
-    });
+  const handleUpdateBudgetItem = (item: BudgetItemUpdate) => {
+    console.log('Updating budget item: ', item);
+    updateItemMutation.mutate(item);
   };
 
-  const handleSubmitEdit: TableProps.SubmitEditFunction<BudgetTableItem> = (
+  const handleSubmitInlineEdit: TableProps.SubmitEditFunction<BudgetTableItem> = (
     item,
     column,
     newValue
   ) => {
     const updatedItem = { ...item, [String(column.id)]: newValue };
-    setSyntheticData((prev) =>
-      prev.map((i) => (i.id === updatedItem.id ? updatedItem : i))
-    );
-    addNotification({
-      id: nanoid(5),
-      type: 'success',
-      message: `Updated budget line item ${updatedItem.name} to ${newValue}`,
-    });
+    updateItemMutation.mutate(updatedItem);
   };
-
-  const handleDeleteCategory = () => {
-    if (!categoryToDelete) return;
-
-    setSyntheticData((prev) =>
-      prev.filter((category) => category.id !== categoryToDelete.parentId)
-    );
-    addNotification({
-      id: nanoid(5),
-      type: 'success',
-      message: `Deleted category ${categoryToDelete.name}`,
-    });
-    setCategoryToDelete(null);
-  };
-
-  const handleDeleteBudgetLineItem = () => {
-    if (!budgetLineItemToDelete) return;
-
-    setSyntheticData((prev) =>
-      prev.filter((item) => item.id !== budgetLineItemToDelete.id)
-    );
-    addNotification({
-      id: nanoid(5),
-      type: 'success',
-      message: `Deleted budget line item ${budgetLineItemToDelete.name}`,
-    });
-    setBudgetLineItemToDelete(null);
+  const handleDeleteItem = (item: BudgetTableItem) => {
+    deleteItemMutation.mutate(item);
   };
 
   return {
-    data: syntheticData,
-    categoryToDelete,
-    setCategoryToDelete,
-    budgetLineItemToDelete,
-    setBudgetLineItemToDelete,
+    data,
+    isLoading,
+    error,
     handleAddCategory,
-    handleAddBudgetLineItem,
-    handleSubmitEdit,
-    handleDeleteCategory,
-    handleDeleteBudgetLineItem,
+    handleAddBudgetItem,
+    handleUpdateBudgetItem,
+    handleSubmitInlineEdit,
+    handleDeleteItem,
   };
 };

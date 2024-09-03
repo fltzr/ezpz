@@ -9,6 +9,7 @@ export const useTheme = () => {
 
   useEffect(() => {
     applyMode(theme);
+    document.body.classList.toggle('awsui-dark-mode', theme === Mode.Dark);
     localStorage.setItem('theme', theme);
   }, [theme]);
 

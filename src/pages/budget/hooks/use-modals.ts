@@ -1,16 +1,31 @@
 import { useState } from 'react';
+import type { BudgetItem, BudgetTableItem, Category } from '../utils/types';
+
+type ModalType = 'addCategory' | 'addBudgetItem' | 'editBudgetItem' | 'deleteItem';
+
+type ModalState = {
+  type: ModalType | null;
+  props?: {
+    item?: BudgetTableItem;
+    category?: Category;
+    budgetItem?: BudgetItem;
+  };
+};
 
 export const useModals = () => {
-  const [modals, setModals] = useState({
-    addCategory: false,
-    deleteCategory: false,
-    addBudgetLineItem: false,
-  });
+  const [modalState, setModalState] = useState<ModalState>({ type: null, props: {} });
 
-  const openModal = (modal: keyof typeof modals) => () =>
-    setModals((prev) => ({ ...prev, [modal]: true }));
-  const closeModal = (modal: keyof typeof modals) => () =>
-    setModals((prev) => ({ ...prev, [modal]: false }));
+  const openModal = (type: ModalType, props = {}) => {
+    setModalState({ type, props });
+  };
 
-  return { modals, openModal, closeModal };
+  const closeModal = () => {
+    setModalState({ type: null, props: {} });
+  };
+
+  return {
+    modalState,
+    openModal,
+    closeModal,
+  };
 };

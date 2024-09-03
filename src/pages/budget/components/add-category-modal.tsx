@@ -1,51 +1,100 @@
-import { useState } from 'react';
-import { nanoid } from 'nanoid';
-import { Box, Button, Input, Modal, SpaceBetween } from '@cloudscape-design/components';
-import { BudgetTableItem } from '../utils/data';
+import { useEffect, useRef } from 'react';
+import { Category } from '../utils/types';
+import { z } from 'zod';
+import {
+  Box,
+  Button,
+  Form,
+  FormField,
+  Input,
+  Modal,
+  SpaceBetween,
+} from '@cloudscape-design/components';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 type AddCategoryModalProps = {
   visible: boolean;
   onClose: () => void;
-  onAdd: (category: BudgetTableItem) => void;
+  onAdd: (category: Omit<Category, 'id' | 'created_at'>) => void;
 };
 
-export const AddCategoryModal = ({ visible, onClose, onAdd }: AddCategoryModalProps) => {
-  const [name, setName] = useState('');
-  const [budget, setBudget] = useState(0);
+const categorySchema = z.object({
+  category_name: z.string().min(1, 'Category name is required.'),
+});
 
-  const handleAdd = () => {
-    onAdd({ id: nanoid(5), name, budget, parentId: null });
+type CategorySchema = z.infer<typeof categorySchema>;
+
+export const AddCategoryModal = ({ visible, onClose, onAdd }: AddCategoryModalProps) => {
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<CategorySchema>({
+    resolver: zodResolver(categorySchema),
+    defaultValues: {
+      category_name: '',
+    },
+  });
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (visible && inputRef.current) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 0);
+    }
+  }, [visible]);
+
+  const handleOnClose = () => {
+    reset();
     onClose();
+  };
+
+  const handleOnSubmit = (data: CategorySchema) => {
+    onAdd(data);
+    handleOnClose();
   };
 
   return (
     <Modal
       visible={visible}
-      onDismiss={onClose}
+      onDismiss={handleOnClose}
       header='Add category'
       footer={
         <Box float='right'>
-          <SpaceBetween size='m' direction='horizontal'>
-            <Button onClick={onClose}>Cancel</Button>
-            <Button variant='primary' onClick={handleAdd}>
+          <SpaceBetween direction='horizontal' size='xs'>
+            <Button variant='link' onClick={handleOnClose}>
+              Cancel
+            </Button>
+            <Button variant='primary' onClick={() => handleSubmit(handleOnSubmit)()}>
               Add
             </Button>
           </SpaceBetween>
         </Box>
       }>
-      <SpaceBetween size='l' direction='vertical'>
-        <Input
-          placeholder='Category name'
-          value={name}
-          onChange={(e) => setName(e.detail.value)}
-        />
-        <Input
-          placeholder='Budget'
-          type='number'
-          value={budget.toString()}
-          onChange={(e) => setBudget(Number(e.detail.value))}
-        />
-      </SpaceBetween>
+      <Form>
+        <SpaceBetween direction='vertical' size='l'>
+          <Controller
+            control={control}
+            name='category_name'
+            render={({ field }) => (
+              <FormField label='Category name' errorText={errors.category_name?.message}>
+                <Input
+                  {...field}
+                  ref={inputRef}
+                  disableBrowserAutocorrect
+                  autoComplete={false}
+                  placeholder='e.g., Housing, Transportation, Savings'
+                  onChange={({ detail }) => field.onChange(detail.value)}
+                />
+              </FormField>
+            )}
+          />
+        </SpaceBetween>
+      </Form>
     </Modal>
   );
 };
