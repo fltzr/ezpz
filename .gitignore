@@ -1,3 +1,7 @@
+# Environment variables
+!.env.template
+.env
+
 # Logs
 logs
 *.log
