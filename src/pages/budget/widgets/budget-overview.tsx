@@ -12,7 +12,7 @@ import {
 } from '@cloudscape-design/components';
 
 import { formatCurrency } from '../../../common/utils/format-currency';
-import { useBudgetState } from '../hooks/use-budget-state';
+import { useBudgetApi } from '../hooks/use-budget-api';
 import { isBudgetItem } from '../utils/types';
 import { BudgetPercentageChart } from './budget-percentage-chart';
 
@@ -32,7 +32,7 @@ const getBudgetStatus = (amount: number, budget: number) => {
 };
 
 export const BudgetOverview = () => {
-  const { data, isLoading } = useBudgetState();
+  const { data, isLoading } = useBudgetApi();
 
   const [isEditing, setIsEditing] = useState(false);
   const [amountToBudget, setAmountToBudget] = useState(0);

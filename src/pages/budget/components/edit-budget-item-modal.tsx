@@ -19,7 +19,7 @@ import {
   type Category,
   isCategoryItem,
 } from '../utils/types';
-import { useBudgetState } from '../hooks/use-budget-state';
+import { useBudgetApi } from '../hooks/use-budget-api';
 
 type EditBudgetItemModalProps = {
   visible: boolean;
@@ -46,7 +46,7 @@ export const EditBudgetItemModal = ({
   onEdit,
   item,
 }: EditBudgetItemModalProps) => {
-  const { data } = useBudgetState();
+  const { data } = useBudgetApi();
   const categories = (data?.filter(isCategoryItem) as Category[]) ?? [];
 
   const {
@@ -195,7 +195,7 @@ export const EditBudgetItemModal = ({
 //   item,
 // }: EditBudgetItemModalProps) => {
 //   const visibleAndItemPresent = !!(visible && item);
-//   const { data } = useBudgetState();
+//   const { data } = useBudgetApi();
 //   const categories = (data?.filter(isCategoryItem) as Category[]) ?? [];
 
 //   const {

@@ -13,7 +13,7 @@ import {
   BudgetItemUpdate,
 } from '../utils/types';
 
-export const useBudgetState = () => {
+export const useBudgetApi = () => {
   const queryClient = useQueryClient();
   const { addNotification } = useNotificationStore();
 

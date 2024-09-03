@@ -8,7 +8,7 @@ import {
   Table,
 } from '@cloudscape-design/components';
 
-import { useBudgetState } from './hooks/use-budget-state';
+import { useBudgetApi } from './hooks/use-budget-api';
 import { createBudgetTableColumnDefinitions } from './utils/table-configs';
 import {
   BudgetItem,
@@ -38,7 +38,7 @@ const ViewBudgetPage = () => {
     handleUpdateBudgetItem,
     handleSubmitInlineEdit,
     handleDeleteItem,
-  } = useBudgetState();
+  } = useBudgetApi();
 
   const { items, collectionProps } = useCollection(data ?? [], {
     selection: {},
