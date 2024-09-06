@@ -1,22 +1,29 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import * as api from '../api/income';
-import { useNotificationStore } from '../../../common/state/notifications';
-import { IncomeSource, IncomeSourceInsert, IncomeSourceUpdate } from '../utils/types';
 import { nanoid } from 'nanoid';
+import { useSupabase } from '../../../common/hooks/use-supabase';
+import * as api from '../api/income';
+import type {
+  IncomeSource,
+  IncomeSourceInsert,
+  IncomeSourceUpdate,
+} from '../utils/types';
+import { useNotificationStore } from '../../../common/state/notifications';
 
-export const useIncomeApi = () => {
+export const useIncomeApi = (userId: string) => {
+  const supabase = useSupabase();
   const queryClient = useQueryClient();
   const { addNotification } = useNotificationStore();
 
   const { data, refetch, isLoading, error } = useQuery({
-    queryKey: ['income-sources'],
-    queryFn: api.fetchIncomeSources,
+    queryKey: ['income-sources', userId],
+    queryFn: () => api.fetchIncomeSources(supabase, userId),
+    enabled: !!userId,
   });
-
   const addIncomeSourceMutation = useMutation({
-    mutationFn: api.addIncomeSource,
+    mutationFn: (newIncomeSource: IncomeSourceInsert) =>
+      api.addIncomeSource(supabase, { ...newIncomeSource, user_id: userId }),
     onSuccess: (newIncomeSource) => {
-      queryClient.setQueryData<IncomeSource[]>(['income-sources'], (old) =>
+      queryClient.setQueryData<IncomeSource[]>(['income-sources', userId], (old) =>
         old ? [...old, newIncomeSource] : [newIncomeSource]
       );
 
@@ -37,13 +44,13 @@ export const useIncomeApi = () => {
 
   const updateIncomeSourceMutation = useMutation({
     mutationFn: async (incomeSource: IncomeSourceUpdate) => {
-      await api.updateIncomeSource(incomeSource.id!, {
+      await api.updateIncomeSource(supabase, incomeSource.id!, {
         income_source_name: incomeSource.income_source_name,
         projected_amount: incomeSource.projected_amount,
       });
     },
     onSuccess: (_, updatedIncomeSource) => {
-      queryClient.refetchQueries({ queryKey: ['income-sources'] });
+      queryClient.refetchQueries({ queryKey: ['income-sources', userId] });
       const data = queryClient.getQueryData<IncomeSource[]>(['income-sources']);
 
       addNotification({
@@ -65,10 +72,12 @@ export const useIncomeApi = () => {
 
   const deleteIncomeSourceMutation = useMutation({
     mutationFn: async (incomeSources: IncomeSource[]) => {
-      await Promise.all(incomeSources.map((source) => api.deleteIncomeSource(source.id)));
+      await Promise.all(
+        incomeSources.map((source) => api.deleteIncomeSource(supabase, source.id))
+      );
     },
     onSuccess: (_, deletedIncomeSources) => {
-      queryClient.refetchQueries({ queryKey: ['income-sources'] });
+      queryClient.refetchQueries({ queryKey: ['income-sources', userId] });
 
       addNotification({
         id: nanoid(5),

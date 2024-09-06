@@ -1,32 +1,35 @@
 import { nanoid } from 'nanoid';
 import type { TableProps } from '@cloudscape-design/components';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+import { useSupabase } from '../../../common/hooks/use-supabase';
 import { useNotificationStore } from '../../../common/state/notifications';
 import * as api from '../api/budget-queries';
 import { calculateCategoryTotals } from '../utils/table-configs';
 import {
   type BudgetTableItem,
+  type CategoryInsert,
+  type BudgetItemInsert,
+  type BudgetItemUpdate,
   isCategoryItem,
   isBudgetItem,
-  CategoryInsert,
-  BudgetItemInsert,
-  BudgetItemUpdate,
 } from '../utils/types';
 
-export const useBudgetApi = () => {
+export const useBudgetApi = (userId: string) => {
+  const supabase = useSupabase();
   const queryClient = useQueryClient();
   const { addNotification } = useNotificationStore();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['budget-items'],
-    queryFn: api.fetchBudgetData,
+    queryKey: ['budget-items', userId],
+    queryFn: () => api.fetchBudgetData(supabase, userId),
+    enabled: !!userId,
     select: calculateCategoryTotals,
   });
-
   const addCategoryMutation = useMutation({
-    mutationFn: api.addCategory,
+    mutationFn: (newCategory: CategoryInsert) => api.addCategory(supabase, newCategory),
     onSuccess: (newCategory) => {
-      queryClient.setQueryData<BudgetTableItem[]>(['budget-items'], (old) =>
+      queryClient.setQueryData<BudgetTableItem[]>(['budget-items', userId], (old) =>
         calculateCategoryTotals(old ? [...old, newCategory] : [newCategory])
       );
       addNotification({
@@ -43,11 +46,10 @@ export const useBudgetApi = () => {
       });
     },
   });
-
   const addBudgetItemMutation = useMutation({
-    mutationFn: api.addBudgetItem,
+    mutationFn: (item: BudgetItemInsert) => api.addBudgetItem(supabase, item),
     onSuccess: (newItem) => {
-      queryClient.setQueryData<BudgetTableItem[]>(['budget-items'], (old) => {
+      queryClient.setQueryData<BudgetTableItem[]>(['budget-items', userId], (old) => {
         if (!old) return [newItem];
         const updatedItems = [...old];
         const categoryIndex = updatedItems.findIndex(
@@ -79,15 +81,14 @@ export const useBudgetApi = () => {
 
   const updateItemMutation = useMutation({
     mutationFn: async (item: BudgetItemUpdate) => {
-      console.log(`updateItemMutation: `, item);
-      await api.updateBudgetItem(item.id!, {
+      await api.updateBudgetItem(supabase, item.id!, {
         budget_item_name: item.budget_item_name,
         projected_amount: item.projected_amount,
         category_id: item.category_id,
       });
     },
     onSuccess: (_, updatedItem) => {
-      queryClient.refetchQueries({ queryKey: ['budget-items'] });
+      queryClient.refetchQueries({ queryKey: ['budget-items', userId] });
 
       addNotification({
         id: nanoid(5),
@@ -107,13 +108,13 @@ export const useBudgetApi = () => {
   const deleteItemMutation = useMutation({
     mutationFn: async (item: BudgetTableItem) => {
       if (isCategoryItem(item)) {
-        await api.deleteCategory(item.id);
+        await api.deleteCategory(supabase, item.id);
       } else if (isBudgetItem(item)) {
-        await api.deleteBudgetItem(item.id);
+        await api.deleteBudgetItem(supabase, item.id);
       }
     },
     onSuccess: (_, deletedItem) => {
-      queryClient.refetchQueries({ queryKey: ['budget-items'] });
+      queryClient.refetchQueries({ queryKey: ['budget-items', userId] });
 
       addNotification({
         id: nanoid(5),

@@ -6,18 +6,22 @@ import { useTheme } from './common/hooks/use-theme';
 import { Box, Header, Modal, StatusIndicator } from '@cloudscape-design/components';
 import { SupabaseProvider } from './common/hooks/use-supabase';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AuthProvider } from './auth/components/auth-provider';
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60 * 5, // 5 minutes
       gcTime: 1000 * 60 * 30, // 30 minutes
+      refetchOnWindowFocus: false,
+      retry: false,
     },
   },
 });
 
 export const App = () => {
   const [initialPopup, setInitialPopup] = useState(false);
+
   useTheme();
 
   useEffect(() => {
@@ -32,17 +36,19 @@ export const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <SupabaseProvider>
-        <RouterProvider router={router} />
-        <Modal
-          visible={initialPopup}
-          onDismiss={() => setInitialPopup(false)}
-          header={<Header variant='h1'>Coucou beautiful bABY</Header>}>
-          I{' '}
-          <Box variant='span'>
-            <StatusIndicator type='success'>LOVE</StatusIndicator>
-          </Box>{' '}
-          you!!!!!!!!
-        </Modal>
+        <AuthProvider>
+          <RouterProvider router={router} />
+          <Modal
+            visible={initialPopup}
+            onDismiss={() => setInitialPopup(false)}
+            header={<Header variant='h1'>Coucou beautiful bABY</Header>}>
+            I{' '}
+            <Box variant='span'>
+              <StatusIndicator type='success'>LOVE</StatusIndicator>
+            </Box>{' '}
+            you!!!!!!!!
+          </Modal>
+        </AuthProvider>
       </SupabaseProvider>
     </QueryClientProvider>
   );

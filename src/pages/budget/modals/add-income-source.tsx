@@ -18,6 +18,7 @@ type AddIncomeSourceModalProps = {
   visible: boolean;
   onAdd: (IncomeSource: IncomeSourceInsert) => void;
   onClose: () => void;
+  userId: string;
 };
 
 const addIncomeSourceSchema = z.object({
@@ -33,6 +34,7 @@ export const AddIncomeSourceModal = ({
   visible,
   onAdd,
   onClose,
+  userId,
 }: AddIncomeSourceModalProps) => {
   const {
     control,
@@ -56,7 +58,7 @@ export const AddIncomeSourceModal = ({
   };
 
   const handleOnSubmit = (data: AddIncomeSourceSchema) => {
-    onAdd(data);
+    onAdd({ ...data, user_id: userId });
     handleOnClose();
   };
 

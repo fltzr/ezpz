@@ -17,6 +17,7 @@ type AddCategoryModalProps = {
   visible: boolean;
   onClose: () => void;
   onAdd: (category: Omit<Category, 'id' | 'created_at'>) => void;
+  userId: string;
 };
 
 const categorySchema = z.object({
@@ -25,7 +26,12 @@ const categorySchema = z.object({
 
 type CategorySchema = z.infer<typeof categorySchema>;
 
-export const AddCategoryModal = ({ visible, onClose, onAdd }: AddCategoryModalProps) => {
+export const AddCategoryModal = ({
+  visible,
+  onClose,
+  onAdd,
+  userId,
+}: AddCategoryModalProps) => {
   const {
     control,
     handleSubmit,
@@ -54,7 +60,7 @@ export const AddCategoryModal = ({ visible, onClose, onAdd }: AddCategoryModalPr
   };
 
   const handleOnSubmit = (data: CategorySchema) => {
-    onAdd(data);
+    onAdd({ ...data, user_id: userId });
     handleOnClose();
   };
 

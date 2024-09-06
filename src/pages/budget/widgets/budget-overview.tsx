@@ -38,10 +38,10 @@ const getBudgetStatus = (amountSpent: number, budgetAmount?: number) => {
   return <StatusIndicator type='info'>On budget</StatusIndicator>;
 };
 
-export const BudgetOverview = () => {
+export const BudgetOverview = ({ userId }: { userId: string }) => {
   const [selectedItems, setSelectedItems] = useState<IncomeSource[]>([]);
   const { modalState, openModal, closeModal } = useModals();
-  const { data } = useBudgetApi();
+  const { data } = useBudgetApi(userId);
   const {
     data: incomeSources,
     isLoading: loadingIncomeSources,
@@ -49,7 +49,7 @@ export const BudgetOverview = () => {
     handleAddIncomeSource,
     handleUpdateIncomeSource,
     handleDeleteIncomeSource,
-  } = useIncomeApi();
+  } = useIncomeApi(userId);
 
   const amountToBudget = incomeSources?.reduce(
     (acc, curr) => (acc = acc + curr.projected_amount),
@@ -218,7 +218,7 @@ export const BudgetOverview = () => {
               }}
               empty={
                 incomeSources ? (
-                  <StatusIndicator type='info'>No matching items found!</StatusIndicator>
+                  <StatusIndicator type='info'>No income sources added!</StatusIndicator>
                 ) : (
                   getBudgetStatus(0)
                 )
@@ -231,6 +231,7 @@ export const BudgetOverview = () => {
         visible={modalState.type === 'addIncomeSource'}
         onClose={closeModal}
         onAdd={handleAddIncomeSource}
+        userId={userId}
       />
       <DeleteIncomeSourceModal
         visible={modalState.type === 'deleteIncomeSource'}

@@ -26,6 +26,7 @@ type EditBudgetItemModalProps = {
   onClose: () => void;
   onEdit: (item: BudgetItemUpdate) => void;
   item: BudgetItem;
+  userId: string;
 };
 
 const budgetItemSchema = z.object({
@@ -45,8 +46,9 @@ export const EditBudgetItemModal = ({
   onClose,
   onEdit,
   item,
+  userId,
 }: EditBudgetItemModalProps) => {
-  const { data } = useBudgetApi();
+  const { data } = useBudgetApi(userId);
   const categories = (data?.filter(isCategoryItem) as Category[]) ?? [];
 
   const {

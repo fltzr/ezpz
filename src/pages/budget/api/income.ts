@@ -1,15 +1,24 @@
-import { supabase } from '../../../lib/supabase';
+import { useSupabase } from '../../../common/hooks/use-supabase';
 import { IncomeSourceInsert, IncomeSourceUpdate } from '../utils/types';
 
-export const fetchIncomeSources = async () => {
-  const { data, error } = await supabase.from('income_sources').select('*');
+export const fetchIncomeSources = async (
+  supabase: ReturnType<typeof useSupabase>,
+  userId: string
+) => {
+  const { data, error } = await supabase
+    .from('income_sources')
+    .select('*')
+    .eq('user_id', userId);
 
   if (error) throw new Error(`Failed to fetch income sources: ${error.message}`);
 
   return data;
 };
 
-export const addIncomeSource = async (newIncomeSource: IncomeSourceInsert) => {
+export const addIncomeSource = async (
+  supabase: ReturnType<typeof useSupabase>,
+  newIncomeSource: IncomeSourceInsert
+) => {
   const { data, error } = await supabase
     .from('income_sources')
     .insert(newIncomeSource)
@@ -21,13 +30,20 @@ export const addIncomeSource = async (newIncomeSource: IncomeSourceInsert) => {
   return data;
 };
 
-export const updateIncomeSource = async (id: string, updates: IncomeSourceUpdate) => {
+export const updateIncomeSource = async (
+  supabase: ReturnType<typeof useSupabase>,
+  id: string,
+  updates: IncomeSourceUpdate
+) => {
   const { error } = await supabase.from('income_sources').update(updates).eq('id', id);
 
   if (error) throw new Error(`Failed to update income source: ${error.message}`);
 };
 
-export const deleteIncomeSource = async (id: string) => {
+export const deleteIncomeSource = async (
+  supabase: ReturnType<typeof useSupabase>,
+  id: string
+) => {
   const { error } = await supabase.from('income_sources').delete().eq('id', id);
 
   if (error) throw new Error(`Failed to delete income source: ${error.message}`);

@@ -5,6 +5,7 @@ import {
   Grid,
   Header,
   SpaceBetween,
+  StatusIndicator,
   Table,
 } from '@cloudscape-design/components';
 
@@ -16,7 +17,6 @@ import {
   isCategoryItem,
   type BudgetTableItem,
 } from './utils/types';
-import { ViewBudgetHeader } from './components/header';
 
 import { BudgetOverview } from './widgets/budget-overview';
 import { useModals } from './hooks/use-modals';
@@ -25,19 +25,23 @@ import { DeleteItemModal } from './components/delete-item-modal';
 import { AddBudgetItemModal } from './components/add-budget-item-modal';
 import { BudgetPercentageChart } from './widgets/budget-percentage-chart';
 import { EditBudgetItemModal } from './components/edit-budget-item-modal';
+import { useIncomeApi } from './hooks/use-income-api';
+import { PropsWithChildren } from 'react';
 
-const ViewBudgetPage = () => {
-  let totalBudget = Number(localStorage.getItem('amount-to-budget')) ?? 0;
+export const ViewBudgetPage = ({
+  userId,
+  children,
+}: { userId: string } & PropsWithChildren) => {
+  const { data: incomeSources } = useIncomeApi(userId);
   const {
     data,
     isLoading,
-    // error,
     handleAddCategory,
     handleAddBudgetItem,
     handleUpdateBudgetItem,
     handleSubmitInlineEdit,
     handleDeleteItem,
-  } = useBudgetApi();
+  } = useBudgetApi(userId);
 
   const { items, collectionProps } = useCollection(data ?? [], {
     selection: {},
@@ -51,22 +55,27 @@ const ViewBudgetPage = () => {
 
   const { modalState, openModal, closeModal } = useModals();
 
+  const amountToBudget = incomeSources?.reduce(
+    (acc, curr) => acc + curr.projected_amount,
+    0
+  );
+
   return (
     <>
       <SpaceBetween size='m'>
-        <ViewBudgetHeader />
+        {children}
         <Grid
           gridDefinition={[
             { colspan: { l: 8, m: 8, default: 12 } },
             { colspan: { l: 4, m: 4, default: 12 } },
             { colspan: { l: 12, m: 12, default: 12 } },
           ]}>
-          <BudgetOverview />
+          <BudgetOverview userId={userId} />
           <Container>
             <BudgetPercentageChart
               isLoading={isLoading}
               data={data}
-              totalBudget={totalBudget}
+              totalBudget={amountToBudget}
             />
           </Container>
           <Table
@@ -74,7 +83,7 @@ const ViewBudgetPage = () => {
             loading={isLoading}
             variant='container'
             selectionType='single'
-            items={items}
+            items={items ?? []}
             submitEdit={handleSubmitInlineEdit}
             columnDefinitions={createBudgetTableColumnDefinitions({
               handleAddBudgetLineItem: (item: Category) => {
@@ -102,6 +111,7 @@ const ViewBudgetPage = () => {
                 Budget
               </Header>
             }
+            empty={<StatusIndicator type='info'>No budget items added!</StatusIndicator>}
             {...collectionProps}
           />
         </Grid>
@@ -110,18 +120,21 @@ const ViewBudgetPage = () => {
         visible={modalState.type === 'addCategory'}
         onClose={closeModal}
         onAdd={handleAddCategory}
+        userId={userId}
       />
       <AddBudgetItemModal
         visible={modalState.type === 'addBudgetItem'}
         onClose={closeModal}
         onAdd={handleAddBudgetItem}
         category={modalState.props?.category as Category}
+        userId={userId}
       />
       <EditBudgetItemModal
         visible={modalState.type === 'editBudgetItem'}
         onClose={closeModal}
         onEdit={handleUpdateBudgetItem}
         item={modalState.props?.budgetItem as BudgetItem}
+        userId={userId}
       />
       <DeleteItemModal
         visible={modalState.type === 'deleteItem'}
@@ -135,5 +148,3 @@ const ViewBudgetPage = () => {
     </>
   );
 };
-
-export const Component = ViewBudgetPage;

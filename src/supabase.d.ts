@@ -16,6 +16,7 @@ export type Database = {
           created_at: string;
           id: string;
           projected_amount: number;
+          user_id: string;
         };
         Insert: {
           budget_item_name: string;
@@ -23,6 +24,7 @@ export type Database = {
           created_at?: string;
           id?: string;
           projected_amount: number;
+          user_id: string;
         };
         Update: {
           budget_item_name?: string;
@@ -30,6 +32,7 @@ export type Database = {
           created_at?: string;
           id?: string;
           projected_amount?: number;
+          user_id?: string;
         };
         Relationships: [
           {
@@ -37,6 +40,13 @@ export type Database = {
             columns: ['category_id'];
             isOneToOne: false;
             referencedRelation: 'categories';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'budget_items_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
             referencedColumns: ['id'];
           }
         ];
@@ -46,18 +56,29 @@ export type Database = {
           category_name: string;
           created_at: string;
           id: string;
+          user_id: string;
         };
         Insert: {
           category_name: string;
           created_at?: string;
           id?: string;
+          user_id: string;
         };
         Update: {
           category_name?: string;
           created_at?: string;
           id?: string;
+          user_id?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'categories_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       income_sources: {
         Row: {
@@ -65,20 +86,57 @@ export type Database = {
           id: string;
           income_source_name: string;
           projected_amount: number;
+          user_id: string | null;
         };
         Insert: {
           created_at?: string;
           id?: string;
           income_source_name: string;
           projected_amount: number;
+          user_id?: string | null;
         };
         Update: {
           created_at?: string;
           id?: string;
           income_source_name?: string;
           projected_amount?: number;
+          user_id?: string | null;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'income_sources_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          }
+        ];
+      };
+      users: {
+        Row: {
+          id: number;
+          name: string;
+          user: string | null;
+        };
+        Insert: {
+          id?: number;
+          name: string;
+          user?: string | null;
+        };
+        Update: {
+          id?: number;
+          name?: string;
+          user?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'users_user_fkey';
+            columns: ['user'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          }
+        ];
       };
     };
     Views: {

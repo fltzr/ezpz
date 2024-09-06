@@ -20,6 +20,7 @@ type AddBudgetItemModalProps = {
   onClose: () => void;
   onAdd: (budgetItem: Omit<BudgetItem, 'id' | 'created_at'>) => void;
   category?: Category;
+  userId: string;
 };
 
 const budgetItemSchema = z.object({
@@ -36,6 +37,7 @@ export const AddBudgetItemModal = ({
   onClose,
   onAdd,
   category,
+  userId,
 }: AddBudgetItemModalProps) => {
   const {
     control,
@@ -61,7 +63,7 @@ export const AddBudgetItemModal = ({
 
   const handleOnSubmit = (data: BudgetItemSchema) => {
     console.log(data);
-    onAdd({ ...data, category_id: category?.id ?? '' });
+    onAdd({ ...data, category_id: category?.id ?? '', user_id: userId });
     handleClose();
   };
 

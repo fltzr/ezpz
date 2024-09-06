@@ -1,0 +1,25 @@
+services:
+  ezpz-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ezpz-app
+    restart: unless-stopped
+    ports:
+      - '4000:4000'
+    networks:
+      - ezpz-network
+
+  tunnel:
+    image: cloudflare/cloudflared
+    container_name: cloudflared-tunnel
+    command: tunnel --no-autoupdate run --token $CLOUDFLARE_TUNNEL_TOKEN
+    environment:
+      - CLOUDFLARE_TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    restart: unless-stopped
+    networks:
+      - ezpz-network
+
+networks:
+  ezpz-network:
+    driver: bridge

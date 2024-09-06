@@ -1,5 +1,5 @@
-import { SupabaseClient } from '@supabase/supabase-js';
 import { createContext, PropsWithChildren, useContext } from 'react';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '../../supabase';
 import { supabase } from '../../lib/supabase';
 

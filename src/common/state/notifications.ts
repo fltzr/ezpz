@@ -11,6 +11,7 @@ type NotificationStore = {
   notifications: Notification[];
   addNotification: (notification: Notification) => void;
   removeNotification: (id: string) => void;
+  clearNotifications: () => void;
 };
 
 export const useNotificationStore = create<NotificationStore>((set) => ({
@@ -21,4 +22,5 @@ export const useNotificationStore = create<NotificationStore>((set) => ({
     })),
   removeNotification: (id) =>
     set((state) => ({ notifications: state.notifications.filter((n) => n.id !== id) })),
+  clearNotifications: () => set({ notifications: [] }),
 }));

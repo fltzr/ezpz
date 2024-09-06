@@ -1,12 +1,17 @@
 import getUserLocale from 'get-user-locale';
-import { PieChart, PieChartProps } from '@cloudscape-design/components';
+import {
+  Box,
+  PieChart,
+  PieChartProps,
+  StatusIndicator,
+} from '@cloudscape-design/components';
 import { BudgetTableItem, isBudgetItem, isCategoryItem } from '../utils/types';
 import { formatCurrency } from '../../../common/utils/format-currency';
 
 type BudgetPercentageChartProps = {
   isLoading: boolean;
   data?: BudgetTableItem[];
-  totalBudget: number;
+  totalBudget: number | undefined;
 };
 
 export const BudgetPercentageChart = ({
@@ -41,10 +46,12 @@ export const BudgetPercentageChart = ({
       detailPopoverContent={(datum) => [
         { key: 'Category', value: datum.title },
         { key: 'Amount', value: formatCurrency(datum.value) },
-        {
-          key: 'Percentage of total budget',
-          value: `${((datum.value / totalBudget) * 100).toFixed(2)}%`,
-        },
+        totalBudget
+          ? {
+              key: 'Percentage of total budget',
+              value: `${((datum.value / totalBudget!) * 100).toFixed(2)}%`,
+            }
+          : { key: '', value: '' },
       ]}
       segmentDescription={(datum, sum) =>
         `${datum.title}: ${currencySymbol}${datum.value.toFixed(2)} (${(
@@ -54,6 +61,13 @@ export const BudgetPercentageChart = ({
       }
       hideFilter
       size='medium'
+      empty={
+        <Box padding={{ horizontal: 'xl' }}>
+          <StatusIndicator type='info'>
+            Add income sources and budget items to see this chart!
+          </StatusIndicator>
+        </Box>
+      }
     />
   );
 };
