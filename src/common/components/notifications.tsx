@@ -1,4 +1,4 @@
-import { type FlashbarProps, Flashbar } from '@cloudscape-design/components';
+import { type FlashbarProps, Button, Flashbar } from '@cloudscape-design/components';
 import { useNotificationStore } from '../state/notifications';
 import { useEffect } from 'react';
 
@@ -9,9 +9,11 @@ export const Notifications = () => {
 
   useEffect(() => {
     const timers = notifications.map((n) => {
-      return setTimeout(() => {
-        removeNotification(n.id ?? '');
-      }, AUTO_DISMISS_DURATION);
+      if (!n.action) {
+        return setTimeout(() => {
+          removeNotification(n.id ?? '');
+        }, AUTO_DISMISS_DURATION);
+      }
     });
 
     return () => {
@@ -24,6 +26,9 @@ export const Notifications = () => {
     content: notification.message,
     dismissible: true,
     onDismiss: () => removeNotification(notification.id ?? ''),
+    action: notification.action ? (
+      <Button onClick={notification.action.onClick}>{notification.action.text}</Button>
+    ) : undefined,
   }));
 
   return <Flashbar stackItems items={items} />;

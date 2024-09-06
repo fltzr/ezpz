@@ -14,6 +14,7 @@ import {
   isCategoryItem,
   isBudgetItem,
 } from '../utils/types';
+import { useNotifiedMutation } from '../../../common/hooks/use-notified-mutation';
 
 export const useBudgetApi = (userId: string) => {
   const supabase = useSupabase();
@@ -26,27 +27,21 @@ export const useBudgetApi = (userId: string) => {
     enabled: !!userId,
     select: calculateCategoryTotals,
   });
-  const addCategoryMutation = useMutation({
+
+  const addCategoryMutation = useNotifiedMutation({
     mutationFn: (newCategory: CategoryInsert) => api.addCategory(supabase, newCategory),
     onSuccess: (newCategory) => {
       queryClient.setQueryData<BudgetTableItem[]>(['budget-items', userId], (old) =>
         calculateCategoryTotals(old ? [...old, newCategory] : [newCategory])
       );
-      addNotification({
-        id: nanoid(5),
-        type: 'success',
-        message: `Added category: ${newCategory.category_name}`,
-      });
     },
-    onError: (error: Error) => {
-      addNotification({
-        id: nanoid(5),
-        type: 'error',
-        message: error.message,
-      });
-    },
+    successMessage: (newCategory) => `Added category: ${newCategory.category_name}`,
+    errorMessage: (error: unknown) =>
+      error instanceof Error
+        ? error.message
+        : 'An unknown error occurred. Please try again.',
   });
-  const addBudgetItemMutation = useMutation({
+  const addBudgetItemMutation = useNotifiedMutation({
     mutationFn: (item: BudgetItemInsert) => api.addBudgetItem(supabase, item),
     onSuccess: (newItem) => {
       queryClient.setQueryData<BudgetTableItem[]>(['budget-items', userId], (old) => {
@@ -64,22 +59,12 @@ export const useBudgetApi = (userId: string) => {
 
         return calculateCategoryTotals(updatedItems);
       });
-      addNotification({
-        id: nanoid(5),
-        type: 'success',
-        message: `Added budget item: ${newItem.budget_item_name}`,
-      });
     },
-    onError: (error: Error) => {
-      addNotification({
-        id: nanoid(5),
-        type: 'error',
-        message: error.message,
-      });
-    },
+    successMessage: (newItem) => `Added budget item: ${newItem.budget_item_name}`,
+    errorMessage: (error) => `Failed to add budget item: ${error.message}`,
   });
 
-  const updateItemMutation = useMutation({
+  const updateItemMutation = useNotifiedMutation({
     mutationFn: async (item: BudgetItemUpdate) => {
       await api.updateBudgetItem(supabase, item.id!, {
         budget_item_name: item.budget_item_name,
@@ -87,25 +72,14 @@ export const useBudgetApi = (userId: string) => {
         category_id: item.category_id,
       });
     },
-    onSuccess: (_, updatedItem) => {
+    onSuccess: () => {
       queryClient.refetchQueries({ queryKey: ['budget-items', userId] });
-
-      addNotification({
-        id: nanoid(5),
-        type: 'success',
-        message: `Updated budget item: ${updatedItem.budget_item_name}`,
-      });
     },
-    onError: (error: Error) => {
-      addNotification({
-        id: nanoid(5),
-        type: 'error',
-        message: error.message,
-      });
-    },
+    successMessage: () => `Updated budget item`,
+    errorMessage: (error) => `Failed to update budget item: ${error.message}`,
   });
 
-  const deleteItemMutation = useMutation({
+  const deleteItemMutation = useNotifiedMutation({
     mutationFn: async (item: BudgetTableItem) => {
       if (isCategoryItem(item)) {
         await api.deleteCategory(supabase, item.id);
@@ -113,26 +87,10 @@ export const useBudgetApi = (userId: string) => {
         await api.deleteBudgetItem(supabase, item.id);
       }
     },
-    onSuccess: (_, deletedItem) => {
+    onSuccess: () => {
       queryClient.refetchQueries({ queryKey: ['budget-items', userId] });
-
-      addNotification({
-        id: nanoid(5),
-        type: 'success',
-        message: `Deleted ${isCategoryItem(deletedItem) ? 'category' : 'budget item'}: ${
-          isCategoryItem(deletedItem)
-            ? deletedItem.category_name
-            : deletedItem.budget_item_name
-        }`,
-      });
     },
-    onError: (error: Error) => {
-      addNotification({
-        id: nanoid(5),
-        type: 'error',
-        message: error.message,
-      });
-    },
+    errorMessage: (error: Error) => `Failed to delete item: ${error.message}`,
   });
 
   const handleAddCategory = (category: CategoryInsert) => {

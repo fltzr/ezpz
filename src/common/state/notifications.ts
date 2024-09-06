@@ -2,9 +2,13 @@ import { create } from 'zustand';
 import { nanoid } from 'nanoid';
 
 type Notification = {
-  id: string;
+  id?: string;
   type: 'success' | 'error' | 'info' | 'warning';
   message: string;
+  action?: {
+    text: string;
+    onClick: () => void;
+  };
 };
 
 type NotificationStore = {
