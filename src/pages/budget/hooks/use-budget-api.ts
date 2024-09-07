@@ -1,9 +1,7 @@
-import { nanoid } from 'nanoid';
-import type { TableProps } from '@cloudscape-design/components';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { TableProps } from '@cloudscape-design/components';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useSupabase } from '../../../common/hooks/use-supabase';
-import { useNotificationStore } from '../../../common/state/notifications';
 import * as api from '../api/budget-queries';
 import { calculateCategoryTotals } from '../utils/table-configs';
 import {
@@ -19,7 +17,6 @@ import { useNotifiedMutation } from '../../../common/hooks/use-notified-mutation
 export const useBudgetApi = (userId: string) => {
   const supabase = useSupabase();
   const queryClient = useQueryClient();
-  const { addNotification } = useNotificationStore();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['budget-items', userId],
