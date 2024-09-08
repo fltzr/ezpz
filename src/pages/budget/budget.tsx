@@ -17,22 +17,19 @@ const BudgetPage = () => {
   return (
     <>
       {selectedUserId && (
-        <ViewBudgetPage
-          userId={selectedUserId?.userId ?? ''}
-          children={
-            <Header
-              variant='awsui-h1-sticky'
-              actions={
-                <UserSelector
-                  onUserChange={(userId, name) => {
-                    setSelectedUserId({ userId, name });
-                  }}
-                />
-              }>
-              {selectedUserId?.name}'s Budget Dashboard
-            </Header>
-          }
-        />
+        <ViewBudgetPage userId={selectedUserId?.userId ?? ''}>
+          <Header
+            variant='awsui-h1-sticky'
+            actions={
+              <UserSelector
+                onUserChange={(userId, name) => {
+                  setSelectedUserId({ userId, name });
+                }}
+              />
+            }>
+            {selectedUserId?.name}&apos;s Budget Dashboard
+          </Header>
+        </ViewBudgetPage>
       )}
     </>
   );

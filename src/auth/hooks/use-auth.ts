@@ -25,7 +25,7 @@ export const useAuth = () => {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['user'] });
+      void queryClient.invalidateQueries({ queryKey: ['user'] });
       navigate('/budget');
       addNotification({
         id: nanoid(5),

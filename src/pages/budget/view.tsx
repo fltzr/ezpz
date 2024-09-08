@@ -140,7 +140,9 @@ export const ViewBudgetPage = ({
         visible={modalState.type === 'deleteItem'}
         onClose={closeModal}
         onDelete={() => {
-          modalState.props?.item && handleDeleteItem(modalState.props.item);
+          if (modalState.props?.item) {
+            handleDeleteItem(modalState.props.item);
+          }
           closeModal();
         }}
         item={modalState.props?.item}

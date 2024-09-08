@@ -54,7 +54,7 @@ const SignInPage = () => {
     }
 
     setFocus('email');
-  }, []);
+  }, [user, navigate, setFocus]);
 
   const handleFailedSignIn = (error: AuthError) => {
     addNotification({
@@ -92,7 +92,11 @@ const SignInPage = () => {
         <Container header={<Header variant='h1'>Sign in</Header>}>
           <Form
             actions={
-              <Button variant='primary' onClick={() => handleSubmit(handleSignIn)()}>
+              <Button
+                variant='primary'
+                onClick={() => {
+                  void handleSubmit(handleSignIn)();
+                }}>
                 Sign in
               </Button>
             }>

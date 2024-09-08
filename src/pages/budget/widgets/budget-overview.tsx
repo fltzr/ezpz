@@ -18,6 +18,7 @@ import { useIncomeApi } from '../hooks/use-income-api';
 import { useModals } from '../hooks/use-modals';
 import { AddIncomeSourceModal } from '../modals/add-income-source';
 import { DeleteIncomeSourceModal } from '../modals/delete-income-source';
+import { useNotificationStore } from '../../../common/state/notifications';
 
 const getBudgetStatus = (amountSpent: number, budgetAmount?: number) => {
   if (!budgetAmount) {
@@ -39,6 +40,7 @@ const getBudgetStatus = (amountSpent: number, budgetAmount?: number) => {
 };
 
 export const BudgetOverview = ({ userId }: { userId: string }) => {
+  const { addNotification } = useNotificationStore();
   const [selectedItems, setSelectedItems] = useState<IncomeSource[]>([]);
   const { modalState, openModal, closeModal } = useModals();
   const { data } = useBudgetApi(userId);
@@ -125,7 +127,12 @@ export const BudgetOverview = ({ userId }: { userId: string }) => {
                       openModal('deleteIncomeSource');
                       break;
                     case 'refresh':
-                      refetch();
+                      refetch().catch((error: Error) => {
+                        addNotification({
+                          type: 'error',
+                          message: `Error refetching incomme sources: ${error.message}`,
+                        });
+                      });
                       break;
                     default:
                       break;
@@ -145,7 +152,13 @@ export const BudgetOverview = ({ userId }: { userId: string }) => {
                   header: 'Source',
                   cell: (item) => item.income_source_name,
                   editConfig: {
-                    editingCell: (item, ctx) => (
+                    editingCell: (
+                      item,
+                      ctx: {
+                        currentValue: string | null;
+                        setValue: (value: string) => void;
+                      }
+                    ) => (
                       <Input
                         placeholder={
                           item.income_source_name ?? 'e.g., Paycheck, Babysitting, Stocks'
@@ -155,7 +168,7 @@ export const BudgetOverview = ({ userId }: { userId: string }) => {
                       />
                     ),
                     validation: (item, value) => {
-                      if (value?.length < 1) {
+                      if (typeof value !== 'string' || value?.length < 1) {
                         return 'Invalid income source name!';
                       }
 
@@ -176,7 +189,7 @@ export const BudgetOverview = ({ userId }: { userId: string }) => {
                       <Input
                         type='number'
                         inputMode='decimal'
-                        placeholder={String(item.projected_amount) ?? 'Estimated income'}
+                        placeholder={String(item.projected_amount)}
                         value={String(ctx.currentValue ?? item.projected_amount)}
                         onChange={(event) => ctx.setValue(Number(event.detail.value))}
                       />

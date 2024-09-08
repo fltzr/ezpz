@@ -13,22 +13,27 @@ import { useNotificationStore } from '../common/state/notifications';
 import { nanoid } from 'nanoid';
 import { useEffect } from 'react';
 
+type LocationState = {
+  reason?: string;
+};
+
 const CommonLayout = () => {
   const { addNotification } = useNotificationStore();
   const location = useLocation();
   const isAuthRoute = location.pathname.includes('/auth');
   const breadcrumbs = [''];
   const activeHref = '';
-
   useEffect(() => {
-    if (location.state?.reason === 'sign-out') {
+    const state = location.state as LocationState;
+
+    if (state && state.reason === 'sign-out') {
       addNotification({
         id: nanoid(5),
         type: 'info',
         message: 'Successfully signed out!',
       });
     }
-  }, [location]);
+  }, [location, addNotification]);
 
   return (
     <I18nProvider locale='en' messages={[messages]}>

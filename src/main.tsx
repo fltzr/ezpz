@@ -7,9 +7,10 @@ import './styles/index.scss';
 
 const root = document.querySelector('#app');
 
-root &&
+if (root) {
   createRoot(root).render(
     <StrictMode>
       <App />
     </StrictMode>
   );
+}

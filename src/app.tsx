@@ -32,7 +32,6 @@ export const App = () => {
       localStorage.setItem('shown-initial-popup', 'true');
     }
   }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <SupabaseProvider>
