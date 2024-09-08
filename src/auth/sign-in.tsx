@@ -19,7 +19,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { AuthError } from '@supabase/supabase-js';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from './components/auth-provider';
+import { useAuth } from './hooks/use-auth';
 
 const signInSchema = z.object({
   email: z

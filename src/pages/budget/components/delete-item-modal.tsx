@@ -34,7 +34,7 @@ export const DeleteItemModal = ({
     </Box>
     ?{' '}
     <Box display='inline' fontWeight='bold'>
-      You can't undo this action.
+      You can&apos;t undo this action.
     </Box>
     <br />
     <br />

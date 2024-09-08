@@ -2,7 +2,7 @@ import { TopNavigation, TopNavigationProps } from '@cloudscape-design/components
 
 import styles from '../styles/top-navigation.module.scss';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../auth/components/auth-provider';
+import { useAuth } from '../auth/hooks/use-auth';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
 import { useNotificationStore } from '../common/state/notifications';
@@ -41,7 +41,9 @@ const generateUserHeaderItems = ({
         switch (event.detail.id) {
           case 'sign-out':
             console.log('sign-out clicked');
-            signOut();
+            signOut().catch((error: Error) => {
+              console.log(`Error signing out: ${error.message}`);
+            });
             break;
           default:
             break;

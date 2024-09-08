@@ -109,7 +109,7 @@ export const EditBudgetItemModal = ({
             <Button
               variant='primary'
               disabled={!isDirty}
-              onClick={() => handleSubmit(handleOnSubmit)()}>
+              onClick={() => void handleSubmit(handleOnSubmit)()}>
               Update
             </Button>
           </SpaceBetween>

@@ -13,10 +13,12 @@ import {
   isBudgetItem,
 } from '../utils/types';
 import { useNotifiedMutation } from '../../../common/hooks/use-notified-mutation';
+import { useNotificationStore } from '../../../common/state/notifications';
 
 export const useBudgetApi = (userId: string) => {
   const supabase = useSupabase();
   const queryClient = useQueryClient();
+  const { addNotification } = useNotificationStore();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['budget-items', userId],
@@ -70,7 +72,14 @@ export const useBudgetApi = (userId: string) => {
       });
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: ['budget-items', userId] });
+      queryClient
+        .refetchQueries({ queryKey: ['budget-items', userId] })
+        .catch((error: Error) => {
+          addNotification({
+            type: 'error',
+            message: `Error refetching budget items: ${error.message}`,
+          });
+        });
     },
     successMessage: () => `Updated budget item`,
     errorMessage: (error) => `Failed to update budget item: ${error.message}`,
@@ -85,7 +94,14 @@ export const useBudgetApi = (userId: string) => {
       }
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: ['budget-items', userId] });
+      queryClient
+        .refetchQueries({ queryKey: ['budget-items', userId] })
+        .catch((error: Error) => {
+          addNotification({
+            type: 'error',
+            message: `Error refetching budget items: ${error.message}`,
+          });
+        });
     },
     errorMessage: (error: Error) => `Failed to delete item: ${error.message}`,
   });

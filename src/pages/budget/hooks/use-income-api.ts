@@ -50,7 +50,15 @@ export const useIncomeApi = (userId: string) => {
       });
     },
     onSuccess: (_, updatedIncomeSource) => {
-      queryClient.refetchQueries({ queryKey: ['income-sources', userId] });
+      queryClient
+        .refetchQueries({ queryKey: ['income-sources', userId] })
+        .catch((error: Error) => {
+          addNotification({
+            type: 'error',
+            message: `Error refetching income sources: ${error.message}`,
+          });
+        });
+
       const data = queryClient.getQueryData<IncomeSource[]>(['income-sources']);
 
       addNotification({
@@ -77,7 +85,14 @@ export const useIncomeApi = (userId: string) => {
       );
     },
     onSuccess: (_, deletedIncomeSources) => {
-      queryClient.refetchQueries({ queryKey: ['income-sources', userId] });
+      queryClient
+        .refetchQueries({ queryKey: ['income-sources', userId] })
+        .catch((error: Error) => {
+          addNotification({
+            type: 'error',
+            message: `Error refetching income sources: ${error.message}`,
+          });
+        });
 
       addNotification({
         id: nanoid(5),

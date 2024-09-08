@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Select, SelectProps } from '@cloudscape-design/components';
 
-import { useAuth } from '../../../auth/components/auth-provider';
+import { useAuth } from '../../../auth/hooks/use-auth';
 import { useSupabase } from '../../../common/hooks/use-supabase';
 
 const fetchUsers = async (supabase: ReturnType<typeof useSupabase>) => {

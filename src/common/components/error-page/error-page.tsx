@@ -15,7 +15,7 @@ export const ErrorPage = () => {
           </Header>
         }>
         <Box variant='p'>
-          We're sorry, an unexpected error occurred.
+          We&apos;re sorry, an unexpected error occurred.
           <Box variant='pre'>
             {error.statusText} | {error.data}
           </Box>
@@ -33,7 +33,7 @@ export const ErrorPage = () => {
           </Header>
         }>
         <Box variant='p'>
-          We're sorry, an unexpected error occurred.
+          We&apos;re sorry, an unexpected error occurred.
           <Box variant='pre'>
             {error instanceof Error ? error.message : String(error)}
           </Box>

@@ -73,7 +73,7 @@ export const AddIncomeSourceModal = ({
             <Button variant='link' onClick={handleOnClose}>
               Cancel
             </Button>
-            <Button variant='primary' onClick={() => handleSubmit(handleOnSubmit)()}>
+            <Button variant='primary' onClick={() => void handleSubmit(handleOnSubmit)()}>
               Add
             </Button>
           </SpaceBetween>

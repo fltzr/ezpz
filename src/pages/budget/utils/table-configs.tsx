@@ -1,5 +1,4 @@
 import { ButtonDropdown, type TableProps } from '@cloudscape-design/components';
-import _ from 'lodash-es';
 import {
   BudgetItem,
   type BudgetTableItem,

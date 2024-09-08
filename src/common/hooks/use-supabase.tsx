@@ -1,13 +1,5 @@
-import { createContext, PropsWithChildren, useContext } from 'react';
-import { SupabaseClient } from '@supabase/supabase-js';
-import { Database } from '../../supabase';
-import { supabase } from '../../lib/supabase';
-
-const SupabaseContext = createContext<SupabaseClient<Database> | undefined>(undefined);
-
-export const SupabaseProvider = ({ children }: PropsWithChildren) => (
-  <SupabaseContext.Provider value={supabase}>{children}</SupabaseContext.Provider>
-);
+import { useContext } from 'react';
+import { SupabaseContext } from '../components/supabase-provider';
 
 export const useSupabase = () => {
   const context = useContext(SupabaseContext);

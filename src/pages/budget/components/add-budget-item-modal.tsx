@@ -83,7 +83,7 @@ export const AddBudgetItemModal = ({
             <Button variant='link' onClick={handleClose}>
               Cancel
             </Button>
-            <Button variant='primary' onClick={() => handleSubmit(handleOnSubmit)()}>
+            <Button variant='primary' onClick={() => void handleSubmit(handleOnSubmit)()}>
               Add
             </Button>
           </SpaceBetween>

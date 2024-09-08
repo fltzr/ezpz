@@ -49,7 +49,7 @@ export const BudgetPercentageChart = ({
         totalBudget
           ? {
               key: 'Percentage of total budget',
-              value: `${((datum.value / totalBudget!) * 100).toFixed(2)}%`,
+              value: `${((datum.value / totalBudget) * 100).toFixed(2)}%`,
             }
           : { key: '', value: '' },
       ]}

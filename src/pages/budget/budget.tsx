@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { UserSelector } from './components/user-selector';
 import { ViewBudgetPage } from './view';
-import { useAuth } from '../../auth/components/auth-provider';
+import { useAuth } from '../../auth/hooks/use-auth';
 import { Header } from '@cloudscape-design/components';
 
 const BudgetPage = () => {

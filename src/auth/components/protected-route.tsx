@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { Spinner } from '@cloudscape-design/components';
 
-import { useAuth } from '../components/auth-provider';
+import { useAuth } from '../hooks/use-auth';
 
 const ProtectedRoute = () => {
   const { user, isLoading } = useAuth();
