@@ -2,6 +2,9 @@
 !.env.template
 .env
 
+# Docker builds
+*.tar
+
 # Logs
 logs
 *.log

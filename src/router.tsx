@@ -11,6 +11,7 @@ import { Spinner } from '@cloudscape-design/components';
 import ProtectedRoute from './auth/components/protected-route';
 
 const BudgetPage = lazy(() => import('./pages/budget/budget'));
+const CalculatorPage = lazy(() => import('./pages/loan-repayment/calculator'));
 
 const routes: RouteObject[] = [
   {
@@ -34,6 +35,14 @@ const routes: RouteObject[] = [
             element: (
               <Suspense fallback={<Spinner size='large' />}>
                 <BudgetPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'loan-calculator',
+            element: (
+              <Suspense fallback={<Spinner size='large' />}>
+                <CalculatorPage />
               </Suspense>
             ),
           },
