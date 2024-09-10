@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
   AppLayout,
   BreadcrumbGroup,
@@ -11,7 +11,8 @@ import { GlobalHeader } from './global-header';
 import { Notifications } from '../common/components/notifications';
 import { useNotificationStore } from '../common/state/notifications';
 import { nanoid } from 'nanoid';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useAuth } from '../auth/hooks/use-auth';
 
 type LocationState = {
   reason?: string;
@@ -19,10 +20,15 @@ type LocationState = {
 
 const CommonLayout = () => {
   const { addNotification } = useNotificationStore();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const location = useLocation();
   const isAuthRoute = location.pathname.includes('/auth');
+  const activeHref = location.pathname;
   const breadcrumbs = [''];
-  const activeHref = '';
+
+  const [navigationOpen, setNavigationOpen] = useState(false);
+
   useEffect(() => {
     const state = location.state as LocationState;
 
@@ -46,8 +52,31 @@ const CommonLayout = () => {
           breadcrumbs={
             isAuthRoute && breadcrumbs ? <BreadcrumbGroup items={[]} /> : undefined
           }
-          navigation={<SideNavigation activeHref={activeHref} />}
-          navigationHide
+          navigation={
+            <SideNavigation
+              activeHref={activeHref}
+              items={[
+                {
+                  type: 'link',
+                  text: 'Budgets',
+                  href: '/budget',
+                },
+                {
+                  type: 'link',
+                  text: 'Loan calculator',
+                  href: '/loan-calculator',
+                },
+              ]}
+              onFollow={(event) => {
+                event.preventDefault();
+                navigate(event.detail.href);
+              }}
+            />
+          }
+          navigationOpen={navigationOpen}
+          navigationHide={!user || isAuthRoute}
+          navigationWidth={200}
+          onNavigationChange={({ detail }) => setNavigationOpen(detail.open)}
           toolsHide
           content={<Outlet />}
         />

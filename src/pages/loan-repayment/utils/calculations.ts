@@ -13,14 +13,7 @@ export const calculateLoanRepayment = (loan: LoanInputSchema | undefined) => {
   let totalInterestPaid = 0;
   let surplus = 0;
 
-  const amortizationSchedule: AmortizationSchedule = [
-    {
-      month: 0,
-      balance: formatCurrency(balance),
-      interestForMonth: '$0',
-      totalInterestPaid: formatCurrency(totalInterestPaid),
-    },
-  ];
+  const amortizationSchedule: AmortizationSchedule = [];
 
   while (balance > 0) {
     // Calculate interest for the month

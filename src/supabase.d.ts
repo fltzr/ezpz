@@ -88,25 +88,66 @@ export type Database = {
           id: string;
           income_source_name: string;
           projected_amount: number;
-          user_id: string | null;
+          user_id: string;
         };
         Insert: {
           created_at?: string;
           id?: string;
           income_source_name: string;
           projected_amount: number;
-          user_id?: string | null;
+          user_id: string;
         };
         Update: {
           created_at?: string;
           id?: string;
           income_source_name?: string;
           projected_amount?: number;
-          user_id?: string | null;
+          user_id?: string;
         };
         Relationships: [
           {
             foreignKeyName: 'income_sources_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          }
+        ];
+      };
+      loans: {
+        Row: {
+          additional_payment: number | null;
+          created_at: string;
+          id: string;
+          interest_rate: number;
+          loan_name: string;
+          monthly_payment: number;
+          principal: number;
+          user_id: string | null;
+        };
+        Insert: {
+          additional_payment?: number | null;
+          created_at?: string;
+          id?: string;
+          interest_rate: number;
+          loan_name: string;
+          monthly_payment: number;
+          principal: number;
+          user_id?: string | null;
+        };
+        Update: {
+          additional_payment?: number | null;
+          created_at?: string;
+          id?: string;
+          interest_rate?: number;
+          loan_name?: string;
+          monthly_payment?: number;
+          principal?: number;
+          user_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'loans_user_id_fkey';
             columns: ['user_id'];
             isOneToOne: false;
             referencedRelation: 'users';
