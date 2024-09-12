@@ -1,3 +1,5 @@
+/// <reference types="vitest/config" />
+
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -20,5 +22,14 @@ export default defineConfig({
   preview: {
     port: 4000,
     strictPort: true,
+  },
+
+  test: {
+    browser: {
+      enabled: true,
+      name: 'chrome',
+      provider: 'webdriverio',
+      providerOptions: {},
+    },
   },
 });
