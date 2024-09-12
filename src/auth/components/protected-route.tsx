@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import { Spinner } from '@cloudscape-design/components';
+import { LoadingBar } from '@cloudscape-design/chat-components';
 
 import { useAuth } from '../hooks/use-auth';
 
@@ -7,7 +7,7 @@ const ProtectedRoute = () => {
   const { user, isLoading } = useAuth();
 
   if (isLoading) {
-    return <Spinner size='large' />;
+    return <LoadingBar variant='gen-ai-masked' />;
   }
 
   if (!user) {

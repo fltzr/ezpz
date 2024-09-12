@@ -19,7 +19,7 @@ const queryClient = new QueryClient({
   },
 });
 
-export const App = () => {
+const App = () => {
   const [initialPopup, setInitialPopup] = useState(false);
 
   useTheme();
@@ -52,3 +52,5 @@ export const App = () => {
     </QueryClientProvider>
   );
 };
+
+export default App;

@@ -1,63 +1,61 @@
 import { formatCurrency } from '../../../common/utils/format-currency';
 import { AmortizationSchedule, LoanInputSchema } from '../schema';
 
-export const calculateLoanRepayment = (loan: LoanInputSchema | undefined) => {
+export const createAmortizationSchedule = (
+  loan?: LoanInputSchema
+): AmortizationSchedule => {
   if (!loan) {
-    return {};
+    return [
+      {
+        month: 0,
+        interestPayment: '$0',
+        principalPayment: '$0',
+        endingBalance: '$0',
+      },
+    ];
   }
 
-  const monthlyInterestRate = loan.annualInterestRate / 100 / 12;
+  let month = 0;
+  let loanBalance = loan.principal;
+  const monthlyPayment = loan.monthlyPayment;
+  const interestRate = loan.annualInterestRate;
 
-  let currentMonth = 0;
-  let balance = loan.principal;
   let totalInterestPaid = 0;
-  let surplus = 0;
 
   const amortizationSchedule: AmortizationSchedule = [];
 
-  while (balance > 0) {
-    // Calculate interest for the month
-    const interestForMonth = balance * monthlyInterestRate;
+  while (loanBalance > 0) {
+    month++;
 
-    // Apply payment to balance
-    const principalPayment =
-      loan.monthlyPayment + (loan.additionalPayment || 0) - interestForMonth;
+    const monthlyInterestRate = interestRate / 100 / 12;
+    const monthlyInterestPayment = monthlyInterestRate * loanBalance;
+    totalInterestPaid += monthlyInterestPayment;
 
-    // Update total interest paid
-    totalInterestPaid += interestForMonth;
+    const principalPayment = monthlyPayment - monthlyInterestPayment;
+    const endingBalance = loanBalance - principalPayment;
 
-    if (balance < principalPayment) {
-      surplus = principalPayment - balance;
-    }
+    if (endingBalance < 0) {
+      amortizationSchedule.push({
+        month,
+        interestPayment: formatCurrency(monthlyInterestPayment),
+        principalPayment: formatCurrency(loanBalance - monthlyInterestPayment),
+        endingBalance: formatCurrency(0),
+        totalInterestPaid,
+      });
 
-    // Update balance of loan
-    balance -= principalPayment;
-
-    // Increment month
-    currentMonth += 1;
-
-    // If payment exceed balance, 0 it out.
-    if (balance < 0) {
       break;
     }
 
     amortizationSchedule.push({
-      month: currentMonth,
-      balance: formatCurrency(balance),
-      interestForMonth: formatCurrency(interestForMonth),
-      totalInterestPaid: formatCurrency(totalInterestPaid),
+      month,
+      interestPayment: formatCurrency(monthlyInterestPayment),
+      principalPayment: formatCurrency(principalPayment),
+      endingBalance: formatCurrency(endingBalance),
+      totalInterestPaid,
     });
+
+    loanBalance -= principalPayment;
   }
 
-  // Calculate payoff years/months
-  const payoffYears = Math.floor(currentMonth / 12);
-  const payoffMonths = currentMonth % 12;
-
-  return {
-    payoffYears,
-    payoffMonths,
-    totalInterestPaid: totalInterestPaid.toPrecision(3),
-    surplus,
-    amortizationSchedule,
-  };
+  return amortizationSchedule;
 };

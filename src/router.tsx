@@ -6,9 +6,9 @@ import {
   createBrowserRouter,
 } from 'react-router-dom';
 import { ErrorPage } from './common/components/error-page/error-page';
-import { lazy, Suspense } from 'react';
-import { Spinner } from '@cloudscape-design/components';
+import { lazy } from 'react';
 import ProtectedRoute from './auth/components/protected-route';
+import { SuspenseLoadingBar } from './common/components/suspense-loading-bar';
 
 const BudgetPage = lazy(() => import('./pages/budget/budget'));
 const CalculatorPage = lazy(() => import('./pages/loan-repayment/calculator'));
@@ -33,17 +33,17 @@ const routes: RouteObject[] = [
           {
             path: 'budget',
             element: (
-              <Suspense fallback={<Spinner size='large' />}>
+              <SuspenseLoadingBar>
                 <BudgetPage />
-              </Suspense>
+              </SuspenseLoadingBar>
             ),
           },
           {
             path: 'loan-calculator',
             element: (
-              <Suspense fallback={<Spinner size='large' />}>
+              <SuspenseLoadingBar>
                 <CalculatorPage />
-              </Suspense>
+              </SuspenseLoadingBar>
             ),
           },
         ],
@@ -53,3 +53,8 @@ const routes: RouteObject[] = [
 ];
 
 export const router: RouterProviderProps['router'] = createBrowserRouter(routes);
+
+if (import.meta.hot) {
+  console.log('Disposing router');
+  import.meta.hot.dispose(() => router.dispose());
+}

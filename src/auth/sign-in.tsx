@@ -89,7 +89,7 @@ const SignInPage = () => {
   return (
     <Box padding={{ vertical: 'xxxl' }}>
       <ContentLayout defaultPadding disableOverlap maxContentWidth={500}>
-        <Container header={<Header variant='h1'>Sign in</Header>}>
+        <Container header={<Header variant='h1'>Sign in!</Header>}>
           <Form
             actions={
               <Button

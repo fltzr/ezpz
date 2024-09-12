@@ -17,21 +17,22 @@ export const AmortizationScheduleTable = ({
         width: 75,
       },
       {
-        id: 'balance',
-        header: 'Balance',
-        cell: (item) => item.balance,
-      },
-      {
-        id: 'monthly_interest',
+        id: 'interest_payment',
         header: 'Interest',
-        cell: (item) => item.interestForMonth,
-        width: 250,
+        cell: (item) => item.interestPayment,
+        width: 125,
       },
       {
-        id: 'total_interest_paid',
-        header: 'Total interest paid',
-        cell: (item) => item.totalInterestPaid,
-        width: 250,
+        id: 'principal_payment',
+        header: 'Principal',
+        cell: (item) => item.principalPayment,
+        width: 125,
+      },
+      {
+        id: 'ending_balance',
+        header: 'Ending balance',
+        cell: (item) => item.endingBalance,
+        width: 150,
       },
     ]}
   />

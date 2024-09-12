@@ -79,23 +79,6 @@ export const LoanInput = ({ onSubmitLoanData }: LoanInputProps) => {
             </FormField>
           )}
         />
-        <Controller
-          control={control}
-          name='additionalPayment'
-          render={({ field }) => (
-            <FormField
-              label='Additional payment'
-              errorText={errors.additionalPayment?.message}>
-              <Input
-                {...field}
-                type='number'
-                inputMode='decimal'
-                onChange={(event) => field.onChange(Number(event.detail.value))}
-                value={String(field.value)}
-              />
-            </FormField>
-          )}
-        />
       </SpaceBetween>
     </Form>
   );

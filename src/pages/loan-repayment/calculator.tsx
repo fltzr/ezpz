@@ -1,108 +1,87 @@
+import { useEffect, useState } from 'react';
 import {
   Box,
-  Button,
   Container,
   Header,
   KeyValuePairs,
+  KeyValuePairsProps,
   SpaceBetween,
-  StatusIndicator,
 } from '@cloudscape-design/components';
-import { calculateLoanRepayment } from './utils/calculations';
+
 import { formatCurrency } from '../../common/utils/format-currency';
+import type { LoanInputSchema } from './schema';
 import { AmortizationScheduleTable } from './components/amortization-schedule-table';
-import { toZodSchema } from './utils/dto';
-import { useEffect, useState } from 'react';
-import { LoanInputSchema } from './schema';
 import { LoanSelector } from './components/loan-selector';
-import { ExtraPaymentOption } from './components/extra-payment-option';
+import { createAmortizationSchedule } from './utils/calculations';
+import { toZodSchema } from './utils/dto';
+import { addMonths } from './utils/add-months';
+import { LoanEntry } from './utils/types';
 
 const CalculatorPage = () => {
   const [loanRepayment, setLoanRepayment] = useState<
-    ReturnType<typeof calculateLoanRepayment> | undefined
+    ReturnType<typeof createAmortizationSchedule> | undefined
   >(undefined);
   const [selectedLoan, setSelectedLoan] = useState<LoanInputSchema | undefined>(
     undefined
   );
 
   useEffect(() => {
-    setLoanRepayment(calculateLoanRepayment(selectedLoan));
+    setLoanRepayment(createAmortizationSchedule(selectedLoan));
   }, [selectedLoan]);
+
+  const handleSelectLoan = (loan: LoanEntry) => {
+    setSelectedLoan(toZodSchema(loan));
+  };
+
+  const loanSummaryItems: KeyValuePairsProps['items'] = loanRepayment
+    ? [
+        {
+          label: 'Months',
+          value: loanRepayment[loanRepayment.length - 1].month,
+        },
+        {
+          label: 'Total interest paid',
+          value: formatCurrency(
+            loanRepayment[loanRepayment.length - 1].totalInterestPaid
+          ),
+        },
+        {
+          label: 'Total cost of loan',
+          value: formatCurrency(
+            (selectedLoan?.principal ?? 0) +
+              loanRepayment[loanRepayment.length - 1].totalInterestPaid!
+          ),
+        },
+        {
+          label: 'Payoff date',
+          value: addMonths(loanRepayment[loanRepayment.length - 1].month),
+        },
+      ]
+    : [];
 
   return (
     <Box padding={{ vertical: 'xl' }}>
       <SpaceBetween size='xxl' direction='vertical'>
         <Header
           variant='h1'
-          actions={
-            <SpaceBetween direction='horizontal' size='m'>
-              <Button variant='primary'>Add loan</Button>
-            </SpaceBetween>
-          }>
+          description='Add or select a loan and view an amortization table.'>
           Loan repayment calculator
         </Header>
 
-        <LoanSelector onSelectLoan={(loan) => setSelectedLoan(toZodSchema(loan))} />
+        <LoanSelector onSelectLoan={handleSelectLoan} />
 
-        {/* <Container>
-        <LoanInput onSubmitLoanData={(data) => setLoanData(data)} />
-      </Container> */}
-        {selectedLoan ? (
-          <SpaceBetween direction='vertical' size='l'>
-            <ExtraPaymentOption
-              isDisabled={!selectedLoan}
-              onAddExtraPayment={(payment) => {
-                setSelectedLoan((prev) => {
-                  if (!prev) return prev;
-
-                  return {
-                    ...prev,
-                    principal: prev.principal - payment,
-                  };
-                });
-              }}
-              onRemoveExtraPayment={(payment) => {
-                setSelectedLoan((prev) => {
-                  if (!prev) return prev;
-
-                  return {
-                    ...prev,
-                    principal: prev.principal + payment,
-                  };
-                });
-              }}
-            />
-            <Container
-              header={<Header variant='h2'>For this loan, it will take...</Header>}>
-              <KeyValuePairs
-                columns={4}
-                items={[
-                  {
-                    label: 'Years',
-                    value: loanRepayment?.payoffYears ?? 0,
-                  },
-                  {
-                    label: 'Months',
-                    value: loanRepayment?.payoffMonths ?? 0,
-                  },
-                  {
-                    label: 'Total interest paid',
-                    value: formatCurrency(Number(loanRepayment?.totalInterestPaid)) || '',
-                  },
-                  {
-                    label: 'With a surplus in the final month of',
-                    value: (
-                      <StatusIndicator type='success'>
-                        {formatCurrency(loanRepayment?.surplus ?? 0)}
-                      </StatusIndicator>
-                    ),
-                  },
-                ]}
-              />
+        {loanRepayment ? (
+          <SpaceBetween size='l' direction='vertical'>
+            {/* Loan Summary */}
+            <Container header={<Header variant='h2'>Loan summary</Header>}>
+              <KeyValuePairs columns={5} items={loanSummaryItems} />
             </Container>
-            <AmortizationScheduleTable schedule={loanRepayment?.amortizationSchedule} />
+
+            {/* Amortization Schedule Table */}
+            <AmortizationScheduleTable schedule={loanRepayment} />
           </SpaceBetween>
         ) : (
-          <Box variant='h3' textAlign='center'>
+          <Box variant='h2' textAlign='center'>
             Select a loan to get started!
           </Box>
         )}

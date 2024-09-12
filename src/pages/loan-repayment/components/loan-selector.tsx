@@ -10,7 +10,7 @@ type LoanSelectorProps = {
 
 export const LoanSelector = ({ onSelectLoan }: LoanSelectorProps) => {
   const { data: loans, isLoading, error } = useLoansApi();
-  const [selectedLoan, setSelectedLoan] = useState<SelectProps.Option | null>(null);
+  const [selectedLoan, setSelectedLoans] = useState<SelectProps.Option | null>(null);
 
   const options: SelectProps['options'] = loans
     ?.sort((a, b) => b.interest_rate - a.interest_rate)
@@ -22,7 +22,7 @@ export const LoanSelector = ({ onSelectLoan }: LoanSelectorProps) => {
     }));
 
   const handleLoanChange: SelectProps['onChange'] = ({ detail }) => {
-    setSelectedLoan(detail.selectedOption);
+    setSelectedLoans(detail.selectedOption);
     onSelectLoan(loans!.find((loan) => loan.id === detail.selectedOption.value)!);
   };
 
