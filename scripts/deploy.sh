@@ -1,39 +1,58 @@
 #!/bin/bash
-set -e
+set -eou pipefail
 
-GREEN='\033[0;32m'
-NC='\033[0m'
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/logging.sh"
 
-printl() {
-    echo -e "${GREEN}[DEPLOY]${NC} $1"
-}
-
-# Load environment variables
-source .env
-
-# Debugging information
-printl "Starting deployment script..."
-printl "Building Docker image: $IMAGE_NAME"
-printl "Saving Docker image to tar file: $TAR_FILE"
-printl "Copying tar file to remote host: $REMOTE_USER@$REMOTE_HOST:$REMOTE_DIR"
-
-if [ -f "$TAR_FILE" ]; then
-    rm "$TAR_FILE" && printl "Removed dangling tar file"
+if [[ -f ".env" ]]; then
+  source ".env"
+else
+  log ERROR ".env file not found."
 fi
 
-docker build -t $IMAGE_NAME .
-docker save $IMAGE_NAME > $TAR_FILE && printl "Successfully built and saved image to $TAR_FILE"
+REQUIRED_VARS=(IMAGE_NAME TAR_FILE REMOTE_KEY_PATH REMOTE_USER REMOTE_HOST REMOTE_DIR)
+for VAR in "${REQUIRED_VARS[@]}"; do
+  if [[ -z "${!VAR:-}" ]]; then
+    log ERROR "${VAR} is required but not set."
+  fi
+done
 
-scp -i $REMOTE_KEY_PATH $TAR_FILE $REMOTE_USER@$REMOTE_HOST:$REMOTE_DIR && printl "Copied docker image to remote host"
+cleanup() {
+  if [[ -f "${TAR_FILE}" ]]; then
+    rm "${TAR_FILE}"
+    log INFO "Cleaned up local tar file."
+  fi
+}
 
-ssh -i $REMOTE_KEY_PATH $REMOTE_USER@$REMOTE_HOST << EOF
-    cd $REMOTE_DIR
-    docker compose down
-    docker load -i $TAR_FILE
-    docker compose up -d
-    rm $TAR_FILE
+trap cleanup EXIT
+
+# Debugging information
+log INFO "Starting deployment script..."
+log INFO "Building Docker image: ${IMAGE_NAME}"
+log INFO "Saving Docker image to tar file: ${TAR_FILE}"
+log INFO "Copying tar file to remote host: ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}"
+
+if [[ -f "${TAR_FILE}" ]]; then
+  rm "${TAR_FILE}" && log INFO "Removed dangling tar file"
+fi
+
+docker build -t "${IMAGE_NAME}" . || log ERROR "Docker build failed."
+docker save "${IMAGE_NAME}" > "${TAR_FILE}" || log ERROR "Failed to save Docker image."
+
+log INFO "Successfully built and saved image to ${TAR_FILE}."
+log INFO "Copying and deploying image to remote host..."
+
+scp -i "${REMOTE_KEY_PATH}" "${TAR_FILE}" "${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}" || log ERROR "SCP failed."
+
+ssh -i "${REMOTE_KEY_PATH}" "${REMOTE_USER}@${REMOTE_HOST}" bash -s << EOF
+  set -eou pipefail
+  
+  cd "${REMOTE_DIR}" || { echo "Failed to cd to ${REMOTE_DIR}"; exit 1; }
+  docker compose down || { echo "Failed to bring down Docker Compose services; exit 1; }
+  docker load -i "${TAR_FILE}" || { echo "Failed to load ${TAR_FILE} to Docker; exit 1; }
+  docker compose up -d || { echo "Failed to start Docker Compose services"; exit 1; }
+  rm "${TAR_FILE}" || { echo "Failed to remote ${TAR_FILE}"; exit 1; }
+
 EOF
 
-rm $TAR_FILE && printl "Removed $TAR_FILE"
-
-printl "Deployment completed."
+log INFO "Deployment completed on remote host."
