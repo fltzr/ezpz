@@ -39,6 +39,9 @@ fi
 docker build -t "${IMAGE_NAME}" . || log ERROR "Docker build failed."
 docker save "${IMAGE_NAME}" > "${TAR_FILE}" || log ERROR "Failed to save Docker image."
 
+log INFO "Removing dangling Docker images..."
+docker image prune -f || log WARN "Failed to remove dangling Docker images."
+
 log INFO "Successfully built and saved image to ${TAR_FILE}."
 log INFO "Copying and deploying image to remote host..."
 
@@ -51,8 +54,8 @@ ssh -i "${REMOTE_KEY_PATH}" "${REMOTE_USER}@${REMOTE_HOST}" bash -s << EOF
   docker compose down || { echo "Failed to bring down Docker Compose services; exit 1; }
   docker load -i "${TAR_FILE}" || { echo "Failed to load ${TAR_FILE} to Docker; exit 1; }
   docker compose up -d || { echo "Failed to start Docker Compose services"; exit 1; }
-  rm "${TAR_FILE}" || { echo "Failed to remote ${TAR_FILE}"; exit 1; }
 
+  rm "${TAR_FILE}" || { echo "Failed to remote ${TAR_FILE}"; exit 1; }
 EOF
 
 log INFO "Deployment completed on remote host."
