@@ -16,6 +16,7 @@ export default tseslint.config(
       parserOptions: {
         project: ['./tsconfig.app.json', './tsconfig.node.json'],
         projectService: true,
+        projectFolderIgnoreList: ['./supabase/functions/**'],
         tsconfigRootDir: import.meta.dirname,
       },
     },

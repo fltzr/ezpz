@@ -1,4 +1,5 @@
 {
+  "plugins": ["prettier-plugin-sh"],
   "singleQuote": true,
   "trailingComma": "es5",
   "tabWidth": 2,
