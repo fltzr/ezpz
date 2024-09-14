@@ -42,13 +42,17 @@ export const useLoansApi = () => {
 
   const updateLoanMutation = useMutation({
     mutationFn: async (loanEntry: LoanEntryUpdate) => {
+      if (!user?.id) {
+        throw new Error('No user ID found. Aborting...');
+      }
+
       await api.updateLoan(supabase, {
+        id: loanEntry.id,
         loan_name: loanEntry.loan_name,
         principal: loanEntry.principal,
         interest_rate: loanEntry.interest_rate,
         monthly_payment: loanEntry.monthly_payment,
-        additional_payment: loanEntry.additional_payment,
-        user_id: loanEntry.user_id,
+        user_id: user.id,
       });
     },
     onSuccess: (_, updatedLoan) => {
@@ -61,7 +65,10 @@ export const useLoansApi = () => {
           });
         });
 
-      const data = queryClient.getQueryData<LoanEntry[]>(['loans']);
+      const data = queryClient.getQueryData<LoanEntry[]>(['loans', user?.id]);
+
+      console.log(data);
+      console.log(updatedLoan);
 
       addNotification({
         id: nanoid(5),
@@ -81,8 +88,8 @@ export const useLoansApi = () => {
   });
 
   const deleteLoanMutation = useMutation({
-    mutationFn: async (loans: LoanEntry[]) => {
-      await Promise.all(loans.map((source) => api.deleteLoan(supabase, source.id)));
+    mutationFn: async (loanId: string) => {
+      await api.deleteLoan(supabase, loanId);
     },
     onSuccess: (_, deletedLoans) => {
       queryClient
@@ -117,8 +124,8 @@ export const useLoansApi = () => {
   const handleUpdateLoan = (loanUpdates: LoanEntryUpdate) => {
     updateLoanMutation.mutate(loanUpdates);
   };
-  const handleDeleteLoan = (loans: LoanEntry[]) => {
-    deleteLoanMutation.mutate(loans);
+  const handleDeleteLoan = (loanId: string) => {
+    deleteLoanMutation.mutate(loanId);
   };
 
   return {

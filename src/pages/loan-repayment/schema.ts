@@ -1,10 +1,14 @@
 import { z } from 'zod';
 
-export const loanInputSchema = z.object({
-  principal: z.number().min(1, 'Principal amount is required.'),
-  annualInterestRate: z.number().min(1, 'Annual interest rate is required.'),
-  monthlyPayment: z.number().min(1, 'Monthly payment is required.'),
-});
+export const loanInputSchema = z
+  .object({
+    id: z.string().uuid(),
+    loanName: z.string().min(1),
+    principal: z.number().min(1, 'Principal amount is required.'),
+    annualInterestRate: z.number().min(1, 'Annual interest rate is required.'),
+    monthlyPayment: z.number().min(1, 'Monthly payment is required.'),
+  })
+  .passthrough();
 
 export type LoanInputSchema = z.infer<typeof loanInputSchema>;
 
