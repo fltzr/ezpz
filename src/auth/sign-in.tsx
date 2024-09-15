@@ -90,51 +90,54 @@ const SignInPage = () => {
     <Box padding={{ vertical: 'xxxl' }}>
       <ContentLayout defaultPadding disableOverlap maxContentWidth={500}>
         <Container header={<Header variant='h1'>Sign in!</Header>}>
-          <Form
-            actions={
-              <Button
-                variant='primary'
-                onClick={() => {
-                  void handleSubmit(handleSignIn)();
-                }}>
-                Sign in
-              </Button>
-            }>
-            <SpaceBetween size='m' direction='vertical'>
-              <Controller
-                control={control}
-                name='email'
-                render={({ field }) => (
-                  <FormField label='Email' errorText={errors.email?.message}>
-                    <Input
-                      {...field}
-                      onChange={(event) => field.onChange(event.detail.value)}
-                    />
-                  </FormField>
-                )}
-              />
-              <Controller
-                control={control}
-                name='password'
-                render={({ field }) => (
-                  <FormField label='Password'>
-                    <SpaceBetween direction='vertical' size='xs'>
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              void handleSubmit(handleSignIn)();
+            }}
+            noValidate>
+            <Form
+              actions={
+                <Button variant='primary' formAction='submit'>
+                  Sign in
+                </Button>
+              }>
+              <SpaceBetween size='m' direction='vertical'>
+                <Controller
+                  control={control}
+                  name='email'
+                  render={({ field }) => (
+                    <FormField label='Email' errorText={errors.email?.message}>
                       <Input
                         {...field}
-                        type={showPassword ? 'text' : 'password'}
                         onChange={(event) => field.onChange(event.detail.value)}
                       />
-                      <Checkbox
-                        checked={showPassword}
-                        onChange={(event) => setShowPassword(event.detail.checked)}>
-                        Show password
-                      </Checkbox>
-                    </SpaceBetween>
-                  </FormField>
-                )}
-              />
-            </SpaceBetween>
-          </Form>
+                    </FormField>
+                  )}
+                />
+                <Controller
+                  control={control}
+                  name='password'
+                  render={({ field }) => (
+                    <FormField label='Password'>
+                      <SpaceBetween direction='vertical' size='xs'>
+                        <Input
+                          {...field}
+                          type={showPassword ? 'text' : 'password'}
+                          onChange={(event) => field.onChange(event.detail.value)}
+                        />
+                        <Checkbox
+                          checked={showPassword}
+                          onChange={(event) => setShowPassword(event.detail.checked)}>
+                          Show password
+                        </Checkbox>
+                      </SpaceBetween>
+                    </FormField>
+                  )}
+                />
+              </SpaceBetween>
+            </Form>
+          </form>
         </Container>
       </ContentLayout>
     </Box>
