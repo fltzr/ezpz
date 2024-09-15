@@ -11,6 +11,9 @@ export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   {
+    ignores: ['supabase/**'],
+  },
+  {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       parserOptions: {

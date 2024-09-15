@@ -21,6 +21,7 @@
     "@supabase/supabase-js": "^2.45.3",
     "@tanstack/react-query": "^5.55.0",
     "@vitejs/plugin-react": "^4.3.1",
+    "axios": "^1.7.7",
     "babel-plugin-react-compiler": "0.0.0-experimental-7449567-20240905",
     "express": "^4.19.2",
     "get-user-locale": "^2.3.2",
