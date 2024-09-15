@@ -93,7 +93,6 @@ export const ViewBudgetPage = ({
                 openModal('editBudgetItem', { budgetItem: item });
               },
               handleDeleteItem: (item) => {
-                console.log(item);
                 openModal('deleteItem', { item });
               },
             })}

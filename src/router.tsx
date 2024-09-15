@@ -55,6 +55,5 @@ const routes: RouteObject[] = [
 export const router: RouterProviderProps['router'] = createBrowserRouter(routes);
 
 if (import.meta.hot) {
-  console.log('Disposing router');
   import.meta.hot.dispose(() => router.dispose());
 }

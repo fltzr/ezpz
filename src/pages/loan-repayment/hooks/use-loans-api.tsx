@@ -67,9 +67,6 @@ export const useLoansApi = () => {
 
       const data = queryClient.getQueryData<LoanEntry[]>(['loans', user?.id]);
 
-      console.log(data);
-      console.log(updatedLoan);
-
       addNotification({
         id: nanoid(5),
         type: 'success',

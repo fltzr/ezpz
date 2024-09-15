@@ -62,7 +62,6 @@ export const AddBudgetItemModal = ({
   }, [visible]);
 
   const handleOnSubmit = (data: BudgetItemSchema) => {
-    console.log(data);
     onAdd({ ...data, category_id: category?.id ?? '', user_id: userId });
     handleClose();
   };

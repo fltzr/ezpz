@@ -40,7 +40,6 @@ const generateUserHeaderItems = ({
 
         switch (event.detail.id) {
           case 'sign-out':
-            console.log('sign-out clicked');
             signOut().catch((error: Error) => {
               console.log(`Error signing out: ${error.message}`);
             });

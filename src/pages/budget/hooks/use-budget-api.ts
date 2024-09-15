@@ -114,7 +114,6 @@ export const useBudgetApi = (userId: string) => {
   };
 
   const handleUpdateBudgetItem = (item: BudgetItemUpdate) => {
-    console.log('Updating budget item: ', item);
     updateItemMutation.mutate(item);
   };
 
