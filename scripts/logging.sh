@@ -24,7 +24,6 @@ log() {
       ;;
     ERROR)
       echo -e "${RED}[${timestamp}] [ERROR]${NC} - $message" >&2
-      exit 1
       ;;
     *)
       echo -e "[${timestamp}] [${level}] - $message"
