@@ -11,8 +11,8 @@ import {
   PlaidApi,
   Products,
 } from 'npm:plaid@27.0.0';
-import { corsHeaders } from '../_shared/cors.ts';
 import { getPlaidConfig } from '../_shared/plaid.ts';
+import { browserEndpoint } from '../_shared/cors.ts';
 
 const createLinkToken = async (plaid: PlaidApi, userId: string) => {
   const config: LinkTokenCreateRequest = {
@@ -32,62 +32,54 @@ const createLinkToken = async (plaid: PlaidApi, userId: string) => {
   return data;
 };
 
-Deno.serve(async (request) => {
-  const { method, headers } = request;
-  const token = headers.get('Authorization')!;
+Deno.serve(
+  browserEndpoint({ allowMethods: 'OPTIONS, POST' }, async (request) => {
+    const { headers } = request;
+    const token = headers.get('Authorization')!;
 
-  if (method === 'OPTIONS') {
-    return new Response('ok', {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      status: 400,
-    });
-  }
-
-  if (!token) {
-    return new Response('Unauthorized', {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      status: 400,
-    });
-  }
-
-  try {
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_ANON_KEY')!,
-      {
-        global: {
-          headers: { Authorization: token },
-        },
-      }
-    );
-
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (!user || authError) {
-      console.error(authError);
-      return new Response(JSON.stringify({ error: 'Authentication failed.' }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    if (!token) {
+      return new Response('Unauthorized', {
         status: 400,
       });
     }
 
-    const PLAID_ENV = 'sandbox';
-    const plaidConfig = getPlaidConfig(PLAID_ENV);
-    const plaid = new PlaidApi(plaidConfig);
+    try {
+      const supabase = createClient(
+        Deno.env.get('SUPABASE_URL')!,
+        Deno.env.get('SUPABASE_ANON_KEY')!,
+        {
+          global: {
+            headers: { Authorization: token },
+          },
+        }
+      );
 
-    const response = await createLinkToken(plaid, user!.id);
+      const {
+        data: { user },
+        error: authError,
+      } = await supabase.auth.getUser();
 
-    console.log(JSON.stringify(response, null, 2));
+      if (!user || authError) {
+        console.error(authError);
+        return new Response(JSON.stringify({ error: 'Authentication failed.' }), {
+          status: 400,
+        });
+      }
 
-    return new Response(JSON.stringify({ link_token: response.link_token }));
-  } catch (error) {
-    console.error(error);
-    return new Response(JSON.stringify({ error: error.message }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      status: 400,
-    });
-  }
-});
+      const PLAID_ENV = 'production';
+      const plaidConfig = getPlaidConfig(PLAID_ENV);
+      const plaid = new PlaidApi(plaidConfig);
+
+      const response = await createLinkToken(plaid, user!.id);
+
+      console.log(JSON.stringify(response, null, 2));
+
+      return new Response(response.link_token);
+    } catch (error) {
+      console.error(error);
+      return new Response(JSON.stringify({ error: error.message }), {
+        status: 400,
+      });
+    }
+  })
+);

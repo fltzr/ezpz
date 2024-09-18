@@ -1,4 +1,4 @@
-import { Database } from '../../../supabase';
+import { Database } from '../../../../supabase';
 
 export type LoanEntry = Database['public']['Tables']['loans']['Row'];
 export type LoanEntryInsert = Database['public']['Tables']['loans']['Insert'];

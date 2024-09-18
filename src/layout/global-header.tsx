@@ -10,10 +10,13 @@ import { nanoid } from 'nanoid';
 
 const generateUserHeaderItems = ({
   user,
-  dropdownActions: { signOut },
+  dropdownActions: { signOut, profile },
 }: {
   user: User | null;
-  dropdownActions: { signOut: () => Promise<void> };
+  dropdownActions: {
+    signOut: () => Promise<void>;
+    profile: (event: CustomEvent) => void;
+  };
 }): TopNavigationProps['utilities'] => {
   if (!user) return undefined;
 
@@ -26,13 +29,12 @@ const generateUserHeaderItems = ({
         {
           id: 'profile',
           text: 'Profile',
-          disabled: true,
-          disabledReason: "Doesn't exist yet!",
+          iconName: 'user-profile',
         },
         {
           id: 'sign-out',
-          iconName: 'undo',
           text: 'Sign out',
+          iconName: 'undo',
         },
       ],
       onItemClick: (event) => {
@@ -43,6 +45,9 @@ const generateUserHeaderItems = ({
             signOut().catch((error: Error) => {
               console.log(`Error signing out: ${error.message}`);
             });
+            break;
+          case 'profile':
+            profile(event);
             break;
           default:
             break;
@@ -71,6 +76,10 @@ export const GlobalHeader = () => {
         utilities={generateUserHeaderItems({
           user,
           dropdownActions: {
+            profile: (event) => {
+              event.preventDefault();
+              navigate('/profile', { replace: true });
+            },
             signOut: async () => {
               const { error } = await supabase.auth.signOut({ scope: 'global' });
 

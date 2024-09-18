@@ -10,8 +10,10 @@ import { lazy } from 'react';
 import ProtectedRoute from './auth/components/protected-route';
 import { SuspenseLoadingBar } from './common/components/suspense-loading-bar';
 
+const ProfileOverviewPage = lazy(() => import('./pages/profile/overview'));
 const BudgetPage = lazy(() => import('./pages/budget/budget'));
 const CalculatorPage = lazy(() => import('./pages/loan-repayment/calculator'));
+const TransactionsOverview = lazy(() => import('./pages/transactions/overview'));
 
 const routes: RouteObject[] = [
   {
@@ -31,6 +33,14 @@ const routes: RouteObject[] = [
         element: <ProtectedRoute />,
         children: [
           {
+            path: 'profile',
+            element: (
+              <SuspenseLoadingBar>
+                <ProfileOverviewPage />
+              </SuspenseLoadingBar>
+            ),
+          },
+          {
             path: 'budget',
             element: (
               <SuspenseLoadingBar>
@@ -43,6 +53,14 @@ const routes: RouteObject[] = [
             element: (
               <SuspenseLoadingBar>
                 <CalculatorPage />
+              </SuspenseLoadingBar>
+            ),
+          },
+          {
+            path: 'transactions',
+            element: (
+              <SuspenseLoadingBar>
+                <TransactionsOverview />
               </SuspenseLoadingBar>
             ),
           },

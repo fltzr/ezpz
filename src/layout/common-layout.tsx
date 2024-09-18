@@ -66,6 +66,11 @@ const CommonLayout = () => {
                   text: 'Loan calculator',
                   href: '/loan-calculator',
                 },
+                {
+                  type: 'link',
+                  text: 'Transactions',
+                  href: '/transactions',
+                },
               ]}
               onFollow={(event) => {
                 event.preventDefault();

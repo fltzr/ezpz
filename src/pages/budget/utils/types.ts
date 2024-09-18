@@ -1,4 +1,4 @@
-import type { Database } from '../../../supabase';
+import type { Database } from '../../../../supabase';
 
 export type IncomeSource = Database['public']['Tables']['income_sources']['Row'];
 export type IncomeSourceInsert = Omit<
@@ -28,5 +28,5 @@ export const isBudgetItem = (item?: BudgetTableItem): item is BudgetItem => {
 };
 
 export const getItemName = (item?: BudgetTableItem) => {
-  return isCategoryItem(item) ? item.category_name : item?.budget_item_name ?? 'Item';
+  return isCategoryItem(item) ? item.category_name : (item?.budget_item_name ?? 'Item');
 };
