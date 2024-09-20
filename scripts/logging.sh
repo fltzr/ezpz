@@ -20,13 +20,13 @@ log() {
 
   case "$level" in
     INFO)
-      echo -e "${GREEN}[${timestamp}] [INFO]${NC} - $message"
+      echo -e "${GREEN}[INFO]${NC} - $message"
       ;;
     ERROR)
-      echo -e "${RED}[${timestamp}] [ERROR]${NC} - $message" >&2
+      echo -e "${RED}[ERROR]${NC} - $message" >&2
       ;;
     *)
-      echo -e "[${timestamp}] [${level}] - $message"
+      echo -e "[${level}] - $message"
       ;;
   esac
 }
