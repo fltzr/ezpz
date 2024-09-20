@@ -1,8 +1,8 @@
-import { Configuration, PlaidEnvironments } from 'npm:plaid@27.0.0';
+import { Configuration, PlaidApi, PlaidEnvironments } from 'npm:plaid@27.0.0';
 
-export const getPlaidConfig = (plaidEnv: 'sandbox' | 'production') => {
-  return new Configuration({
-    basePath: PlaidEnvironments[plaidEnv],
+export const initializePlaid = () => {
+  const config = new Configuration({
+    basePath: PlaidEnvironments['production'],
     baseOptions: {
       headers: {
         'PLAID-CLIENT-ID': Deno.env.get('PLAID_CLIENT_ID')!,
@@ -10,4 +10,6 @@ export const getPlaidConfig = (plaidEnv: 'sandbox' | 'production') => {
       },
     },
   });
+
+  return new PlaidApi(config);
 };
