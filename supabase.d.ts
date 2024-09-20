@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 export type Json =
   | string
   | number
@@ -159,21 +158,21 @@ export type Database = {
         Row: {
           access_token: string;
           created_at: string;
-          id: number;
+          id: string;
           item_id: string;
           user_id: string | null;
         };
         Insert: {
           access_token: string;
           created_at?: string;
-          id?: number;
+          id?: string;
           item_id: string;
           user_id?: string | null;
         };
         Update: {
           access_token?: string;
           created_at?: string;
-          id?: number;
+          id?: string;
           item_id?: string;
           user_id?: string | null;
         };
