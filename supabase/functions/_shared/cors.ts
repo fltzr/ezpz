@@ -31,9 +31,20 @@ export const browserEndpoint = (
     'Access-Control-Allow-Methods': allowMethods,
   };
 
+  const allowedMethodsSet = new Set(
+    allowMethods.split(',').map((method) => method.trim().toUpperCase())
+  );
+
   return async (request: Request) => {
     if (request.method === 'OPTIONS') {
       return new Response('ok', { headers });
+    }
+
+    if (!allowedMethodsSet.has(request.method)) {
+      return new Response('Method not allowed', {
+        status: 405,
+        headers,
+      });
     }
 
     const response = await callback(request);
