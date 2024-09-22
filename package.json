@@ -8,7 +8,7 @@
     "dev:web": "vite",
     "dev:api": "node ./server/main.ts",
     "build": "tsc -b && vite build",
-    "supabase:types": "supabase gen types typescript --project-id ${SUPABASE_PROJECT_REF} --schema public,plaid > supabase.d.ts ",
+    "supabase:types": "supabase gen types typescript --project-id ${SUPABASE_PROJECT_REF} --schema public,plaid > supabase.d.ts && sed -i '' '1i\\\n/* eslint-disable @typescript-eslint/no-redundant-type-constituents */' supabase.d.ts",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test:browser": "vitest"
