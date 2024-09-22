@@ -1,12 +1,17 @@
-import { Container, Header, SpaceBetween } from '@cloudscape-design/components';
+import { Header, SpaceBetween } from '@cloudscape-design/components';
 import { PlaidLinkButton } from './components/plaid-link-button';
+import { PlaidBalances } from './components/plaid-balances';
+import { PlaidTransactions } from './components/plaid-transactions';
 
 const TransactionsOverview = () => {
   return (
-    <SpaceBetween direction='horizontal' size='xl'>
-      <Container header={<Header variant='h1'>Plaid</Header>}>
-        <PlaidLinkButton />
-      </Container>
+    <SpaceBetween direction='vertical' size='xl'>
+      <Header variant='awsui-h1-sticky' actions={<PlaidLinkButton />}>
+        Account overview
+      </Header>
+
+      <PlaidBalances />
+      <PlaidTransactions />
     </SpaceBetween>
   );
 };
