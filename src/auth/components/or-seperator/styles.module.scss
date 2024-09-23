@@ -1,0 +1,21 @@
+.or-separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    border-bottom: 0.5px solid #d1d5db; // Light gray color
+  }
+
+  &::before {
+    margin-right: 1em;
+  }
+
+  &::after {
+    margin-left: 1em;
+  }
+}
