@@ -1,17 +1,18 @@
-import { Table, Header, Button, StatusIndicator } from '@cloudscape-design/components';
+import { Table, Header, StatusIndicator } from '@cloudscape-design/components';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useAuth } from '../../../auth/hooks/use-auth';
 import { useSupabase } from '../../../common/hooks/use-supabase';
 import { useNotificationStore } from '../../../common/state/notifications';
 import { fetchBalances } from '../api';
+import { ManualRefresh } from './manual-refresh';
 
 export const PlaidBalances = () => {
   const { user } = useAuth();
   const supabase = useSupabase();
   const { addNotification } = useNotificationStore();
   const {
-    data: balances,
+    data,
     error: balancesError,
     isFetching,
     refetch,
@@ -31,15 +32,15 @@ export const PlaidBalances = () => {
   }, [balancesError, addNotification]);
 
   const sortedBalances = () => {
-    if (!balances) return [];
+    if (!data?.accounts) return [];
 
-    const primaryCheckings = balances.find(
+    const primaryCheckings = data.accounts.find(
       (account) => account.subtype?.toLowerCase() === 'checking'
     );
-    const primarySavings = balances.find((account) =>
+    const primarySavings = data.accounts.find((account) =>
       account.name.toLowerCase().includes('primary savings')
     );
-    const otherAccounts = balances.filter(
+    const otherAccounts = data.accounts.filter(
       (account) => account !== primaryCheckings && account !== primarySavings
     );
 
@@ -69,16 +70,15 @@ export const PlaidBalances = () => {
       items={sortedBalances() ?? []}
       loading={isFetching}
       loadingText='Fetching balances'
-      totalItemsCount={balances?.length ?? 0}
+      totalItemsCount={data?.accounts?.length ?? 0}
       header={
         <Header
           variant='h2'
           actions={
-            <Button
-              variant='normal'
-              iconName='refresh'
-              onClick={() => {
-                refetch().catch(console.error);
+            <ManualRefresh
+              lastRefresh={data?.updated_at}
+              onRefresh={() => {
+                void refetch();
               }}
             />
           }>

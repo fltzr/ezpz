@@ -1,5 +1,5 @@
 import { useSupabase } from '../../common/hooks/use-supabase';
-import type { AccountsGetResponse, TransactionsSyncResponse } from 'plaid';
+import type { AccountBase, TransactionsSyncResponse } from 'plaid';
 
 export const fetchLinkToken = async (supabase: ReturnType<typeof useSupabase>) => {
   const response = await supabase.functions.invoke<string>('plaid-create_link_token', {
@@ -50,9 +50,10 @@ export const fetchBalances = async (supabase: ReturnType<typeof useSupabase>) =>
 
   console.log(JSON.parse(typeof response.data === 'string' ? response.data : ''));
 
-  return JSON.parse(
-    typeof response.data === 'string' ? response.data : ''
-  ) as AccountsGetResponse['accounts'];
+  return JSON.parse(typeof response.data === 'string' ? response.data : '') as {
+    accounts: AccountBase[];
+    updated_at: string;
+  };
 };
 
 export const fetchTransactions = async (supabase: ReturnType<typeof useSupabase>) => {
