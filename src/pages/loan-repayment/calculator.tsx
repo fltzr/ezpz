@@ -21,6 +21,7 @@ import { toDatabaseSchema, toZodSchema } from './utils/dto';
 import { addMonths } from './utils/add-months';
 import { AddLoanModal } from './modals/add-loan-modal';
 import { DeleteLoanModal } from './modals/delete-loan-modal';
+import { useDrawers } from '../../layout/hooks/use-drawers';
 
 const CalculatorPage = () => {
   const {
@@ -29,6 +30,8 @@ const CalculatorPage = () => {
     handleUpdateLoan,
     handleDeleteLoan,
   } = useLoansApi();
+
+  const { setActiveDrawerId } = useDrawers();
 
   const [selectedLoan, setSelectedLoan] = useState<LoanInputSchema | undefined>(
     undefined
@@ -95,7 +98,7 @@ const CalculatorPage = () => {
           variant='h1'
           description='Add or select a loan and view an amortization table.'
           actions={
-            <Button variant='primary' onClick={() => setShowAddLoanModal(true)}>
+            <Button variant='primary' onClick={() => setActiveDrawerId('form')}>
               Add loan
             </Button>
           }>
