@@ -19,11 +19,13 @@ export const PlaidBalances = () => {
   } = useQuery({
     queryKey: ['balances', user?.id],
     queryFn: () => fetchBalances(supabase),
-    enabled: false,
   });
 
   useEffect(() => {
     if (balancesError) {
+      console.log(JSON.stringify(balancesError.message, null, 2));
+      console.log(JSON.stringify(balancesError.name, null, 2));
+      console.log(JSON.stringify(balancesError?.stack, null, 2));
       addNotification({
         type: 'warning',
         message: `Error fetching balances. Please try again later | Error: ${balancesError?.message}`,
@@ -70,13 +72,13 @@ export const PlaidBalances = () => {
       items={sortedBalances() ?? []}
       loading={isFetching}
       loadingText='Fetching balances'
-      totalItemsCount={data?.accounts?.length ?? 0}
+      totalItemsCount={sortedBalances().length ?? 0}
       header={
         <Header
           variant='h2'
           actions={
             <ManualRefresh
-              lastRefresh={data?.updated_at}
+              lastRefresh={data?.updated_at.split('.')[0]}
               onRefresh={() => {
                 void refetch();
               }}

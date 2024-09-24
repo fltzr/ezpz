@@ -11,21 +11,21 @@ export type Database = {
     Tables: {
       plaid_balances: {
         Row: {
-          accounts: Json
+          accounts: Json | null
           id: string
           plaid_id: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
-          accounts: Json
+          accounts?: Json | null
           id?: string
           plaid_id?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
-          accounts?: Json
+          accounts?: Json | null
           id?: string
           plaid_id?: string | null
           updated_at?: string

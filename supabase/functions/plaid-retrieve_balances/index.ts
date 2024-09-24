@@ -1,10 +1,10 @@
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
+import { AccountBase, AccountsGetResponse } from 'npm:plaid@27.0.0';
 
 import { browserEndpoint } from '../_shared/cors.ts';
 import { withErrorHandling } from '../_shared/with-error-handling.ts';
 import { authenticateUser, getSupabaseClient } from '../_shared/supabase.ts';
 import { initializePlaid } from '../_shared/plaid.ts';
-import { AccountBase, AccountsGetResponse } from 'npm:plaid@27.0.0';
 
 const fetchBalancesFromPlaid = async (accessToken: string) => {
   const plaid = initializePlaid();
@@ -21,6 +21,8 @@ const cacheAccounts = async (
   userId: string,
   accounts: AccountBase[]
 ) => {
+  console.log(`Caching account balances for ${userId}`);
+
   const { error } = await supabase
     .schema('plaid')
     .from('plaid_balances')
@@ -42,20 +44,24 @@ const getCachedAccounts = async (
     .schema('plaid')
     .from('plaid_balances')
     .select('*')
-    .eq('user_id', userId);
+    .eq('user_id', userId)
+    .limit(1)
+    .maybeSingle();
 
   if (error) throw new Error(`Error fetching cached accounts: ${error.message}`);
 
-  const accounts = JSON.parse(data[0].accounts as string) as AccountBase[];
-  const parsedData = { accounts, updated_at: data[0].updated_at };
+  if (!data) {
+    return null;
+  }
 
-  return parsedData;
+  return { accounts: JSON.parse(data?.accounts as string), updated_at: data?.updated_at };
 };
 
 Deno.serve(
   browserEndpoint(
     { allowMethods: 'OPTIONS, POST' },
     withErrorHandling(async (request) => {
+      const contentLength = request.headers.get('Content-Length');
       const token = request.headers.get('Authorization')!;
       const supabase = getSupabaseClient(token);
       const user = await authenticateUser(supabase);
@@ -73,8 +79,13 @@ Deno.serve(
         );
       }
 
-      const body = await request.json();
-      const { refresh }: { refresh?: string } = body;
+      let body = { refresh: false };
+
+      if (contentLength && parseInt(contentLength) > 0) {
+        body = await request.json();
+      }
+
+      const { refresh }: { refresh?: boolean } = body;
 
       /**
        * If a user requests to fetch the most recent balances, we:
@@ -96,18 +107,34 @@ Deno.serve(
        *   2a. If so, return those values
        *   2b. Otherwise, run the same flow as refresh.
        */
+      console.log(`Fetching cached accounts from db for ${user.id}...`);
       const cachedAccounts = await getCachedAccounts(supabase, user.id);
 
-      if (cachedAccounts) {
-        return new Response(JSON.stringify(cacheAccounts));
+      if (cachedAccounts?.accounts) {
+        console.log(`Cached accounts found for ${user.id}...`);
+        console.log(`Cached accounts: ${JSON.stringify(cachedAccounts, null, 2)}`);
+        return new Response(JSON.stringify(cachedAccounts));
       }
+
+      console.log(
+        `No cached records found. Fetching a new batch from plaid for ${user.id}...`
+      );
 
       const plaidResponse = await fetchBalancesFromPlaid(data.access_token);
       await cacheAccounts(supabase, user.id, plaidResponse.accounts);
 
-      return new Response(
-        JSON.stringify({ accounts: plaidResponse.accounts, updated_at: Date() })
-      );
+      if (plaidResponse) {
+        console.log(
+          `Balances fetched from plaid: ${JSON.stringify(plaidResponse, null, 2)}`
+        );
+        return new Response(
+          JSON.stringify({ accounts: plaidResponse.accounts, updated_at: Date() })
+        );
+      }
+
+      return new Response(JSON.stringify({ error: 'Error fetching balances' }), {
+        status: 400,
+      });
     })
   )
 );

@@ -11,25 +11,35 @@ export const ManualRefresh = ({
   lastRefresh,
   loading,
   onRefresh,
-}: ManualRefreshProps) => (
-  <SpaceBetween direction='horizontal' size='xs' alignItems='center'>
-    {lastRefresh && (
-      <Box variant='p' fontSize='body-s' color='text-status-inactive' textAlign='right'>
-        <span aria-live='polite' aria-atomic>
-          Last updated
-          <br />
-          {DateTime.fromFormat(lastRefresh, 'yyyy-MM-dd HH:mm:ss').toLocaleString(
-            DateTime.DATETIME_FULL_WITH_SECONDS
-          )}
-        </span>
-      </Box>
-    )}
-    <Button
-      iconName='refresh'
-      ariaLabel='Refresh'
-      loadingText='Refetching table content'
-      loading={loading}
-      onClick={onRefresh}
-    />
-  </SpaceBetween>
-);
+}: ManualRefreshProps) => {
+  console.log(`lastRefresh: ${lastRefresh}`);
+
+  const formattedLastRefresh =
+    lastRefresh &&
+    DateTime.fromISO(lastRefresh, { zone: 'UTC' })
+      .setZone('America/New_York')
+      .toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS);
+
+  console.log(`formattedLastRefresh: ${formattedLastRefresh}`);
+
+  return (
+    <SpaceBetween direction='horizontal' size='xs' alignItems='center'>
+      {lastRefresh && (
+        <Box variant='p' fontSize='body-s' color='text-status-inactive' textAlign='right'>
+          <span aria-live='polite' aria-atomic>
+            Last updated
+            <br />
+            {formattedLastRefresh}
+          </span>
+        </Box>
+      )}
+      <Button
+        iconName='refresh'
+        ariaLabel='Refresh'
+        loadingText='Refetching table content'
+        loading={loading}
+        onClick={onRefresh}
+      />
+    </SpaceBetween>
+  );
+};
