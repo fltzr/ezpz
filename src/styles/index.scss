@@ -1,4 +1,4 @@
-@use '@cloudscape-design/design-tokens' as cs;
+@use '../../build/design-tokens/index.scss' as cs;
 
 body.awsui-dark-mode {
   background-color: cs.$color-background-layout-main;

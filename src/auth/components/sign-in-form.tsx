@@ -87,7 +87,10 @@ export const SignInForm = () => {
             control={control}
             name='options.captchaToken'
             render={({ field }) => (
-              <Turnstile siteKey='1x00000000000000000000AA' onSuccess={field.onChange} />
+              <Turnstile
+                siteKey={import.meta.env.VITE_CLOUDFLARE_TURNSTILE_KEY}
+                onSuccess={field.onChange}
+              />
             )}
           />
           <Box padding={{ top: 'm' }}>
