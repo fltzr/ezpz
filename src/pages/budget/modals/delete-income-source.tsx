@@ -1,11 +1,11 @@
 import { IncomeSource } from '../utils/types';
 import {
+  Alert,
   Box,
   Button,
   Header,
   Modal,
   SpaceBetween,
-  StatusIndicator,
   Table,
 } from '@cloudscape-design/components';
 
@@ -63,9 +63,7 @@ export const DeleteIncomeSourceModal = ({
       <Table
         variant='borderless'
         header={
-          <StatusIndicator type='info'>
-            The following income sources will be deleted
-          </StatusIndicator>
+          <Alert type='warning'>The following income sources will be deleted</Alert>
         }
         items={items}
         columnDefinitions={[

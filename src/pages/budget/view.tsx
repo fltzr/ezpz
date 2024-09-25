@@ -20,11 +20,11 @@ import {
 
 import { BudgetOverview } from './widgets/budget-overview';
 import { useModals } from './hooks/use-modals';
-import { AddCategoryModal } from './components/add-category-modal';
-import { DeleteItemModal } from './components/delete-item-modal';
-import { AddBudgetItemModal } from './components/add-budget-item-modal';
+import { AddCategoryModal } from './modals/add-category-modal';
+import { DeleteItemModal } from './modals/delete-item-modal';
+import { AddBudgetItemModal } from './modals/add-budget-item-modal';
 import { BudgetPercentageChart } from './widgets/budget-percentage-chart';
-import { EditBudgetItemModal } from './components/edit-budget-item-modal';
+import { EditBudgetItemModal } from './modals/edit-budget-item-modal';
 import { useIncomeApi } from './hooks/use-income-api';
 import { PropsWithChildren } from 'react';
 

@@ -14,7 +14,7 @@ export const useIncomeApi = (userId: string) => {
   const queryClient = useQueryClient();
   const { addNotification } = useNotificationStore();
 
-  const { data, refetch, isLoading, error } = useQuery({
+  const { data, refetch, isFetching, isLoading, error } = useQuery({
     queryKey: ['income-sources', userId],
     queryFn: () => api.fetchIncomeSources(supabase, userId),
     enabled: !!userId,
@@ -124,6 +124,7 @@ export const useIncomeApi = (userId: string) => {
   return {
     data,
     refetch,
+    isFetching,
     isLoading,
     error,
     handleAddIncomeSource,

@@ -9,6 +9,7 @@ import {
   ExpandableSection,
   ButtonDropdown,
   Input,
+  Spinner,
 } from '@cloudscape-design/components';
 
 import { formatCurrency } from '../../../common/utils/format-currency';
@@ -46,7 +47,8 @@ export const BudgetOverview = ({ userId }: { userId: string }) => {
   const { data } = useBudgetApi(userId);
   const {
     data: incomeSources,
-    isLoading: loadingIncomeSources,
+    isFetching: loadingIncomeSources,
+    isLoading,
     refetch,
     handleAddIncomeSource,
     handleUpdateIncomeSource,
@@ -66,179 +68,197 @@ export const BudgetOverview = ({ userId }: { userId: string }) => {
   return (
     <>
       <Container fitHeight header={<Header variant='h2'>Overview</Header>}>
-        <SpaceBetween size='l'>
-          <KeyValuePairs
-            columns={3}
-            items={[
-              {
-                label: 'Amount to budget',
-                value: formatCurrency(amountToBudget),
-              },
-              { label: 'Amount spent', value: formatCurrency(amountSpent) },
-              {
-                label: 'Amount left',
-                value: getBudgetStatus(amountSpent, amountToBudget),
-              },
-            ]}
-          />
-          <ExpandableSection
-            defaultExpanded
-            disableContentPaddings
-            headerText='Income sources'
-            headerActions={
-              <ButtonDropdown
-                variant='normal'
-                items={[
-                  { id: 'add', text: 'Add income source', iconName: 'add-plus' },
-                  {
-                    id: 'update',
-                    text: 'Update',
-                    iconName: 'edit',
-                    disabled: selectedItems.length === 0 || selectedItems.length > 1,
-                    disabledReason:
-                      selectedItems.length > 1
-                        ? 'Multiple income sources are selected.'
-                        : 'No income sources are selected.',
-                  },
-                  {
-                    id: 'delete',
-                    text: `Delete ${
-                      selectedItems.length !== 0 ? `(${selectedItems.length})` : ''
-                    }`,
-                    iconName: 'delete-marker',
-                    disabled: selectedItems.length === 0,
-                    disabledReason:
-                      selectedItems.length > 1
-                        ? 'Multiple income sources are selected.'
-                        : 'No income sources are selected.',
-                  },
-                  {
-                    id: 'refresh',
-                    text: 'Refresh',
-                    iconName: 'refresh',
-                  },
-                ]}
-                onItemClick={(event) => {
-                  switch (event.detail.id) {
-                    case 'add':
-                      openModal('addIncomeSource');
-                      break;
-                    case 'delete':
-                      openModal('deleteIncomeSource');
-                      break;
-                    case 'refresh':
-                      refetch().catch((error: Error) => {
-                        addNotification({
-                          type: 'error',
-                          message: `Error refetching incomme sources: ${error.message}`,
-                        });
-                      });
-                      break;
-                    default:
-                      break;
-                  }
-                }}>
-                Actions
-              </ButtonDropdown>
-            }>
-            <Table
-              variant='full-page'
-              selectionType='multi'
-              loading={loadingIncomeSources}
-              items={incomeSources ?? []}
-              columnDefinitions={[
+        {isLoading ? (
+          <div
+            style={{
+              height: '100%',
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Spinner size='large' />
+          </div>
+        ) : (
+          <SpaceBetween size='l'>
+            <KeyValuePairs
+              columns={3}
+              items={[
                 {
-                  id: 'name',
-                  header: 'Source',
-                  cell: (item) => item.income_source_name,
-                  editConfig: {
-                    editingCell: (
-                      item,
-                      ctx: {
-                        currentValue: string | null;
-                        setValue: (value: string) => void;
-                      }
-                    ) => (
-                      <Input
-                        placeholder={
-                          item.income_source_name ?? 'e.g., Paycheck, Babysitting, Stocks'
-                        }
-                        value={ctx.currentValue ?? item.income_source_name}
-                        onChange={(event) => ctx.setValue(event.detail.value)}
-                      />
-                    ),
-                    validation: (item, value) => {
-                      if (typeof value !== 'string' || value?.length < 1) {
-                        return 'Invalid income source name!';
-                      }
-
-                      if (item.income_source_name === value) {
-                        return 'Name must be different to update!';
-                      }
-
-                      return undefined;
-                    },
-                  },
+                  label: 'Amount to budget',
+                  value: formatCurrency(amountToBudget),
                 },
+                { label: 'Amount spent', value: formatCurrency(amountSpent) },
                 {
-                  id: 'projected_amount',
-                  header: 'Projected amount',
-                  cell: (item) => formatCurrency(item.projected_amount),
-                  editConfig: {
-                    editingCell: (item, ctx) => (
-                      <Input
-                        type='number'
-                        inputMode='decimal'
-                        placeholder={String(item.projected_amount)}
-                        value={String(ctx.currentValue ?? item.projected_amount)}
-                        onChange={(event) => ctx.setValue(Number(event.detail.value))}
-                      />
-                    ),
-                    validation: (_, value: string) => {
-                      if (!value) return undefined;
-
-                      const isValidNumber = isFinite(Number(value));
-
-                      if (!isValidNumber) {
-                        return 'Invalid type.';
-                      }
-
-                      if (Number(value) < 0) {
-                        return 'Projected value must be a non-negative value!';
-                      }
-
-                      return undefined;
-                    },
-                  },
+                  label: 'Amount left',
+                  value: getBudgetStatus(amountSpent, amountToBudget),
                 },
               ]}
-              selectedItems={selectedItems}
-              onSelectionChange={(event) => setSelectedItems(event.detail.selectedItems)}
-              submitEdit={(item, column, newValue) => {
-                type UpdateFields = Pick<
-                  IncomeSource,
-                  'income_source_name' | 'projected_amount'
-                >;
-                const updateField: Record<string, keyof UpdateFields> = {
-                  name: 'income_source_name',
-                  projected_amount: 'projected_amount',
-                };
-
-                handleUpdateIncomeSource({
-                  id: item.id,
-                  [updateField[column.id as string]]: newValue,
-                });
-              }}
-              empty={
-                incomeSources ? (
-                  <StatusIndicator type='info'>No income sources added!</StatusIndicator>
-                ) : (
-                  getBudgetStatus(0)
-                )
-              }
             />
-          </ExpandableSection>
-        </SpaceBetween>
+            <ExpandableSection
+              defaultExpanded
+              disableContentPaddings
+              headerText='Income sources'
+              headerActions={
+                <ButtonDropdown
+                  variant='normal'
+                  items={[
+                    { id: 'add', text: 'Add income source', iconName: 'add-plus' },
+                    {
+                      id: 'update',
+                      text: 'Update',
+                      iconName: 'edit',
+                      disabled: selectedItems.length === 0 || selectedItems.length > 1,
+                      disabledReason:
+                        selectedItems.length > 1
+                          ? 'Multiple income sources are selected.'
+                          : 'No income sources are selected.',
+                    },
+                    {
+                      id: 'delete',
+                      text: `Delete ${
+                        selectedItems.length !== 0 ? `(${selectedItems.length})` : ''
+                      }`,
+                      iconName: 'delete-marker',
+                      disabled: selectedItems.length === 0,
+                      disabledReason:
+                        selectedItems.length > 1
+                          ? 'Multiple income sources are selected.'
+                          : 'No income sources are selected.',
+                    },
+                    {
+                      id: 'refresh',
+                      text: 'Refresh',
+                      iconName: 'refresh',
+                    },
+                  ]}
+                  onItemClick={(event) => {
+                    switch (event.detail.id) {
+                      case 'add':
+                        openModal('addIncomeSource');
+                        break;
+                      case 'delete':
+                        openModal('deleteIncomeSource');
+                        break;
+                      case 'refresh':
+                        refetch().catch((error: Error) => {
+                          addNotification({
+                            type: 'error',
+                            message: `Error refetching incomme sources: ${error.message}`,
+                          });
+                        });
+                        break;
+                      default:
+                        break;
+                    }
+                  }}>
+                  Actions
+                </ButtonDropdown>
+              }>
+              <Table
+                variant='full-page'
+                selectionType='multi'
+                loading={loadingIncomeSources}
+                items={incomeSources ?? []}
+                columnDefinitions={[
+                  {
+                    id: 'name',
+                    header: 'Source',
+                    cell: (item) => item.income_source_name,
+                    editConfig: {
+                      editingCell: (
+                        item,
+                        ctx: {
+                          currentValue: string | null;
+                          setValue: (value: string) => void;
+                        }
+                      ) => (
+                        <Input
+                          placeholder={
+                            item.income_source_name ??
+                            'e.g., Paycheck, Babysitting, Stocks'
+                          }
+                          value={ctx.currentValue ?? item.income_source_name}
+                          onChange={(event) => ctx.setValue(event.detail.value)}
+                        />
+                      ),
+                      validation: (item, value) => {
+                        if (typeof value !== 'string' || value?.length < 1) {
+                          return 'Invalid income source name!';
+                        }
+
+                        if (item.income_source_name === value) {
+                          return 'Name must be different to update!';
+                        }
+
+                        return undefined;
+                      },
+                    },
+                  },
+                  {
+                    id: 'projected_amount',
+                    header: 'Projected amount',
+                    cell: (item) => formatCurrency(item.projected_amount),
+                    editConfig: {
+                      editingCell: (item, ctx) => (
+                        <Input
+                          type='number'
+                          inputMode='decimal'
+                          placeholder={String(item.projected_amount)}
+                          value={String(ctx.currentValue ?? item.projected_amount)}
+                          onChange={(event) => ctx.setValue(Number(event.detail.value))}
+                        />
+                      ),
+                      validation: (_, value: string) => {
+                        if (!value) return undefined;
+
+                        const isValidNumber = isFinite(Number(value));
+
+                        if (!isValidNumber) {
+                          return 'Invalid type.';
+                        }
+
+                        if (Number(value) < 0) {
+                          return 'Projected value must be a non-negative value!';
+                        }
+
+                        return undefined;
+                      },
+                    },
+                  },
+                ]}
+                selectedItems={selectedItems}
+                onSelectionChange={(event) =>
+                  setSelectedItems(event.detail.selectedItems)
+                }
+                submitEdit={(item, column, newValue) => {
+                  type UpdateFields = Pick<
+                    IncomeSource,
+                    'income_source_name' | 'projected_amount'
+                  >;
+                  const updateField: Record<string, keyof UpdateFields> = {
+                    name: 'income_source_name',
+                    projected_amount: 'projected_amount',
+                  };
+
+                  handleUpdateIncomeSource({
+                    id: item.id,
+                    [updateField[column.id as string]]: newValue,
+                  });
+                }}
+                empty={
+                  incomeSources ? (
+                    <StatusIndicator type='info'>
+                      No income sources added!
+                    </StatusIndicator>
+                  ) : (
+                    getBudgetStatus(0)
+                  )
+                }
+              />
+            </ExpandableSection>
+          </SpaceBetween>
+        )}
       </Container>
       <AddIncomeSourceModal
         visible={modalState.type === 'addIncomeSource'}
