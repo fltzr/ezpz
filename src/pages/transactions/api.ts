@@ -38,9 +38,13 @@ export const exchangePublicToken = async (supabase: ReturnType<typeof useSupabas
   };
 };
 
-export const fetchBalances = async (supabase: ReturnType<typeof useSupabase>) => {
+export const fetchBalances = async (
+  supabase: ReturnType<typeof useSupabase>,
+  refresh?: boolean
+) => {
   const response = await supabase.functions.invoke<string>('plaid-retrieve_balances', {
     method: 'POST',
+    body: { refresh },
   });
 
   if (response.data === null && response.error) {
