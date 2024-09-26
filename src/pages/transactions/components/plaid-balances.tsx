@@ -1,6 +1,6 @@
 import { Table, Header, StatusIndicator } from '@cloudscape-design/components';
 import { useQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../../../auth/hooks/use-auth';
 import { useSupabase } from '../../../common/hooks/use-supabase';
 import { useNotificationStore } from '../../../common/state/notifications';
@@ -11,6 +11,8 @@ export const PlaidBalances = () => {
   const { user } = useAuth();
   const supabase = useSupabase();
   const { addNotification } = useNotificationStore();
+
+  const [refreshParams, setRefreshParams] = useState(false);
   const {
     data,
     error: balancesError,
@@ -18,7 +20,7 @@ export const PlaidBalances = () => {
     refetch,
   } = useQuery({
     queryKey: ['balances', user?.id],
-    queryFn: () => fetchBalances(supabase),
+    queryFn: () => fetchBalances(supabase, refreshParams),
   });
 
   useEffect(() => {
@@ -80,6 +82,7 @@ export const PlaidBalances = () => {
             <ManualRefresh
               lastRefresh={data?.updated_at.split('.')[0]}
               onRefresh={() => {
+                setRefreshParams(true);
                 void refetch();
               }}
             />
