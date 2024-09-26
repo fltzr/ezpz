@@ -12,15 +12,11 @@ export const ManualRefresh = ({
   loading,
   onRefresh,
 }: ManualRefreshProps) => {
-  console.log(`lastRefresh: ${lastRefresh}`);
-
   const formattedLastRefresh =
     lastRefresh &&
     DateTime.fromISO(lastRefresh, { zone: 'UTC' })
       .setZone('America/New_York')
       .toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS);
-
-  console.log(`formattedLastRefresh: ${formattedLastRefresh}`);
 
   return (
     <SpaceBetween direction='horizontal' size='xs' alignItems='center'>
