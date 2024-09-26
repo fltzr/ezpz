@@ -7,6 +7,7 @@ import { Box, Header, Modal, StatusIndicator } from '@cloudscape-design/componen
 import { SupabaseProvider } from './common/components/supabase-provider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './auth/components/auth-provider';
+import { DrawerProvider } from './common/components/drawer-provider';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -36,17 +37,19 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <SupabaseProvider>
         <AuthProvider>
-          <RouterProvider router={router} />
-          <Modal
-            visible={initialPopup}
-            onDismiss={() => setInitialPopup(false)}
-            header={<Header variant='h1'>Coucou beautiful bABY</Header>}>
-            I{' '}
-            <Box variant='span'>
-              <StatusIndicator type='success'>LOVE</StatusIndicator>
-            </Box>{' '}
-            you!!!!!!!!
-          </Modal>
+          <DrawerProvider>
+            <RouterProvider router={router} />
+            <Modal
+              visible={initialPopup}
+              onDismiss={() => setInitialPopup(false)}
+              header={<Header variant='h1'>Coucou beautiful bABY</Header>}>
+              I{' '}
+              <Box variant='span'>
+                <StatusIndicator type='success'>LOVE</StatusIndicator>
+              </Box>{' '}
+              you!!!!!!!!
+            </Modal>
+          </DrawerProvider>
         </AuthProvider>
       </SupabaseProvider>
     </QueryClientProvider>

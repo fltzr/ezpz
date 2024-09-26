@@ -17,14 +17,14 @@ import { useNotificationStore } from '../common/state/notifications';
 import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../auth/hooks/use-auth';
-import { useDrawers } from './hooks/use-drawers';
+import { useDrawer } from '../common/components/drawer-provider';
 
 type LocationState = {
   reason?: string;
 };
 
 const CommonLayout = () => {
-  const { activeDrawerId, setActiveDrawerId } = useDrawers();
+  const { activeDrawerId, drawerContent, closeDrawer } = useDrawer();
 
   const { addNotification } = useNotificationStore();
   const { user } = useAuth();
@@ -107,22 +107,10 @@ const CommonLayout = () => {
             navigationWidth={200}
             onNavigationChange={({ detail }) => setNavigationOpen(detail.open)}
             content={<Outlet />}
-            drawers={
-              activeDrawerId
-                ? [
-                    {
-                      id: 'form',
-                      ariaLabels: { drawerName: '' },
-                      trigger: {
-                        iconName: 'add-plus',
-                      },
-                      content: <></>,
-                      defaultSize: 600,
-                    },
-                  ]
-                : undefined
-            }
-            onDrawerChange={(event) => setActiveDrawerId(event.detail.activeDrawerId)}
+            drawers={drawerContent ? [drawerContent] : undefined}
+            onDrawerChange={() => {
+              closeDrawer();
+            }}
             activeDrawerId={activeDrawerId}
           />
         )}
