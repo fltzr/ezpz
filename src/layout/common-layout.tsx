@@ -24,7 +24,7 @@ type LocationState = {
 };
 
 const CommonLayout = () => {
-  const { activeDrawerId, drawerContent, closeDrawer } = useDrawer();
+  const { activeDrawerId, drawerContent, closeDrawer, panelWidth } = useDrawer();
 
   const { addNotification } = useNotificationStore();
   const { user } = useAuth();
@@ -108,6 +108,7 @@ const CommonLayout = () => {
             onNavigationChange={({ detail }) => setNavigationOpen(detail.open)}
             content={<Outlet />}
             drawers={drawerContent ? [drawerContent] : undefined}
+            toolsWidth={panelWidth}
             onDrawerChange={() => {
               closeDrawer();
             }}

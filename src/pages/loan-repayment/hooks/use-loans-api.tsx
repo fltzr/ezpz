@@ -88,7 +88,7 @@ export const useLoansApi = () => {
     mutationFn: async (loanId: string) => {
       await api.deleteLoan(supabase, loanId);
     },
-    onSuccess: (_, deletedLoans) => {
+    onSuccess: (_, deletedLoan) => {
       queryClient
         .refetchQueries({ queryKey: ['loans', user!.id] })
         .catch((error: Error) => {
@@ -101,9 +101,7 @@ export const useLoansApi = () => {
       addNotification({
         id: nanoid(5),
         type: 'success',
-        message: `Deleted ${deletedLoans.length} loan${
-          deletedLoans.length > 1 ? 's' : ''
-        }`,
+        message: `Successfully deleted loan ID ${deletedLoan}`,
       });
     },
     onError: (error) => {

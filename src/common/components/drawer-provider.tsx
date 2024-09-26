@@ -3,8 +3,9 @@ import { createContext, PropsWithChildren, ReactNode, useContext, useState } fro
 
 type DrawerContextProps = {
   activeDrawerId: string | null;
-  drawerContent: AppLayoutProps.Drawer | undefined;
-  openDrawer: (drawer: ReactNode, drawerName?: string) => void;
+  drawerContent?: AppLayoutProps.Drawer;
+  panelWidth?: number;
+  openDrawer: (drawerName: string, drawer: ReactNode, width: number) => void;
   closeDrawer: () => void;
 };
 
@@ -15,8 +16,9 @@ export const DrawerProvider = ({ children }: PropsWithChildren) => {
   const [drawerContent, setDrawerContent] = useState<AppLayoutProps.Drawer | undefined>(
     undefined
   );
+  const [panelWidth, setPanelWidth] = useState<number | undefined>(undefined);
 
-  const openDrawer = (content: ReactNode, drawerName = 'default') => {
+  const openDrawer = (drawerName = 'default', content: ReactNode, width = 200) => {
     setActiveDrawerId(drawerName);
     setDrawerContent({
       id: drawerName,
@@ -26,6 +28,7 @@ export const DrawerProvider = ({ children }: PropsWithChildren) => {
       },
       trigger: {},
     });
+    setPanelWidth(width);
   };
 
   const closeDrawer = () => {
@@ -35,7 +38,13 @@ export const DrawerProvider = ({ children }: PropsWithChildren) => {
 
   return (
     <DrawerContext.Provider
-      value={{ activeDrawerId, drawerContent, openDrawer, closeDrawer }}>
+      value={{
+        activeDrawerId,
+        drawerContent,
+        panelWidth,
+        openDrawer,
+        closeDrawer,
+      }}>
       {children}
     </DrawerContext.Provider>
   );

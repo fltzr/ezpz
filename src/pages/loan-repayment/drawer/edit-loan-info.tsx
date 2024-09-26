@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Drawer,
   Form,
@@ -7,25 +8,30 @@ import {
   Input,
   SpaceBetween,
 } from '@cloudscape-design/components';
-import { loanInputSchema, LoanInputSchema } from '../schema';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffectOnce } from 'react-use';
 
-type AddLoanInfoProps = {
-  onSubmit: (loan: LoanInputSchema) => void;
+import { loanInputSchema, LoanInputSchema } from '../schema';
+
+type EditLoanInfoProps = {
+  loanDetails?: LoanInputSchema;
+  onSubmitEdit: (loan: LoanInputSchema) => void;
   onDismiss: () => void;
 };
 
-export const AddLoanInfo = ({ onSubmit, onDismiss }: AddLoanInfoProps) => {
+export const EditLoanInfo = ({
+  loanDetails,
+  onSubmitEdit,
+  onDismiss,
+}: EditLoanInfoProps) => {
   const {
     control,
     handleSubmit,
     reset,
     formState: { errors },
-    setFocus,
   } = useForm<LoanInputSchema>({
-    resolver: zodResolver(loanInputSchema.omit({ id: true })),
+    resolver: zodResolver(loanInputSchema),
+    defaultValues: loanDetails,
   });
 
   const handleOnDismiss = () => {
@@ -33,30 +39,41 @@ export const AddLoanInfo = ({ onSubmit, onDismiss }: AddLoanInfoProps) => {
     onDismiss();
   };
 
-  useEffectOnce(() => {
-    setFocus('loanName');
-  });
-
   return (
-    <Drawer header={<Header variant='h2'>Add loan</Header>}>
+    <Drawer
+      header={
+        <Header variant='h2'>
+          Edit loan details for{' '}
+          <Box display='inline-block' fontSize='heading-m' color='text-status-info'>
+            {loanDetails?.loanName}
+          </Box>
+        </Header>
+      }>
       <Form
         actions={
-          <SpaceBetween size='xs' direction='horizontal'>
-            <Button variant='link' onClick={handleOnDismiss}>
-              Cancel
-            </Button>
-            <Button
-              variant='primary'
-              onClick={() =>
-                void handleSubmit(onSubmit, (error) => {
-                  console.log(error);
-                })()
-              }>
-              Add
-            </Button>
-          </SpaceBetween>
+          <Box float='right'>
+            <SpaceBetween size='xs' direction='horizontal'>
+              <Button variant='link' onClick={handleOnDismiss}>
+                Cancel
+              </Button>
+              <Button variant='primary' onClick={() => void handleSubmit(onSubmitEdit)()}>
+                Update
+              </Button>
+            </SpaceBetween>
+          </Box>
         }>
         <SpaceBetween direction='vertical' size='m'>
+          {/* Loan ID (read-only) */}
+          <Controller
+            control={control}
+            name='id'
+            render={({ field }) => (
+              <FormField label='Loan ID'>
+                <Input readOnly value={field.value} />
+              </FormField>
+            )}
+          />
+
           {/* Loan Name */}
           <Controller
             control={control}
@@ -64,7 +81,6 @@ export const AddLoanInfo = ({ onSubmit, onDismiss }: AddLoanInfoProps) => {
             render={({ field }) => (
               <FormField label='Loan Name' errorText={errors.loanName?.message}>
                 <Input
-                  {...field}
                   value={field.value}
                   onChange={(event) => field.onChange(event.detail.value)}
                 />
@@ -79,7 +95,6 @@ export const AddLoanInfo = ({ onSubmit, onDismiss }: AddLoanInfoProps) => {
             render={({ field }) => (
               <FormField label='Principal ($)' errorText={errors.principal?.message}>
                 <Input
-                  {...field}
                   type='number'
                   inputMode='decimal'
                   value={field.value !== undefined ? String(field.value) : ''}
@@ -100,7 +115,6 @@ export const AddLoanInfo = ({ onSubmit, onDismiss }: AddLoanInfoProps) => {
                 label='Annual Interest Rate (%)'
                 errorText={errors.annualInterestRate?.message}>
                 <Input
-                  {...field}
                   type='number'
                   inputMode='decimal'
                   value={field.value !== undefined ? String(field.value) : ''}
@@ -121,7 +135,6 @@ export const AddLoanInfo = ({ onSubmit, onDismiss }: AddLoanInfoProps) => {
                 label='Monthly Payment ($)'
                 errorText={errors.monthlyPayment?.message}>
                 <Input
-                  {...field}
                   type='number'
                   inputMode='decimal'
                   value={field.value !== undefined ? String(field.value) : ''}

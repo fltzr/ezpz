@@ -12,7 +12,6 @@ import {
 
 import type { LoanInputSchema } from './schema';
 import { useLoansApi } from './hooks/use-loans-api';
-import { EditLoanModal } from './modals/edit-loan-modal';
 import { AmortizationScheduleTable } from './components/amortization-schedule-table';
 import { LoanSelector } from './components/loan-selector';
 import { formatCurrency } from '../../common/utils/format-currency';
@@ -22,6 +21,7 @@ import { addMonths } from './utils/add-months';
 import { DeleteLoanModal } from './modals/delete-loan-modal';
 import { AddLoanInfo } from './drawer/add-loan-info';
 import { useDrawer } from '../../common/components/drawer-provider';
+import { EditLoanInfo } from './drawer/edit-loan-info';
 
 const CalculatorPage = () => {
   const {
@@ -37,7 +37,6 @@ const CalculatorPage = () => {
     undefined
   );
 
-  const [showEditLoanModal, setShowEditLoanModal] = useState(false);
   const [showDeleteLoanModal, setShowDeleteLoanModal] = useState(false);
 
   useEffect(() => {
@@ -65,16 +64,23 @@ const CalculatorPage = () => {
   const handleSubmitAdd = (data: LoanInputSchema) => {
     handleAddLoan(toDatabaseSchema(data));
     closeDrawer();
+    resetLoanSelection();
   };
 
   const handleSubmitEdit = (data: LoanInputSchema) => {
     handleUpdateLoan(toDatabaseSchema(data));
-    setShowEditLoanModal(false);
+    closeDrawer();
+    resetLoanSelection();
   };
 
   const handleSubmitDelete = (loanId: string) => {
     handleDeleteLoan(loanId);
     setShowDeleteLoanModal(false);
+    resetLoanSelection();
+  };
+
+  const resetLoanSelection = () => {
+    setSelectedLoan(undefined);
   };
 
   const loanSummaryItems = (): KeyValuePairsProps['items'] => {
@@ -104,16 +110,19 @@ const CalculatorPage = () => {
           variant='h1'
           description='Add or select a loan and view an amortization table.'
           actions={
-            <Button
-              variant='primary'
-              onClick={() => {
-                openDrawer(
-                  <AddLoanInfo onSubmit={handleSubmitAdd} onDismiss={closeDrawer} />,
-                  'add-loan-info'
-                );
-              }}>
-              Add loan
-            </Button>
+            <Box padding={{ vertical: 's' }}>
+              <Button
+                variant='primary'
+                onClick={() => {
+                  openDrawer(
+                    'add-loan-info',
+                    <AddLoanInfo onSubmit={handleSubmitAdd} onDismiss={closeDrawer} />,
+                    350
+                  );
+                }}>
+                Add loan
+              </Button>
+            </Box>
           }>
           Loan repayment calculator
         </Header>
@@ -126,7 +135,17 @@ const CalculatorPage = () => {
                   variant='inline-icon'
                   iconName='edit'
                   disabled={!selectedLoan}
-                  onClick={() => setShowEditLoanModal(true)}
+                  onClick={() => {
+                    openDrawer(
+                      'edit-loan-info',
+                      <EditLoanInfo
+                        loanDetails={selectedLoan}
+                        onSubmitEdit={handleSubmitEdit}
+                        onDismiss={closeDrawer}
+                      />,
+                      350
+                    );
+                  }}
                 />
                 <Button
                   variant='inline-icon'
@@ -160,14 +179,6 @@ const CalculatorPage = () => {
           </Box>
         )}
       </SpaceBetween>
-      {selectedLoan && (
-        <EditLoanModal
-          visible={showEditLoanModal}
-          loanDetails={selectedLoan}
-          onDismiss={() => setShowEditLoanModal(false)}
-          onSubmitEdit={handleSubmitEdit}
-        />
-      )}
       <DeleteLoanModal
         visible={showDeleteLoanModal}
         loanDetails={selectedLoan}
