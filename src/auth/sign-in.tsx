@@ -15,7 +15,11 @@ import { SignInWithGoogle } from './components/providers/google';
 import { SignInWithGithub } from './components/providers/github';
 import { SignInForm } from './components/sign-in-form';
 
+import { useTranslation } from 'react-i18next';
+
 const SignInPage = () => {
+  const { t } = useTranslation();
+
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -35,13 +39,13 @@ const SignInPage = () => {
       <div />
       <SpaceBetween direction='vertical' size='xxl'>
         <Container
-          header={<Header variant='h1'>Sign in</Header>}
+          header={<Header variant='h1'>{t('auth.signIn')}</Header>}
           footer={
             <>
               <Box textAlign='center'>
-                Don&apos;t have an account?{' '}
+                {t('auth.noAccount')}{' '}
                 <Link variant='primary' href='#'>
-                  Sign up
+                  {t('auth.noAccountLink')}
                 </Link>
               </Box>
             </>

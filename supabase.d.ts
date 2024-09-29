@@ -42,7 +42,7 @@ export type Database = {
           {
             foreignKeyName: "plaid_balances_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -66,6 +66,7 @@ export type Database = {
     Tables: {
       budget_items: {
         Row: {
+          budget_entry: string | null
           budget_item_name: string
           category_id: string
           created_at: string
@@ -74,6 +75,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          budget_entry?: string | null
           budget_item_name: string
           category_id: string
           created_at?: string
@@ -82,6 +84,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          budget_entry?: string | null
           budget_item_name?: string
           category_id?: string
           created_at?: string
@@ -108,18 +111,21 @@ export type Database = {
       }
       categories: {
         Row: {
+          budget_entry: string | null
           category_name: string
           created_at: string
           id: string
           user_id: string
         }
         Insert: {
+          budget_entry?: string | null
           category_name: string
           created_at?: string
           id?: string
           user_id: string
         }
         Update: {
+          budget_entry?: string | null
           category_name?: string
           created_at?: string
           id?: string
@@ -137,6 +143,7 @@ export type Database = {
       }
       income_sources: {
         Row: {
+          budget_entry: string | null
           created_at: string
           id: string
           income_source_name: string
@@ -144,6 +151,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          budget_entry?: string | null
           created_at?: string
           id?: string
           income_source_name: string
@@ -151,6 +159,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          budget_entry?: string | null
           created_at?: string
           id?: string
           income_source_name?: string

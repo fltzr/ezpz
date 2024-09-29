@@ -2,8 +2,10 @@ import { Box, Container, Header } from '@cloudscape-design/components';
 import { isRouteErrorResponse, useRouteError } from 'react-router-dom';
 
 import styles from './styles.module.scss';
+import { useTranslation } from 'react-i18next';
 
 export const ErrorPage = () => {
+  const { t } = useTranslation();
   const error = useRouteError();
 
   if (isRouteErrorResponse(error)) {
@@ -11,11 +13,11 @@ export const ErrorPage = () => {
       <Container
         header={
           <Header info={error.status} variant='h1'>
-            Oops!
+            {t('routeErrorTitle')}
           </Header>
         }>
         <Box variant='p'>
-          We&apos;re sorry, an unexpected error occurred.
+          {t('error.routeErrorMessage')}
           <Box variant='pre'>
             {error.statusText} | {error.data}
           </Box>
@@ -29,11 +31,11 @@ export const ErrorPage = () => {
       <Container
         header={
           <Header info={error instanceof Error ? error.name : String(error)} variant='h1'>
-            Oops!
+            {t('error.routeErrorTitle')}
           </Header>
         }>
         <Box variant='p'>
-          We&apos;re sorry, an unexpected error occurred.
+          {t('error.routeErrorMessage')}
           <Box variant='pre'>
             {error instanceof Error ? error.message : String(error)}
           </Box>

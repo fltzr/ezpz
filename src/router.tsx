@@ -9,9 +9,10 @@ import { ErrorPage } from './common/components/error-page/error-page';
 import { lazy } from 'react';
 import ProtectedRoute from './auth/components/protected-route';
 import { SuspenseLoadingBar } from './common/components/suspense-loading-bar';
+import { BudgetProvider } from './pages/budget/components/budget-provider';
 
 const ProfileOverviewPage = lazy(() => import('./pages/profile/overview'));
-const BudgetPage = lazy(() => import('./pages/budget/budget'));
+const BudgetPage = lazy(() => import('./pages/budget/page'));
 const CalculatorPage = lazy(() => import('./pages/loan-repayment/calculator'));
 const TransactionsOverview = lazy(() => import('./pages/transactions/overview'));
 
@@ -44,7 +45,9 @@ const routes: RouteObject[] = [
             path: 'budget',
             element: (
               <SuspenseLoadingBar>
-                <BudgetPage />
+                <BudgetProvider>
+                  <BudgetPage />
+                </BudgetProvider>
               </SuspenseLoadingBar>
             ),
           },

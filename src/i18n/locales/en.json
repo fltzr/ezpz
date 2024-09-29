@@ -1,0 +1,377 @@
+{
+  "common": {
+    "or": "or"
+  },
+  "layout": {
+    "header": {
+      "items": {
+        "profile": "Profile",
+        "signOut": "Sign out",
+        "signOutError": "Error occured while attempting to sign out: {{message}}"
+      }
+    },
+    "navItems": {
+      "budgets": "Budgets",
+      "loanCalculator": "Loan calculator",
+      "transactions": "Transactions"
+    }
+  },
+  "error": {
+    "routeErrorTitle": "Oops!",
+    "routeErrorMessage": "We're sorry, an unexpected error occured."
+  },
+  "auth": {
+    "welcome": "Welcome to ezpz!",
+    "signIn": "Sign in!",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "password": "Password",
+    "showPassword": "Show password",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithGithub": "Continue with GitHub",
+    "noAccount": "Don't have an account?",
+    "noAccountLink": "Sign up",
+    "button": {
+      "signIn": "Sign in"
+    },
+    "formValidation": {
+      "emailRequired": "Email is required!",
+      "emailInvalid": "Invalid email address!",
+      "emailExceededCharacterCount": "Email must not exceed 50 characters.",
+      "passwordRequired": "Password is required!"
+    },
+    "api": {
+      "signOutSuccess": "Successfully signed out!",
+      "signinFailed": "Error signing in. Please try again!",
+      "coucou": "Welcome, beautiful baby!"
+    }
+  },
+
+  "pages": {
+    "budget": {
+      "pageTitle": "{{name}}'s budget dashboard",
+      "tableTitle": "Budget",
+      "addCategory": "Add category",
+      "empty": "No budget items added!",
+      "overview": {
+        "title": "Overview",
+        "amountToBudget": "Amount to budget",
+        "amountSpent": "Amount spent",
+        "amountLeft": "Amount left"
+      },
+      "incomeSources": {
+        "title": "Income sources",
+        "dropdown": {
+          "title": "Actions",
+          "add": "Add income source",
+          "update": "Update income source",
+          "delete": "Delete ({{count}})",
+          "refresh": "Refresh",
+          "disabledMultipleSelected": "Multiple income sources are selected.",
+          "disabledNoneSelected": "No income sources are selected.",
+          "errorRefetching": "Error refetching income sources: {{error}}"
+        }
+      },
+      "table": {
+        "source": "Source",
+        "projectedAmount": "Projected amount",
+        "incomeSourceExample": "e.g., Babysitting, Salary, etc.",
+        "nameError": "Invalid income source name!",
+        "noChangesError": "Name must be different to update!",
+        "typeError": "Invalid type.",
+        "negativeValueError": "Projected value must be a non-negative value!",
+        "empty": "No income sources added!"
+      },
+      "pieChart": {
+        "keyCategory": "Category",
+        "keyAmount": "Amount",
+        "keyPercentageTotal": "Percentage of total budget",
+        "empty": "Add income sources and budget items to see this chart!"
+      },
+      "budgetTable": {
+        "tableTitle": "Budget table",
+        "columnCategory": "Category",
+        "columnProjectedAmount": "Projected Amount",
+        "columnActions": "Actions",
+        "actionButtons": {
+          "renameCategory": "Rename category",
+          "deleteCategory": "Delete category",
+          "addBudgetLineItem": "Add budget item",
+          "editBudgetItem": "Edit",
+          "deleteBudgetItem": "Delete",
+          "changeCategory": "Change category"
+        }
+      },
+      "modals": {
+        "addButton": "Add",
+        "deleteButton": "Delete",
+        "updateButton": "Update",
+        "cancelButton": "Cancel",
+
+        "itemName": "Item name",
+        "itemNameExample": "e.g., Groceries, Rent, Utilities",
+        "projectedAmount": "Projected amount",
+        "projectedAmountDescription": "The projected amount you plan to spend on this item. Current currency: {{currency}}",
+        "categoryName": "Category name",
+        "categoryNameExample": "e.g., Housing, Transportation, Savings",
+        "incomeSourceName": "Name of income source",
+        "incomeSourceExample": "Paycheck, Investments, Babysitting",
+
+        "deleteHeader": "Delete income source{{s}}?",
+        "deleteContentp1": "Permanently delete ",
+        "deleteContentp2": "{{count}} income sources?",
+        "deleteContentp3": "You can't undo this action.",
+        "deleteContentAlert": "The following income sources will be deleted",
+
+        "editHeader": "Edit {{name}}",
+        "budgetItemName": "Budget item name",
+        "budgetItemNameDescription": "Enter a descriptive name"
+      }
+    },
+    "loanRepayment": {
+      "title": "Loan repayment calculator",
+      "description": "Add or select a loan and view an amortization table.",
+      "summary": {
+        "months": "Months",
+        "totalInterest": "Total interest paid",
+        "totalCost": "Total cost of loan",
+        "payoffDate": "Payoff date"
+      },
+      "actions": {
+        "addLoan": "Add loan",
+        "edit": "Edit",
+        "delete": "Delete"
+      }
+    },
+    "budget_new": {
+      "title": "{{name}}'s budget dashboard",
+      "empty": "No budget items added!",
+
+      "headers": {
+        "monthlyOverview": "Monthly overview",
+        "incomeSources": "Income sources",
+        "monthlyBreakdown": "Monthly breakdown",
+        "budgetTable": "Budget Table"
+      },
+      "formFields": {
+        "labelDateSelector": "Budget period"
+      },
+      "overview": {
+        "title": "Overview",
+        "amountToBudget": "Amount to budget",
+        "amountSpent": "Amount spent",
+        "amountLeft": "Amount left"
+      },
+      "table": {
+        "addCategory": "Add category",
+        "source": "Source",
+        "projectedAmount": "Projected amount",
+        "incomeSourceExample": "e.g., Babysitting, Salary, etc.",
+        "nameError": "Invalid income source name!",
+        "noChangesError": "Name must be different to update!",
+        "typeError": "Invalid type.",
+        "negativeValueError": "Projected value must be a non-negative value!",
+        "empty": "No income sources added!"
+      },
+      "budgetTable": {
+        "tableTitle": "Budget table",
+        "columnCategory": "Category",
+        "columnProjectedAmount": "Projected Amount",
+        "columnActions": "Actions",
+        "actionButtons": {
+          "renameCategory": "Rename category",
+          "deleteCategory": "Delete category",
+          "addBudgetLineItem": "Add budget item",
+          "editBudgetItem": "Edit",
+          "deleteBudgetItem": "Delete",
+          "changeCategory": "Change category"
+        }
+      },
+      "pieChart": {
+        "title": "Monthly breakdown",
+        "keyCategory": "Category",
+        "keyAmount": "Amount",
+        "keyPercentageTotal": "Percentage of total budget",
+        "empty": "Add income sources and budget items to see this chart!"
+      },
+      "incomeSources": {
+        "title": "Income sources",
+        "dropdown": {
+          "title": "Actions",
+          "add": "Add income source",
+          "update": "Update income source",
+          "delete": "Delete ({{count}})",
+          "refresh": "Refresh",
+          "disabledMultipleSelected": "Multiple income sources are selected.",
+          "disabledNoneSelected": "No income sources are selected.",
+          "errorRefetching": "Error refetching income sources: {{error}}"
+        }
+      }
+    }
+  },
+  "budget": {
+    "common": {
+      "title": "{{name}}'s budget dashboard",
+      "fetchingUsers": "Fetcing users..."
+    },
+    "monthlyOverview": {
+      "title": "Monthly overview",
+      "budgetPeriod": "Budget period",
+      "amountToBudget": "Amount to budget",
+      "amountSpent": "Amount spent",
+      "amountLeft": "Amount left",
+      "status": {
+        "noIncomeSet": "No income set!",
+        "underBudget": "{{amount}} under budget",
+        "overBudget": "{{amount}} over budget",
+        "onBudget": "On budget"
+      }
+    },
+
+    "incomeSources": {
+      "title": "Income sources",
+      "validation": {
+        "nameError": "Invalid income source name!",
+        "typeError": "Invalid type.",
+        "negativeValueError": "Projected value must be a non-negative value!",
+        "noChangesError": "Name must be different to update!",
+        "disabledMultipleSelected": "Multiple income sources are selected.",
+        "disabledNoneSelected": "No income sources are selected.",
+        "errorRefetching": "Error refetching income sources: {{error}}"
+      },
+      "dropdown": {
+        "title": "Actions",
+        "add": "Add",
+        "update": "Update",
+        "delete": "Delete ({{count}})",
+        "refresh": "Refresh"
+      },
+      "table": {
+        "empty": "No income sources added!",
+        "columns": {
+          "source": "Source",
+          "projectedAmount": "Projected amount"
+        }
+      }
+    },
+    "monthlyBreakdown": {
+      "title": "Monthly breakdown",
+      "chart": {
+        "empty": "Add income sources and budget items to see this chart!",
+        "popover": {
+          "keyCategory": "Category",
+          "keyAmount": "Amount",
+          "keyPercentageTotal": "Percentage of total budget"
+        }
+      }
+    },
+
+    "budgetTable": {
+      "title": "Budget table",
+      "empty": "No budget items added!",
+      "addCategory": "Add category",
+      "columns": {
+        "category": "Category",
+        "projectedAmount": "Projected amount",
+        "actions": {
+          "columnName": "Actions",
+          "renameCategory": "Rename category",
+          "deleteCategory": "Delete category",
+          "addBudgetItem": "Add budget item",
+          "editBudgetItem": "Edit budget item",
+          "deleteBudgetItem": "Delete budget item"
+        }
+      }
+    },
+
+    "drawers": {
+      "common": {
+        "category": "Category",
+        "cancelButton": "Cancel",
+        "addButton": "Add",
+        "updateButton": "Update"
+      },
+      "addBudgetItem": {
+        "title": "Add budget item",
+        "fields": {
+          "itemName": "Item name",
+          "itemNameExample": "e.g., Groceries, Rent, Utilities",
+          "projectedAmount": "Projected amount",
+          "projectedAmountDescription": "The projected amount you plan to spend on this item. Current currency:\t{{currency}}"
+        }
+      },
+      "addCategory": {
+        "title": "Add category",
+        "fields": {
+          "categoryName": "Name of category",
+          "categoryExample": "e.g., Bills, Savings, Housing"
+        }
+      },
+
+      "addIncomeSource": {
+        "title": "Add income source",
+        "fields": {
+          "incomeSourceName": "Name of income source",
+          "incomeSourceExample": "e.g., Bills, Savings, Housing",
+          "projectedAmount": "Projected amount",
+          "projectedAmountDescription": "The projected amount you plan to spend on this item. Current currency: {{currency}}"
+        }
+      },
+
+      "editBudgetItem": {
+        "title": "Edit budget item",
+        "fields": {
+          "itemName": "Item name",
+          "itemNameExample": "e.g., Groceries, Rent, Utilities",
+          "projectedAmount": "Projected amount",
+          "projectedAmountDescription": "The projected amount you plan to spend on this item. Current currency:\t{{currency}}",
+          "categoryName": "Name of category"
+        }
+      }
+    },
+
+    "modals": {
+      "common": {
+        "cancelButton": "Cancel",
+        "deleteButton": "Delete"
+      },
+      "deleteIncomeSource": {
+        "title": "Delete income source{{s}}?",
+        "deleteContentp1": "Permanently delete ",
+        "deleteContentp2": "You can't undo this action.",
+        "deleteContentAlert": "Proceeding to delete this category will delete all associated budget items."
+      },
+      "deleteBudgetItem": {
+        "title": "Delete {{name}}?",
+        "deleteContentp1": "Permanently delete ",
+        "deleteContentp2": "{{count}} income sources?",
+        "deleteContentp3": "You can't undo this action.",
+        "deleteContentAlert": "The following income sources will be deleted"
+      }
+    },
+
+    "api": {
+      "budget": {
+        "addCategorySuccess": "Successfully added category: {{category}}",
+        "unknownError": "An unknown error occured. Please try again.",
+        "addBudgetItemSuccess": "Successfully added budget item: {{budgetItem}}",
+        "addBudgetItemError": "Failed to add budget item: {{message}}",
+        "refetchBudgetItemError": "Failed to refetch budget items: {{message}}",
+        "updateBudgetItemSuccess": "Successfully updated budget item",
+        "updateBudgetItemError": "Failed to update budget item: {{message}}",
+        "deleteBudgetItemSuccess": "Successfully deleted item.",
+        "deleteBudgetItemError": "Failed to delete item: {{message}}"
+      },
+      "income": {
+        "addIncomeSourceSuccess": "Successfully added income source: {{name}}",
+        "addIncomeSourceError": "Failed to add income source: {{message}}",
+        "updateIncomeSourceSuccess": "Successfully updated income source: {{name}}",
+        "updateIncomeSourceError": "Failed to update income source: {{message}}",
+        "deleteIncomeSourceSuccess": "Successfully deleted {{count}} income source{{s}}",
+        "deleteIncomeSourceError": "Failed to delete item: {{message}}",
+        "refetchIncomeSourceError": "Failed to refetch income sources: {{message}}",
+        "unknownError": "An unknown error occured. Please try again."
+      }
+    }
+  }
+}

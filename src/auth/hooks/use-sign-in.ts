@@ -9,6 +9,8 @@ import { UseFormReset, UseFormSetFocus } from 'react-hook-form';
 import { useNotificationStore } from '../../common/state/notifications';
 import { useSupabase } from '../../common/hooks/use-supabase';
 
+import { useTranslation } from 'react-i18next';
+
 interface UseSignInProps {
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   reset: UseFormReset<SignInSchema>;
@@ -16,6 +18,7 @@ interface UseSignInProps {
 }
 
 export const useSignIn = ({ setIsLoading, reset, setFocus }: UseSignInProps) => {
+  const { t } = useTranslation();
   const supabase = useSupabase();
   const navigate = useNavigate();
   const { addNotification } = useNotificationStore();
@@ -24,7 +27,7 @@ export const useSignIn = ({ setIsLoading, reset, setFocus }: UseSignInProps) => 
     addNotification({
       id: nanoid(5),
       type: 'error',
-      message: `Error signing in: ${error.message}. Please try again!`,
+      message: `${t('auth.api.signinFailed')}: ${error.message}`,
     });
     setFocus('email');
   };
@@ -46,7 +49,7 @@ export const useSignIn = ({ setIsLoading, reset, setFocus }: UseSignInProps) => 
       addNotification({
         id: nanoid(5),
         type: 'success',
-        message: 'Welcome, beautiful baby!',
+        message: t('auth.api.coucou'),
       });
     }
 

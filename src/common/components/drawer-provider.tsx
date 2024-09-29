@@ -1,11 +1,17 @@
 import { AppLayoutProps } from '@cloudscape-design/components';
 import { createContext, PropsWithChildren, ReactNode, useContext, useState } from 'react';
 
+type OpenDrawerData = {
+  drawerName: string;
+  content: ReactNode;
+  width?: number;
+};
+
 type DrawerContextProps = {
   activeDrawerId: string | null;
   drawerContent?: AppLayoutProps.Drawer;
   panelWidth?: number;
-  openDrawer: (drawerName: string, drawer: ReactNode, width: number) => void;
+  openDrawer: (info: OpenDrawerData) => void;
   closeDrawer: () => void;
 };
 
@@ -18,7 +24,11 @@ export const DrawerProvider = ({ children }: PropsWithChildren) => {
   );
   const [panelWidth, setPanelWidth] = useState<number | undefined>(undefined);
 
-  const openDrawer = (drawerName = 'default', content: ReactNode, width = 200) => {
+  const openDrawer = ({
+    drawerName = 'default',
+    content,
+    width = 200,
+  }: OpenDrawerData) => {
     setActiveDrawerId(drawerName);
     setDrawerContent({
       id: drawerName,

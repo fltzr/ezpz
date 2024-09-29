@@ -1,0 +1,285 @@
+{
+  "common": {
+    "or": "ou"
+  },
+  "error": {
+    "routeErrorTitle": "Oups !",
+    "routeErrorMessage": "Nous sommes désolés. Une errur inattendue est survenue."
+  },
+  "layout": {
+    "header": {
+      "items": {
+        "profile": "Profil",
+        "signOut": "Se déconnecter",
+        "signOutError": "Erreur lors de la tentative de déconnexion: {{message}}"
+      }
+    },
+    "navItems": {
+      "budgets": "Budgets",
+      "loanCalculator": "Calculatrice de prêt",
+      "transactions": "Transactions"
+    }
+  },
+  "auth": {
+    "welcome": "Bienvenue sur ezpz !",
+    "signIn": "Se connecter !",
+    "emai": "Email",
+    "emailPlaceholder": "vous@exemple.com",
+    "password": "Mot de passe",
+    "showPassword": "Afficher le mot de passe",
+    "continueWithGoogle": "Continuer avec Google",
+    "continueWithGithub": "Continuer avec GitHub",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "noAccountLink": "Inscrivez-vous",
+    "button": {
+      "signIn": "Se connecter"
+    },
+    "formValidation": {
+      "emailRequired": "L'email est requise !",
+      "emailInvalid": "Adresse électronique invalide !",
+      "emailExceededCharacterCount": "L'email ne doit pas dépasser 50 caractères.",
+      "passwordRequired": "Le mot de passe est requis !"
+    },
+    "api": {
+      "signOutSuccess": "Déconnexion réussie !",
+      "signinFailed": "Erreur lors de la connexion. Veuillez réessayer !",
+      "coucou": "Bienvenue, beau bébé !"
+    }
+  },
+  "pages": {
+    "budget": {
+      "pageTitle": "Tableau de bord budgétarie de {{name}}",
+      "tableTitle": "Le budget",
+      "addCategory": "Ajouter une catégorie",
+      "empty": "Aucun poste budgétarie ajouté !",
+      "overview": {
+        "title": "Vue d'ensemble",
+        "amountToBudget": "Montant au budget",
+        "amountSpent": "Montant dépensé",
+        "amountLeft": "Amount restant"
+      },
+      "incomeSources": {
+        "title": "Sources de revenus",
+        "dropdown": {
+          "title": "Actions",
+          "add": "Ajouter",
+          "update": "Mise à jour",
+          "delete": "Supprimer ({{count}})",
+          "refresh": "Rafraīchir",
+          "disabledMultipleSelected": "Plusieurs sources de revenus sont sélectionnées.",
+          "disabledNoneSelected": "Aucune source de revenu n'est sélectionnée.",
+          "errorRefetching": "Errur dans la récupération des sources de revenus: {{error}}"
+        }
+      },
+      "table": {
+        "source": "Source",
+        "projectedAmount": "Montant prévu",
+        "incomeSourceExample": "Por exemple, Salarie, baby-sitting, etc.",
+        "nameError": "Nom de la source de revenu invalide !",
+        "noChangesError": "Le nom doit être différent pour être mis à jour !",
+        "typeError": "Type non valide",
+        "negativeValueError": "Le montant prévu doit être une valeur non négative !",
+        "empty": "Aucun source de revenu ajoutée !"
+      },
+      "pieChart": {
+        "keyCategory": "Catégorie",
+        "keyAmount": "Montant",
+        "keyPercentageTotal": "Pourcentage du budget total",
+        "empty": "Ajoutez des sources de revenus et des postes budgétaries pour voir ce graphique !"
+      },
+      "budgetTable": {
+        "columnCategory": "Catégorie",
+        "columnProjectedAmount": "Montant prévu",
+        "columnActions": "Actions",
+        "actionButtons": {
+          "renameCategory": "Renommer une catégorie",
+          "deleteCategory": "Supprimer la catégorie",
+          "addBudgetLineItem": "Ajouter un poste budgétarie",
+          "editBudgetItem": "Editer",
+          "deleteBudgetItem": "Supprimer",
+          "changeCategory": "Changer de catégorie"
+        }
+      }
+    },
+    "loanRepayment": {
+      "title": "Calculatrice de remboursement de prêt",
+      "description": "Ajouter ou sélectionner un prêt et afficher un tableau d'amortissement.",
+      "summary": {
+        "months": "Mois",
+        "totalInterest": "Total des intérêts payés",
+        "totalCost": "Coût total du prét",
+        "payoffDate": "Date de remboursement"
+      },
+      "actions": {
+        "addLoan": "Add loan",
+        "edit": "Edit",
+        "delete": "Delete"
+      }
+    }
+  },
+  "budget": {
+    "common": {
+      "title": "Tableau de bord budgétarie de {{name}}",
+      "fetchingUsers": "Recherche d'utilisateurs"
+    },
+    "monthlyOverview": {
+      "title": "Vue mensuel",
+      "budgetPeriod": "Périod budgétarie",
+      "amountToBudget": "Montant à budgéter",
+      "amountSpent": "Montant dépensé",
+      "amountLeft": "Montant restant",
+      "status": {
+        "noIncomeSet": "Aucune revenu définie !",
+        "underBudget": "{{amount}} sous le budget",
+        "overBudget": "{{amount}} au-dessus du budget",
+        "onBudget": "Dans le budget"
+      }
+    },
+
+    "incomeSources": {
+      "title": "Sources de revenus",
+      "validation": {
+        "nameError": "Nom de la source de revenu invalide !",
+        "typeError": "Type non valide",
+        "negativeValueError": "La valeur projetée doit être une valeur non négative !",
+        "noChangesError": "Le nom doit être différent pour mettre à jour!",
+        "disabledMultipleSelected": "Plusieurs sources de revenus sont sélectionnées.",
+        "disabledNoneSelected": "Aucune source de revenu n'est sélectionnée.",
+        "errorRefetching": "Erreur lors de la récupération des sources de revenus: {{error}}"
+      },
+      "dropdown": {
+        "title": "Actions",
+        "add": "Ajouter",
+        "update": "Mettre à jour",
+        "delete": "Supprimer ({{count}})",
+        "refresh": "Rafraîchir"
+      },
+      "table": {
+        "empty": "Aucun source de revenu ajoutée!",
+        "columns": {
+          "source": "Source",
+          "projectedAmount": "Montant projeté"
+        }
+      }
+    },
+    "monthlyBreakdown": {
+      "title": "Répartition mensuelle",
+      "chart": {
+        "empty": "Ajoutez des sources de revenus et des postes budgétaires pour voir ce graphique !",
+        "popover": {
+          "keyCategory": "Catégorie",
+          "keyAmount": "Montant",
+          "keyPercentageTotal": "Pourcentage du budget total"
+        }
+      }
+    },
+
+    "budgetTable": {
+      "title": "Tableau du budget",
+      "empty": "Aucune poste budgétaire ajouté !",
+      "addCategory": "Ajouter une catégorie",
+      "columns": {
+        "category": "Catégorie",
+        "projectedAmount": "Montant projeté",
+        "actions": {
+          "columnName": "Actions",
+          "renameCategory": "Renommer une catégorie",
+          "deleteCategory": "Supprimer la catégorie",
+          "addBudgetItem": "Ajouter un poste budgétarie",
+          "editBudgetItem": "Modifier le poste budgétarie",
+          "deleteBudgetItem": "Supprimer le poste budgétarie"
+        }
+      }
+    },
+
+    "drawers": {
+      "common": {
+        "category": "Catégorie",
+        "cancelButton": "Annuler",
+        "addButton": "Ajouter",
+        "updateButton": "Mettre à jour"
+      },
+      "addBudgetItem": {
+        "title": "Ajoute un poste budgétaire",
+        "fields": {
+          "itemName": "Nom de l'article",
+          "itemNameExample": "Par exemple, Épicerie, Loyer, Services Public",
+          "projectedAmount": "Montant projeté",
+          "projectedAmountDescription": "Le montant projeté que vous prévoyez de dépenser pour cet article. Devise actuelle : {{currency}}"
+        }
+      },
+      "addCategory": {
+        "title": "Ajouter une catégorie",
+        "fields": {
+          "categoryName": "Nom de la catégorie",
+          "categoryExample": "Par exemple, Factures, Épargne, Logement"
+        }
+      },
+
+      "addIncomeSource": {
+        "title": "Ajouter une source de revenus",
+        "fields": {
+          "incomeSourceName": "Nom de la source de revenus",
+          "incomeSourceExample": "Par exemple, Salarie, Intérêts, Dividendes",
+          "projectedAmount": "Montant projeté",
+          "projectedAmountDescription": "Le montant projeté que vous prévoyez de dépenser pour cet article. Devise actuelle : {{currency}}"
+        }
+      },
+
+      "editBudgetItem": {
+        "title": "Modifier le poste budgétaire",
+        "fields": {
+          "itemName": "Nom de l'article",
+          "itemNameExample": "Par exemple, Épicerie, Loyer, Services Public",
+          "projectedAmount": "Montant projeté",
+          "projectedAmountDescription": "Le montant projeté que vous prévoyez de dépenser pour cet article. Devise actuelle : {{currency}}",
+          "categoryName": "Nom de la catégorie"
+        }
+      }
+    },
+
+    "modals": {
+      "common": {
+        "cancelButton": "Annuler",
+        "deleteButton": "Supprimer"
+      },
+      "deleteIncomeSource": {
+        "title": "Supprimer la source de revenus{{s}} ?",
+        "deleteContentp1": "Supprimer définitivment ",
+        "deleteContentp2": "Vous ne pouvez pas annuler cette action.",
+        "deleteContentAlert": "En procédent à la suppression de cette catégorie, tous les postes budgétaries associés seront supprimés."
+      },
+      "deleteBudgetItem": {
+        "title": "Supprimer {{name}}?",
+        "deleteContentp1": "Supprimer définitivment ",
+        "deleteContentp2": "{{count}} articles ?",
+        "deleteContentp3": "Vous ne pouvez pas annuler cette action.",
+        "deleteContentAlert": "L'articles suivantes seront supprimées: "
+      }
+    },
+
+    "api": {
+      "budget": {
+        "addCategorySuccess": "Catégorie ajoutee avec succés: {{category}}",
+        "unknownError": "Une erreur inconnue s'est produite. Veuillez réessayer.",
+        "addBudgetItemSuccess": "Poste budgétarie ajouté avec succés: {{budgetItem}}",
+        "addBudgetItemError": "Échec de l'ajoute du post budgétaire: {{message}}",
+        "refetchBudgetItemError": "Échec de la récupération des postes budgétaires: {{message}}",
+        "updateBudgetItemSuccess": "Poste budgétarie mis à jour avec succés",
+        "updateBudgetItemError": "Failed to update budget item: {{message}}",
+        "deleteBudgetItemSuccess": "Poste supprimé avec succès.",
+        "deleteBudgetItemError": "Échec de la suppression du poste : {{message}}"
+      },
+      "income": {
+        "addIncomeSourceSuccess": "Source de revenus ajoutée avec succès : {{name}}",
+        "addIncomeSourceError": "Échec de l'ajout de la source de revenus : {{message}}",
+        "updateIncomeSourceSuccess": "Source de revenus mise à jour avec succès : {{name}}",
+        "updateIncomeSourceError": "Échec de la mise à jour de la source de revenus : {{message}}",
+        "deleteIncomeSourceSuccess": "{{count}} source(s) de revenus supprimée(s) avec succès",
+        "deleteIncomeSourceError": "Échec de la suppression de l'élément : {{message}}",
+        "refetchIncomeSourceError": "Échec de la récupération des sources de revenus : {{message}}",
+        "unknownError": "Une erreur inconnue s'est produite. Veuillez réessayer."
+      }
+    }
+  }
+}

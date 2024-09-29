@@ -14,8 +14,10 @@ import {
   SpaceBetween,
 } from '@cloudscape-design/components';
 import { Turnstile } from '@marsidev/react-turnstile';
+import { useTranslation } from 'react-i18next';
 
 export const SignInForm = () => {
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -53,10 +55,10 @@ export const SignInForm = () => {
             control={control}
             name='email'
             render={({ field }) => (
-              <FormField label='Email' errorText={errors.email?.message}>
+              <FormField label={t('auth.email')} errorText={errors.email?.message}>
                 <Input
                   {...field}
-                  placeholder='you@example.com'
+                  placeholder={t('auth.emailPlaceholder')}
                   onChange={(event) => field.onChange(event.detail.value)}
                 />
               </FormField>
@@ -66,7 +68,7 @@ export const SignInForm = () => {
             control={control}
             name='password'
             render={({ field }) => (
-              <FormField label='Password'>
+              <FormField label={t('auth.password')}>
                 <SpaceBetween direction='vertical' size='xs'>
                   <Input
                     {...field}
@@ -77,7 +79,7 @@ export const SignInForm = () => {
                   <Checkbox
                     checked={showPassword}
                     onChange={(event) => setShowPassword(event.detail.checked)}>
-                    Show password
+                    {t('auth.showPassword')}
                   </Checkbox>
                 </SpaceBetween>
               </FormField>
@@ -100,7 +102,7 @@ export const SignInForm = () => {
               loading={isLoading}
               variant='primary'
               formAction='submit'>
-              Sign in
+              {t('auth.button.signIn')}
             </Button>
           </Box>
         </SpaceBetween>
