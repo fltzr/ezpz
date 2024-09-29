@@ -8,8 +8,6 @@ import {
   SideNavigation,
   SpaceBetween,
 } from '@cloudscape-design/components';
-import I18nProvider from '@cloudscape-design/components/i18n';
-import messages from '@cloudscape-design/components/i18n/messages/all.en';
 
 import { GlobalHeader } from './global-header';
 import { Notifications } from '../common/components/notifications';
@@ -18,12 +16,16 @@ import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../auth/hooks/use-auth';
 import { useDrawer } from '../common/components/drawer-provider';
+import { LocaleProvider } from '../common/components/locale-provider';
+
+import { useTranslation } from 'react-i18next';
 
 type LocationState = {
   reason?: string;
 };
 
 const CommonLayout = () => {
+  const { t } = useTranslation();
   const { activeDrawerId, drawerContent, closeDrawer, panelWidth } = useDrawer();
 
   const { addNotification } = useNotificationStore();
@@ -43,13 +45,13 @@ const CommonLayout = () => {
       addNotification({
         id: nanoid(5),
         type: 'info',
-        message: 'Successfully signed out!',
+        message: t('auth.api.signOutSuccess'),
       });
     }
-  }, [location, addNotification]);
+  }, [location, addNotification, t]);
 
   return (
-    <I18nProvider locale='en' messages={[messages]}>
+    <LocaleProvider>
       <GlobalHeader />
       <div id='c'>
         {location.pathname.includes('auth') ? (
@@ -61,7 +63,7 @@ const CommonLayout = () => {
             header={
               <Box padding={{ vertical: 'xxxl' }}>
                 <SpaceBetween direction='vertical' size='xl' alignItems='center'>
-                  <Header variant='h1'>Welcome to Ezpz!</Header>
+                  <Header variant='h1'>{t('auth.welcome')}</Header>
                 </SpaceBetween>
               </Box>
             }>
@@ -82,17 +84,17 @@ const CommonLayout = () => {
                 items={[
                   {
                     type: 'link',
-                    text: 'Budgets',
+                    text: t('layout.navItems.budgets'),
                     href: '/budget',
                   },
                   {
                     type: 'link',
-                    text: 'Loan calculator',
+                    text: t('layout.navItems.loanCalculator'),
                     href: '/loan-calculator',
                   },
                   {
                     type: 'link',
-                    text: 'Transactions',
+                    text: t('layout.navItems.transactions'),
                     href: '/transactions',
                   },
                 ]}
@@ -116,7 +118,7 @@ const CommonLayout = () => {
           />
         )}
       </div>
-    </I18nProvider>
+    </LocaleProvider>
   );
 };
 

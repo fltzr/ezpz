@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Select, SelectProps } from '@cloudscape-design/components';
 
-import { useAuth } from '../../../auth/hooks/use-auth';
 import { useSupabase } from '../../../common/hooks/use-supabase';
+import { useBudgetProvider } from '../hooks/use-budget-provider';
+import { useTranslation } from 'react-i18next';
 
 const fetchUsers = async (supabase: ReturnType<typeof useSupabase>) => {
   const { data, error } = await supabase.from('users').select('*');
@@ -12,13 +12,10 @@ const fetchUsers = async (supabase: ReturnType<typeof useSupabase>) => {
   return data;
 };
 
-export const UserSelector = ({
-  onUserChange,
-}: {
-  onUserChange: (userId: string, name: string) => void;
-}) => {
+export const UserSelector = () => {
+  const { t } = useTranslation(undefined, { keyPrefix: 'budget' });
   const supabase = useSupabase();
-  const { user } = useAuth();
+
   const {
     data: users,
     isLoading,
@@ -28,15 +25,19 @@ export const UserSelector = ({
     queryFn: () => fetchUsers(supabase),
   });
 
-  const [selectedUser, setSelectedUser] = useState<SelectProps.Option | null>(null);
+  const { selectedUser, setSelectedUser } = useBudgetProvider();
+
   const options: SelectProps['options'] = users?.map((u) => ({
     label: u.name,
     value: u.user?.toString(),
   }));
 
   const handleUserChange: SelectProps['onChange'] = ({ detail }) => {
-    setSelectedUser(detail.selectedOption);
-    onUserChange(detail.selectedOption.value!, detail.selectedOption.label ?? '');
+    console.log(detail.selectedOption);
+    setSelectedUser({
+      userId: detail.selectedOption.value!,
+      name: detail.selectedOption.label!,
+    });
   };
 
   return (
@@ -44,13 +45,15 @@ export const UserSelector = ({
       expandToViewport
       options={options ?? undefined}
       selectedOption={
-        selectedUser ?? {
-          label: users?.find((u) => u.user === user?.id)?.name,
-          value: user?.id,
-        }
+        selectedUser
+          ? {
+              label: selectedUser.name,
+              value: selectedUser.userId,
+            }
+          : null
       }
       statusType={isLoading ? 'loading' : error ? 'error' : 'finished'}
-      loadingText='Fetching users...'
+      loadingText={t('common.fetchingUsers')}
       onChange={handleUserChange}
     />
   );

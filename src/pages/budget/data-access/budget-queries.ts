@@ -1,21 +1,30 @@
 import { useSupabase } from '../../../common/hooks/use-supabase';
 import {
-  type CategoryInsert,
-  type CategoryUpdate,
-  type BudgetItemInsert,
-  type BudgetItemUpdate,
+  BudgetItemInsert,
+  BudgetItemUpdate,
+  CategoryInsert,
+  CategoryUpdate,
 } from '../utils/types';
 
 export const fetchBudgetData = async (
-  supabase: ReturnType<typeof useSupabase>,
-  userId: string
+  userId: string,
+  budgetEntry: string,
+  supabase: ReturnType<typeof useSupabase>
 ) => {
   const [
     { data: categories, error: categoriesError },
     { data: budgetItems, error: budgetItemsError },
   ] = await Promise.all([
-    supabase.from('categories').select('*').eq('user_id', userId),
-    supabase.from('budget_items').select('*').eq('user_id', userId),
+    supabase
+      .from('categories')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('budget_entry', budgetEntry),
+    supabase
+      .from('budget_items')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('budget_entry', budgetEntry),
   ]);
 
   if (categoriesError)

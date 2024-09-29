@@ -1,26 +1,27 @@
-import { useEffect, useRef } from 'react';
-import getUserLocale from 'get-user-locale';
-import { z } from 'zod';
-import { Controller, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Box,
   Button,
+  Drawer,
   Form,
   FormField,
   Grid,
+  Header,
   Input,
-  Modal,
   SpaceBetween,
 } from '@cloudscape-design/components';
-import type { BudgetItem, Category } from '../utils/types';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffectOnce } from 'react-use';
+import { useTranslation } from 'react-i18next';
+import { BudgetItemInsert } from '../utils/types';
+import { z } from 'zod';
+import getUserLocale from 'get-user-locale';
 
-type AddBudgetItemModalProps = {
-  visible: boolean;
+type AddBudgetItemProps = {
+  selectedUserId: string;
+  categoryId: string;
+  onAdd: (budgetItem: BudgetItemInsert) => void;
   onClose: () => void;
-  onAdd: (budgetItem: Omit<BudgetItem, 'id' | 'created_at'>) => void;
-  category?: Category;
-  userId: string;
 };
 
 const budgetItemSchema = z.object({
@@ -32,75 +33,71 @@ const budgetItemSchema = z.object({
 
 type BudgetItemSchema = z.infer<typeof budgetItemSchema>;
 
-export const AddBudgetItemModal = ({
-  visible,
-  onClose,
+export const AddBudgetItem = ({
+  selectedUserId,
+  categoryId,
   onAdd,
-  category,
-  userId,
-}: AddBudgetItemModalProps) => {
+  onClose,
+}: AddBudgetItemProps) => {
+  const { t } = useTranslation(undefined, { keyPrefix: 'budget.drawers' });
   const {
     control,
     handleSubmit,
     reset,
     formState: { errors },
+    setFocus,
   } = useForm<BudgetItemSchema>({
     resolver: zodResolver(budgetItemSchema),
-    defaultValues: {
-      budget_item_name: '',
-    },
   });
 
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (visible && inputRef.current) {
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 0);
-    }
-  }, [visible]);
-
-  const handleOnSubmit = (data: BudgetItemSchema) => {
-    onAdd({ ...data, category_id: category?.id ?? '', user_id: userId });
-    handleClose();
-  };
-
-  const handleClose = () => {
+  const handleOnClose = () => {
     reset();
     onClose();
   };
 
+  const handleOnSubmit = (data: BudgetItemSchema) => {
+    onAdd({
+      ...data,
+      user_id: selectedUserId,
+      category_id: categoryId,
+    });
+    handleOnClose();
+  };
+
+  useEffectOnce(() => {
+    setFocus('budget_item_name');
+  });
+
   return (
-    <Modal
-      visible={visible}
-      onDismiss={handleClose}
-      header={`Add budget item to ${category?.category_name}`}
-      footer={
-        <Box float='right'>
-          <SpaceBetween direction='horizontal' size='xs'>
-            <Button variant='link' onClick={handleClose}>
-              Cancel
-            </Button>
-            <Button variant='primary' onClick={() => void handleSubmit(handleOnSubmit)()}>
-              Add
-            </Button>
-          </SpaceBetween>
-        </Box>
-      }>
-      <Form>
+    <Drawer header={<Header variant='h2'>{t('addBudgetItem.title')}</Header>}>
+      <Form
+        actions={
+          <Box float='right'>
+            <SpaceBetween direction='horizontal' size='xs'>
+              <Button variant='link' onClick={handleOnClose}>
+                {t('common.cancelButton')}
+              </Button>
+              <Button
+                variant='primary'
+                onClick={() => void handleSubmit(handleOnSubmit)()}>
+                {t('common.addButton')}
+              </Button>
+            </SpaceBetween>
+          </Box>
+        }>
         <SpaceBetween direction='vertical' size='l'>
           <Controller
             name='budget_item_name'
             control={control}
             render={({ field }) => (
-              <FormField label='Item name' errorText={errors.budget_item_name?.message}>
+              <FormField
+                label={t('addBudgetItem.fields.itemName')}
+                errorText={errors.budget_item_name?.message}>
                 <Input
                   {...field}
-                  ref={inputRef}
                   disableBrowserAutocorrect
                   autoComplete={false}
-                  placeholder='e.g., Groceries, Rent, Utilities'
+                  placeholder={t('addBudgetItem.fields.itemNameExample')}
                   onChange={({ detail }) => field.onChange(detail.value)}
                 />
               </FormField>
@@ -111,10 +108,10 @@ export const AddBudgetItemModal = ({
             control={control}
             render={({ field }) => (
               <FormField
-                label='Projected value'
-                description={`The projected value you plan to spend on this item. Current currency: ${
-                  getUserLocale().includes('US') ? '$' : '€'
-                }`}
+                label={t('addBudgetItem.fields.projectedAmount')}
+                description={t('addBudgetItem.fields.projectedAmountDescription', {
+                  currency: getUserLocale().includes('fr') ? '€' : '$',
+                })}
                 errorText={errors.projected_amount?.message}>
                 <Grid gridDefinition={[{ colspan: 1 }, { colspan: 11 }]}>
                   <Box
@@ -122,7 +119,7 @@ export const AddBudgetItemModal = ({
                     textAlign='center'
                     float='right'
                     padding={{ vertical: 'xs' }}>
-                    $
+                    {getUserLocale().includes('fr') ? '€' : '$'}
                   </Box>
                   <Input
                     {...field}
@@ -130,7 +127,7 @@ export const AddBudgetItemModal = ({
                     autoComplete={false}
                     type='number'
                     inputMode='decimal'
-                    placeholder='$0.00'
+                    placeholder={getUserLocale().includes('fr') ? '€0.00' : '$0.00'}
                     value={String(field.value || 0)}
                     onChange={({ detail }) => field.onChange(Number(detail.value))}
                   />
@@ -140,6 +137,6 @@ export const AddBudgetItemModal = ({
           />
         </SpaceBetween>
       </Form>
-    </Modal>
+    </Drawer>
   );
 };

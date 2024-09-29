@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { IncomeSource } from '../utils/types';
 import {
   Alert,
@@ -22,6 +23,7 @@ export const DeleteIncomeSourceModal = ({
   onDelete,
   onClose,
 }: DeleteIncomeSourceModalProps) => {
+  const { t } = useTranslation(undefined, { keyPrefix: 'budget.modals' });
   const isMultiple = items.length > 1;
 
   const handleOnClose = () => {
@@ -37,33 +39,36 @@ export const DeleteIncomeSourceModal = ({
     <Modal
       visible={visible}
       onDismiss={handleOnClose}
-      header={<Header variant='h1'>Delete income source{isMultiple ? 's' : ''}?</Header>}
+      header={
+        <Header variant='h1'>
+          {t('deleteIncomeSource.title', { s: isMultiple ? 's' : '' })}
+        </Header>
+      }
       footer={
         <Box float='right'>
           <SpaceBetween direction='horizontal' size='xs'>
             <Button variant='link' onClick={handleOnClose}>
-              Cancel
+              {t('common.cancelButton')}
             </Button>
             <Button variant='primary' onClick={handleOnConfirm}>
-              Delete
+              {t('common.deleteButton')}
             </Button>
           </SpaceBetween>
         </Box>
       }>
-      <Box variant='span'>Permanently delete </Box>
+      <Box variant='span'>{t('deleteIncomeSource.deleteContentp1')}</Box>
       <Box variant='awsui-gen-ai-label' fontSize='heading-xs' display='inline'>
-        {items.length} income sources
-      </Box>
-      ?{' '}
+        {t('deleteIncomeSource.deleteContentp2', { count: items.length })}
+      </Box>{' '}
       <Box display='inline' fontWeight='bold'>
-        You can&apos;t undo this action.
+        {t('deleteIncomeSource.deleteContentp3')}
       </Box>
       <br />
       <br />
       <Table
         variant='borderless'
         header={
-          <Alert type='warning'>The following income sources will be deleted</Alert>
+          <Alert type='warning'>{t('deleteIncomeSource.deleteContentAlert')}</Alert>
         }
         items={items}
         columnDefinitions={[

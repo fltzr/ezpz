@@ -2,13 +2,15 @@ import { useSupabase } from '../../../common/hooks/use-supabase';
 import { IncomeSourceInsert, IncomeSourceUpdate } from '../utils/types';
 
 export const fetchIncomeSources = async (
-  supabase: ReturnType<typeof useSupabase>,
-  userId: string
+  userId: string,
+  budgetEntry: string,
+  supabase: ReturnType<typeof useSupabase>
 ) => {
   const { data, error } = await supabase
     .from('income_sources')
     .select('*')
-    .eq('user_id', userId);
+    .eq('user_id', userId)
+    .eq('budget_entry', budgetEntry);
 
   if (error) throw new Error(`Failed to fetch income sources: ${error.message}`);
 

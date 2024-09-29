@@ -9,29 +9,31 @@ import {
   Table,
 } from '@cloudscape-design/components';
 
-import { useBudgetApi } from './hooks/use-budget-api';
-import { createBudgetTableColumnDefinitions } from './utils/table-configs';
+import { useBudgetApi } from './hooks/use-budget-api.ts';
+import { createBudgetTableColumnDefinitions } from './utils/table-configs.tsx';
 import {
   BudgetItem,
   Category,
   isCategoryItem,
   type BudgetTableItem,
-} from './utils/types';
+} from './utils/types.ts';
 
-import { BudgetOverview } from './widgets/budget-overview';
-import { useModals } from './hooks/use-modals';
-import { AddCategoryModal } from './modals/add-category-modal';
-import { DeleteItemModal } from './modals/delete-item-modal';
-import { AddBudgetItemModal } from './modals/add-budget-item-modal';
-import { BudgetPercentageChart } from './widgets/budget-percentage-chart';
-import { EditBudgetItemModal } from './modals/edit-budget-item-modal';
-import { useIncomeApi } from './hooks/use-income-api';
+import { BudgetOverview } from './widgets/budget-overview.tsx';
+import { useModals } from './hooks/use-modals.ts';
+import { AddCategoryModal } from './modals/add-category-modal.tsx';
+import { DeleteItemModal } from './modals/delete-item-modal.tsx';
+import { AddBudgetItemModal } from './modals/add-budget-item-modal.tsx';
+import { BudgetPercentageChart } from './widgets/budget-percentage-chart.tsx';
+import { EditBudgetItemModal } from './modals/edit-budget-item-modal.tsx';
+import { useIncomeApi } from './hooks/use-income-api.ts';
 import { PropsWithChildren } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const ViewBudgetPage = ({
   userId,
   children,
 }: { userId: string } & PropsWithChildren) => {
+  const { t } = useTranslation(undefined, { keyPrefix: 'pages.budget' });
   const { data: incomeSources } = useIncomeApi(userId);
   const {
     data,
@@ -85,7 +87,7 @@ export const ViewBudgetPage = ({
             selectionType='single'
             items={items ?? []}
             submitEdit={handleSubmitInlineEdit}
-            columnDefinitions={createBudgetTableColumnDefinitions({
+            columnDefinitions={createBudgetTableColumnDefinitions(t, {
               handleAddBudgetLineItem: (item: Category) => {
                 openModal('addBudgetItem', { category: item });
               },
@@ -104,13 +106,13 @@ export const ViewBudgetPage = ({
                     variant='primary'
                     iconName='add-plus'
                     onClick={() => openModal('addCategory')}>
-                    Add category
+                    {t('addCategory')}
                   </Button>
                 }>
-                Budget
+                {t('tableTitle')}
               </Header>
             }
-            empty={<StatusIndicator type='info'>No budget items added!</StatusIndicator>}
+            empty={<StatusIndicator type='info'>{t('empty')}</StatusIndicator>}
             {...collectionProps}
           />
         </Grid>

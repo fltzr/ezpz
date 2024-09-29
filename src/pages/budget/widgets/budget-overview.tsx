@@ -12,14 +12,15 @@ import {
   Spinner,
 } from '@cloudscape-design/components';
 
-import { formatCurrency } from '../../../common/utils/format-currency';
-import { useBudgetApi } from '../hooks/use-budget-api';
-import { IncomeSource, isBudgetItem } from '../utils/types';
-import { useIncomeApi } from '../hooks/use-income-api';
-import { useModals } from '../hooks/use-modals';
-import { AddIncomeSourceModal } from '../modals/add-income-source';
-import { DeleteIncomeSourceModal } from '../modals/delete-income-source';
-import { useNotificationStore } from '../../../common/state/notifications';
+import { formatCurrency } from '../../../common/utils/format-currency.tsx';
+import { useBudgetApi } from '../hooks/use-budget-api.ts';
+import { IncomeSource, isBudgetItem } from '../utils/types.ts';
+import { useIncomeApi } from '../hooks/use-income-api.ts';
+import { useModals } from '../hooks/use-modals.ts';
+import { AddIncomeSourceModal } from '../modals/add-income-source.tsx';
+import { DeleteIncomeSourceModal } from '../modals/delete-income-source.tsx';
+import { useNotificationStore } from '../../../common/state/notifications.ts';
+import { useTranslation } from 'react-i18next';
 
 const getBudgetStatus = (amountSpent: number, budgetAmount?: number) => {
   if (!budgetAmount) {
@@ -41,6 +42,7 @@ const getBudgetStatus = (amountSpent: number, budgetAmount?: number) => {
 };
 
 export const BudgetOverview = ({ userId }: { userId: string }) => {
+  const { t } = useTranslation(undefined, { keyPrefix: 'pages.budget' });
   const { addNotification } = useNotificationStore();
   const [selectedItems, setSelectedItems] = useState<IncomeSource[]>([]);
   const { modalState, openModal, closeModal } = useModals();
@@ -67,7 +69,7 @@ export const BudgetOverview = ({ userId }: { userId: string }) => {
 
   return (
     <>
-      <Container fitHeight header={<Header variant='h2'>Overview</Header>}>
+      <Container fitHeight header={<Header variant='h2'>{t('overview.title')}</Header>}>
         {isLoading ? (
           <div
             style={{
@@ -85,12 +87,15 @@ export const BudgetOverview = ({ userId }: { userId: string }) => {
               columns={3}
               items={[
                 {
-                  label: 'Amount to budget',
+                  label: t('overview.amountToBudget'),
                   value: formatCurrency(amountToBudget),
                 },
-                { label: 'Amount spent', value: formatCurrency(amountSpent) },
                 {
-                  label: 'Amount left',
+                  label: t('overview.amountSpent'),
+                  value: formatCurrency(amountSpent),
+                },
+                {
+                  label: t('overview.amountLeft'),
                   value: getBudgetStatus(amountSpent, amountToBudget),
                 },
               ]}
@@ -98,21 +103,25 @@ export const BudgetOverview = ({ userId }: { userId: string }) => {
             <ExpandableSection
               defaultExpanded
               disableContentPaddings
-              headerText='Income sources'
+              headerText={t('incomeSources.title')}
               headerActions={
                 <ButtonDropdown
                   variant='normal'
                   items={[
-                    { id: 'add', text: 'Add income source', iconName: 'add-plus' },
+                    {
+                      id: 'add',
+                      text: t('incomeSources.dropdown.add'),
+                      iconName: 'add-plus',
+                    },
                     {
                       id: 'update',
-                      text: 'Update',
+                      text: t('incomeSources.dropdown.update'),
                       iconName: 'edit',
                       disabled: selectedItems.length === 0 || selectedItems.length > 1,
                       disabledReason:
                         selectedItems.length > 1
-                          ? 'Multiple income sources are selected.'
-                          : 'No income sources are selected.',
+                          ? t('incomeSources.dropdown.disabledMultipleSelected')
+                          : t('incomeSources.dropdown.disabledNoneSelected'),
                     },
                     {
                       id: 'delete',
@@ -123,12 +132,12 @@ export const BudgetOverview = ({ userId }: { userId: string }) => {
                       disabled: selectedItems.length === 0,
                       disabledReason:
                         selectedItems.length > 1
-                          ? 'Multiple income sources are selected.'
-                          : 'No income sources are selected.',
+                          ? t('incomeSources.dropdown.disabledMultipleSelected')
+                          : t('incomeSources.dropdown.disabledNoneSelected'),
                     },
                     {
                       id: 'refresh',
-                      text: 'Refresh',
+                      text: t('incomeSources.dropdown.refresh'),
                       iconName: 'refresh',
                     },
                   ]}
@@ -144,7 +153,9 @@ export const BudgetOverview = ({ userId }: { userId: string }) => {
                         refetch().catch((error: Error) => {
                           addNotification({
                             type: 'error',
-                            message: `Error refetching incomme sources: ${error.message}`,
+                            message: t('incomeSources.dropdown.errorRefetching', {
+                              error: error.message,
+                            }),
                           });
                         });
                         break;
@@ -152,7 +163,7 @@ export const BudgetOverview = ({ userId }: { userId: string }) => {
                         break;
                     }
                   }}>
-                  Actions
+                  {t('incomeSources.dropdown.title')}
                 </ButtonDropdown>
               }>
               <Table
@@ -163,7 +174,7 @@ export const BudgetOverview = ({ userId }: { userId: string }) => {
                 columnDefinitions={[
                   {
                     id: 'name',
-                    header: 'Source',
+                    header: t('table.source'),
                     cell: (item) => item.income_source_name,
                     editConfig: {
                       editingCell: (
@@ -175,8 +186,7 @@ export const BudgetOverview = ({ userId }: { userId: string }) => {
                       ) => (
                         <Input
                           placeholder={
-                            item.income_source_name ??
-                            'e.g., Paycheck, Babysitting, Stocks'
+                            item.income_source_name ?? t('table.incomeSourceExample')
                           }
                           value={ctx.currentValue ?? item.income_source_name}
                           onChange={(event) => ctx.setValue(event.detail.value)}
@@ -184,11 +194,11 @@ export const BudgetOverview = ({ userId }: { userId: string }) => {
                       ),
                       validation: (item, value) => {
                         if (typeof value !== 'string' || value?.length < 1) {
-                          return 'Invalid income source name!';
+                          return t('pages.buget.table.nameError');
                         }
 
                         if (item.income_source_name === value) {
-                          return 'Name must be different to update!';
+                          return t('table.noChangesError');
                         }
 
                         return undefined;
@@ -197,7 +207,7 @@ export const BudgetOverview = ({ userId }: { userId: string }) => {
                   },
                   {
                     id: 'projected_amount',
-                    header: 'Projected amount',
+                    header: t('table.projectedAmount'),
                     cell: (item) => formatCurrency(item.projected_amount),
                     editConfig: {
                       editingCell: (item, ctx) => (
@@ -215,11 +225,11 @@ export const BudgetOverview = ({ userId }: { userId: string }) => {
                         const isValidNumber = isFinite(Number(value));
 
                         if (!isValidNumber) {
-                          return 'Invalid type.';
+                          return t('table.typeError');
                         }
 
                         if (Number(value) < 0) {
-                          return 'Projected value must be a non-negative value!';
+                          return t('table.negativeValueError');
                         }
 
                         return undefined;
@@ -248,9 +258,7 @@ export const BudgetOverview = ({ userId }: { userId: string }) => {
                 }}
                 empty={
                   incomeSources ? (
-                    <StatusIndicator type='info'>
-                      No income sources added!
-                    </StatusIndicator>
+                    <StatusIndicator type='info'>{t('table.empty')}</StatusIndicator>
                   ) : (
                     getBudgetStatus(0)
                   )

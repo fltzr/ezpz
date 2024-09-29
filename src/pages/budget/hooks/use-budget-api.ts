@@ -1,28 +1,30 @@
 import { TableProps } from '@cloudscape-design/components';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-
 import { useSupabase } from '../../../common/hooks/use-supabase';
-import * as api from '../api/budget-queries';
-import { calculateCategoryTotals } from '../utils/table-configs';
-import {
-  type BudgetTableItem,
-  type CategoryInsert,
-  type BudgetItemInsert,
-  type BudgetItemUpdate,
-  isCategoryItem,
-  isBudgetItem,
-} from '../utils/types';
-import { useNotifiedMutation } from '../../../common/hooks/use-notified-mutation';
 import { useNotificationStore } from '../../../common/state/notifications';
 
-export const useBudgetApi = (userId: string) => {
+import * as api from '../data-access/budget-queries';
+import { calculateCategoryTotals } from '../utils/table-configs';
+import { useNotifiedMutation } from '../../../common/hooks/use-notified-mutation';
+import {
+  BudgetItemInsert,
+  BudgetItemUpdate,
+  BudgetTableItem,
+  CategoryInsert,
+  isBudgetItem,
+  isCategoryItem,
+} from '../utils/types';
+import { useTranslation } from 'react-i18next';
+
+export const useBudgetApi = (userId: string, budgetEntry: string) => {
+  const { t } = useTranslation(undefined, { keyPrefix: 'budget.api.budget' });
   const supabase = useSupabase();
   const queryClient = useQueryClient();
   const { addNotification } = useNotificationStore();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['budget-items', userId],
-    queryFn: () => api.fetchBudgetData(supabase, userId),
+    queryKey: ['budget-items', budgetEntry, userId],
+    queryFn: () => api.fetchBudgetData(userId, budgetEntry, supabase),
     enabled: !!userId,
     select: calculateCategoryTotals,
   });
@@ -30,37 +32,41 @@ export const useBudgetApi = (userId: string) => {
   const addCategoryMutation = useNotifiedMutation({
     mutationFn: (newCategory: CategoryInsert) => api.addCategory(supabase, newCategory),
     onSuccess: (newCategory) => {
-      queryClient.setQueryData<BudgetTableItem[]>(['budget-items', userId], (old) =>
-        calculateCategoryTotals(old ? [...old, newCategory] : [newCategory])
+      queryClient.setQueryData<BudgetTableItem[]>(
+        ['budget-items', budgetEntry, userId],
+        (old) => calculateCategoryTotals(old ? [...old, newCategory] : [newCategory])
       );
     },
-    successMessage: (newCategory) => `Added category: ${newCategory.category_name}`,
+    successMessage: (newCategory) =>
+      t('addCategorySuccess', { category: newCategory.category_name }),
     errorMessage: (error: unknown) =>
-      error instanceof Error
-        ? error.message
-        : 'An unknown error occurred. Please try again.',
+      error instanceof Error ? error.message : t('unknownError'),
   });
   const addBudgetItemMutation = useNotifiedMutation({
     mutationFn: (item: BudgetItemInsert) => api.addBudgetItem(supabase, item),
     onSuccess: (newItem) => {
-      queryClient.setQueryData<BudgetTableItem[]>(['budget-items', userId], (old) => {
-        if (!old) return [newItem];
-        const updatedItems = [...old];
-        const categoryIndex = updatedItems.findIndex(
-          (item) => isCategoryItem(item) && item.id === newItem.category_id
-        );
+      queryClient.setQueryData<BudgetTableItem[]>(
+        ['budget-items', budgetEntry, userId],
+        (old) => {
+          if (!old) return [newItem];
+          const updatedItems = [...old];
+          const categoryIndex = updatedItems.findIndex(
+            (item) => isCategoryItem(item) && item.id === newItem.category_id
+          );
 
-        if (categoryIndex !== -1) {
-          updatedItems.splice(categoryIndex + 1, 0, newItem);
-        } else {
-          updatedItems.push(newItem);
+          if (categoryIndex !== -1) {
+            updatedItems.splice(categoryIndex + 1, 0, newItem);
+          } else {
+            updatedItems.push(newItem);
+          }
+
+          return calculateCategoryTotals(updatedItems);
         }
-
-        return calculateCategoryTotals(updatedItems);
-      });
+      );
     },
-    successMessage: (newItem) => `Added budget item: ${newItem.budget_item_name}`,
-    errorMessage: (error) => `Failed to add budget item: ${error.message}`,
+    successMessage: (newItem) =>
+      t('addBudgetItemSuccess', { budgetItem: newItem.budget_item_name }),
+    errorMessage: (error) => t('addBudgetItemError', { message: error.message }),
   });
 
   const updateItemMutation = useNotifiedMutation({
@@ -73,16 +79,16 @@ export const useBudgetApi = (userId: string) => {
     },
     onSuccess: () => {
       queryClient
-        .refetchQueries({ queryKey: ['budget-items', userId] })
+        .refetchQueries({ queryKey: ['budget-items', budgetEntry, userId] })
         .catch((error: Error) => {
           addNotification({
             type: 'error',
-            message: `Error refetching budget items: ${error.message}`,
+            message: t('refetchBudgetItemError', { message: error.message }),
           });
         });
     },
-    successMessage: () => `Updated budget item`,
-    errorMessage: (error) => `Failed to update budget item: ${error.message}`,
+    successMessage: () => t('updateBudgetItemSuccess'),
+    errorMessage: (error) => t('updateBudgetItemError', { message: error.message }),
   });
 
   const deleteItemMutation = useNotifiedMutation({
@@ -95,22 +101,24 @@ export const useBudgetApi = (userId: string) => {
     },
     onSuccess: () => {
       queryClient
-        .refetchQueries({ queryKey: ['budget-items', userId] })
+        .refetchQueries({ queryKey: ['budget-items', budgetEntry, userId] })
         .catch((error: Error) => {
           addNotification({
             type: 'error',
-            message: `Error refetching budget items: ${error.message}`,
+            message: t('refetchBudgetItemError', { message: error.message }),
           });
         });
     },
-    errorMessage: (error: Error) => `Failed to delete item: ${error.message}`,
+    errorMessage: (error: Error) =>
+      t('deleteBudgetItemError', { message: error.message }),
+    successMessage: () => t('deleteBudgetItemSuccess'),
   });
 
   const handleAddCategory = (category: CategoryInsert) => {
-    addCategoryMutation.mutate(category);
+    addCategoryMutation.mutate({ ...category, budget_entry: budgetEntry });
   };
   const handleAddBudgetItem = (item: BudgetItemInsert) => {
-    addBudgetItemMutation.mutate(item);
+    addBudgetItemMutation.mutate({ ...item, budget_entry: budgetEntry });
   };
 
   const handleUpdateBudgetItem = (item: BudgetItemUpdate) => {

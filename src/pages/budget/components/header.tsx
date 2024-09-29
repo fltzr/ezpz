@@ -1,5 +1,32 @@
-import { Header } from '@cloudscape-design/components';
+import { Box, Header } from '@cloudscape-design/components';
+import { getI18n, useTranslation } from 'react-i18next';
+import { ReactNode } from 'react';
+import { useBudgetProvider } from '../hooks/use-budget-provider';
+import { DateTime } from 'luxon';
 
-export const ViewBudgetHeader = ({ name }: { name: string }) => {
-  return <Header variant='h1'>{name}&apos;s Budget Dashboard</Header>;
+type PageHeaderProps = {
+  actions?: ReactNode;
+};
+
+export const PageHeader = ({ actions }: PageHeaderProps) => {
+  const { t } = useTranslation(undefined, { keyPrefix: 'budget' });
+  const locale = getI18n().language;
+  const { selectedUser, budgetEntry } = useBudgetProvider();
+
+  console.log(locale);
+
+  const formatedDate = DateTime.fromFormat(budgetEntry, 'yyyy-MM')
+    .setLocale(locale)
+    .toFormat('LLLL yyyy');
+
+  return (
+    <>
+      <Header
+        variant='awsui-h1-sticky'
+        info={<Box variant='span'>{formatedDate}</Box>}
+        actions={actions}>
+        {t('common.title', { name: selectedUser.name })}
+      </Header>
+    </>
+  );
 };

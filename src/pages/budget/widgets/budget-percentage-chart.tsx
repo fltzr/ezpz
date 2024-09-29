@@ -5,8 +5,9 @@ import {
   PieChartProps,
   StatusIndicator,
 } from '@cloudscape-design/components';
-import { BudgetTableItem, isBudgetItem, isCategoryItem } from '../utils/types';
-import { formatCurrency } from '../../../common/utils/format-currency';
+import { BudgetTableItem, isBudgetItem, isCategoryItem } from '../utils/types.ts';
+import { formatCurrency } from '../../../common/utils/format-currency.tsx';
+import { useTranslation } from 'react-i18next';
 
 type BudgetPercentageChartProps = {
   isLoading: boolean;
@@ -19,6 +20,7 @@ export const BudgetPercentageChart = ({
   data,
   totalBudget,
 }: BudgetPercentageChartProps) => {
+  const { t } = useTranslation(undefined, { keyPrefix: 'pages.budget.pieChart' });
   const currencySymbol = getUserLocale().includes('US') ? '$' : '€';
   const chartData = (): PieChartProps.Datum[] | undefined => {
     const categoryTotals = new Map<string, number>();
@@ -41,14 +43,16 @@ export const BudgetPercentageChart = ({
 
   return (
     <PieChart
+      hideDescriptions
+      variant='donut'
       data={chartData() ?? []}
       statusType={isLoading ? 'loading' : 'finished'}
       detailPopoverContent={(datum) => [
-        { key: 'Category', value: datum.title },
-        { key: 'Amount', value: formatCurrency(datum.value) },
+        { key: t('keyCategory'), value: datum.title },
+        { key: t('keyAmount'), value: formatCurrency(datum.value) },
         totalBudget
           ? {
-              key: 'Percentage of total budget',
+              key: t('keyPercentageTotal'),
               value: `${((datum.value / totalBudget) * 100).toFixed(2)}%`,
             }
           : { key: '', value: '' },
@@ -63,9 +67,7 @@ export const BudgetPercentageChart = ({
       size='medium'
       empty={
         <Box padding={{ horizontal: 'xl' }}>
-          <StatusIndicator type='info'>
-            Add income sources and budget items to see this chart!
-          </StatusIndicator>
+          <StatusIndicator type='info'>{t('empty')}</StatusIndicator>
         </Box>
       }
     />

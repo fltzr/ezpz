@@ -7,20 +7,47 @@ import { User } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
 import { useNotificationStore } from '../common/state/notifications';
 import { nanoid } from 'nanoid';
+import { Locale, useLocale } from '../common/components/locale-provider';
+import { useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
 
 const generateUserHeaderItems = ({
+  t,
+  locale: { locale, localeOptions, setLocale },
   user,
   dropdownActions: { signOut, profile },
 }: {
+  t: TFunction<'translation', 'layout.header.items'>;
+  locale: ReturnType<typeof useLocale>;
   user: User | null;
   dropdownActions: {
     signOut: () => Promise<void>;
     profile: (event: CustomEvent) => void;
   };
 }): TopNavigationProps['utilities'] => {
-  if (!user) return undefined;
+  const selectedLocale = localeOptions.find((loc) => loc.code === locale);
+
+  const localeItems = localeOptions.map((opt) => ({
+    id: opt.code,
+    text: opt.label,
+  }));
+
+  const items: TopNavigationProps['utilities'] = [
+    {
+      type: 'menu-dropdown',
+      text: selectedLocale?.label,
+      items: localeItems,
+      onItemClick: (event) => {
+        event.preventDefault();
+        setLocale(event.detail.id as Locale);
+      },
+    },
+  ];
+
+  if (!user) return items;
 
   return [
+    ...items,
     {
       type: 'menu-dropdown',
       iconName: 'user-profile-active',
@@ -28,12 +55,12 @@ const generateUserHeaderItems = ({
       items: [
         {
           id: 'profile',
-          text: 'Profile',
+          text: t('profile'),
           iconName: 'user-profile',
         },
         {
           id: 'sign-out',
-          text: 'Sign out',
+          text: t('signOut'),
           iconName: 'undo',
         },
       ],
@@ -58,6 +85,8 @@ const generateUserHeaderItems = ({
 };
 
 export const GlobalHeader = () => {
+  const { t } = useTranslation(undefined, { keyPrefix: 'layout.header.items' });
+  const { locale, localeOptions, setLocale } = useLocale();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { addNotification } = useNotificationStore();
@@ -74,6 +103,12 @@ export const GlobalHeader = () => {
           },
         }}
         utilities={generateUserHeaderItems({
+          t,
+          locale: {
+            locale,
+            localeOptions,
+            setLocale,
+          },
           user,
           dropdownActions: {
             profile: (event) => {
@@ -87,7 +122,9 @@ export const GlobalHeader = () => {
                 addNotification({
                   id: nanoid(5),
                   type: 'error',
-                  message: `Error while attempting to sign out: ${error.message}`,
+                  message: t('layout.header.items.signOutError', {
+                    message: error.message,
+                  }),
                 });
 
                 return;

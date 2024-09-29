@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import {
   Box,
   Button,
+  ButtonGroup,
   Container,
   FormField,
   Header,
@@ -22,8 +23,10 @@ import { DeleteLoanModal } from './modals/delete-loan-modal';
 import { AddLoanInfo } from './drawer/add-loan-info';
 import { useDrawer } from '../../common/components/drawer-provider';
 import { EditLoanInfo } from './drawer/edit-loan-info';
+import { useTranslation } from 'react-i18next';
 
 const CalculatorPage = () => {
+  const { t } = useTranslation(undefined, { keyPrefix: 'pages.loanRepayment' });
   const {
     data: loans = [],
     handleAddLoan,
@@ -90,10 +93,10 @@ const CalculatorPage = () => {
     const totalCostOfLoan = (selectedLoan?.principal ?? 0) + totalInterestPaid;
 
     return [
-      { label: 'Months', value: month },
-      { label: 'Total interest paid', value: formatCurrency(totalInterestPaid) },
-      { label: 'Total cost of loan', value: formatCurrency(totalCostOfLoan) },
-      { label: 'Payoff date', value: addMonths(month) },
+      { label: t('summary.months'), value: month },
+      { label: t('summary.totalInterest'), value: formatCurrency(totalInterestPaid) },
+      { label: t('summary.totalCost'), value: formatCurrency(totalCostOfLoan) },
+      { label: t('summary.payoffDate'), value: addMonths(month) },
     ];
   };
 
@@ -108,7 +111,7 @@ const CalculatorPage = () => {
       <SpaceBetween size='xxl' direction='vertical'>
         <Header
           variant='h1'
-          description='Add or select a loan and view an amortization table.'
+          description={t('description')}
           actions={
             <Box padding={{ vertical: 's' }}>
               <Button
@@ -120,40 +123,55 @@ const CalculatorPage = () => {
                     350
                   );
                 }}>
-                Add loan
+                {t('actions.addLoan')}
               </Button>
             </Box>
           }>
-          Loan repayment calculator
+          {t('title')}
         </Header>
 
         <FormField
           secondaryControl={
             <Box padding={{ top: 's' }}>
-              <SpaceBetween direction='horizontal' size='m'>
-                <Button
-                  variant='inline-icon'
-                  iconName='edit'
-                  disabled={!selectedLoan}
-                  onClick={() => {
-                    openDrawer(
-                      'edit-loan-info',
-                      <EditLoanInfo
-                        loanDetails={selectedLoan}
-                        onSubmitEdit={handleSubmitEdit}
-                        onDismiss={closeDrawer}
-                      />,
-                      350
-                    );
-                  }}
-                />
-                <Button
-                  variant='inline-icon'
-                  iconName='remove'
-                  disabled={!selectedLoan}
-                  onClick={() => setShowDeleteLoanModal(true)}
-                />
-              </SpaceBetween>
+              <ButtonGroup
+                i18nIsDynamicList
+                ariaLabel='Loan actions'
+                variant='icon'
+                items={[
+                  {
+                    type: 'icon-button',
+                    id: 'edit',
+                    iconName: 'edit',
+                    text: t('actions.edit'),
+                  },
+                  {
+                    type: 'icon-button',
+                    id: 'delete',
+                    iconName: 'remove',
+                    text: t('actions.delete'),
+                  },
+                ]}
+                onItemClick={({ detail }) => {
+                  switch (detail.id) {
+                    case 'edit':
+                      openDrawer(
+                        'edit-loan-info',
+                        <EditLoanInfo
+                          loanDetails={selectedLoan}
+                          onSubmitEdit={handleSubmitEdit}
+                          onDismiss={closeDrawer}
+                        />,
+                        350
+                      );
+                      break;
+                    case 'delete':
+                      setShowDeleteLoanModal(true);
+                      break;
+                    default:
+                      break;
+                  }
+                }}
+              />
             </Box>
           }>
           <LoanSelector
