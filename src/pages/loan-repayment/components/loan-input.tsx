@@ -1,3 +1,6 @@
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
 import {
   Button,
   Form,
@@ -6,8 +9,7 @@ import {
   Input,
   SpaceBetween,
 } from '@cloudscape-design/components';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm } from 'react-hook-form';
+
 import { loanInputSchema, type LoanInputSchema } from '../schema';
 
 type LoanInputProps = {

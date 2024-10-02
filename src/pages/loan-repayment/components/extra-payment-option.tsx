@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import {
   Box,
   Button,
@@ -6,7 +8,6 @@ import {
   Input,
   SpaceBetween,
 } from '@cloudscape-design/components';
-import { useState } from 'react';
 
 type ExtraPaymentOptionProps = {
   isDisabled: boolean;

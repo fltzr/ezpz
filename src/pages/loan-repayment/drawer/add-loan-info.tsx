@@ -1,3 +1,8 @@
+import { useEffectOnce } from 'react-use';
+import { Controller, useForm } from 'react-hook-form';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+
 import {
   Button,
   Drawer,
@@ -7,10 +12,8 @@ import {
   Input,
   SpaceBetween,
 } from '@cloudscape-design/components';
-import { loanInputSchema, LoanInputSchema } from '../schema';
-import { Controller, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffectOnce } from 'react-use';
+
+import { type LoanInputSchema, loanInputSchema } from '../schema';
 
 type AddLoanInfoProps = {
   onSubmit: (loan: LoanInputSchema) => void;

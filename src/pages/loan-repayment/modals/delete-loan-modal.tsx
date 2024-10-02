@@ -7,7 +7,8 @@ import {
   SpaceBetween,
   Table,
 } from '@cloudscape-design/components';
-import { LoanInputSchema } from '../schema';
+
+import type { LoanInputSchema } from '../schema';
 
 type DeleteLoanModalProps = {
   visible: boolean;

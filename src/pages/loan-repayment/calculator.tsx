@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Button,
@@ -11,19 +12,21 @@ import {
   SpaceBetween,
 } from '@cloudscape-design/components';
 
+import { formatCurrency } from '../../utils/format-currency';
+import { useDrawer } from '../../components/drawer-provider';
+
 import type { LoanInputSchema } from './schema';
 import { useLoansApi } from './hooks/use-loans-api';
+
 import { AmortizationScheduleTable } from './components/amortization-schedule-table';
 import { LoanSelector } from './components/loan-selector';
-import { formatCurrency } from '../../utils/format-currency';
+import { AddLoanInfo } from './drawer/add-loan-info';
+import { EditLoanInfo } from './drawer/edit-loan-info';
+import { DeleteLoanModal } from './modals/delete-loan-modal';
+
+import { addMonths } from './utils/add-months';
 import { createAmortizationSchedule } from './utils/calculations';
 import { toDatabaseSchema, toZodSchema } from './utils/dto';
-import { addMonths } from './utils/add-months';
-import { DeleteLoanModal } from './modals/delete-loan-modal';
-import { AddLoanInfo } from './drawer/add-loan-info';
-import { useDrawer } from '../../components/drawer-provider';
-import { EditLoanInfo } from './drawer/edit-loan-info';
-import { useTranslation } from 'react-i18next';
 
 const CalculatorPage = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'pages.loanRepayment' });
@@ -117,11 +120,13 @@ const CalculatorPage = () => {
               <Button
                 variant='primary'
                 onClick={() => {
-                  openDrawer(
-                    'add-loan-info',
-                    <AddLoanInfo onSubmit={handleSubmitAdd} onDismiss={closeDrawer} />,
-                    350
-                  );
+                  openDrawer({
+                    drawerName: 'add-loan-info',
+                    content: (
+                      <AddLoanInfo onSubmit={handleSubmitAdd} onDismiss={closeDrawer} />
+                    ),
+                    width: 350,
+                  });
                 }}>
                 {t('actions.addLoan')}
               </Button>
@@ -154,15 +159,17 @@ const CalculatorPage = () => {
                 onItemClick={({ detail }) => {
                   switch (detail.id) {
                     case 'edit':
-                      openDrawer(
-                        'edit-loan-info',
-                        <EditLoanInfo
-                          loanDetails={selectedLoan}
-                          onSubmitEdit={handleSubmitEdit}
-                          onDismiss={closeDrawer}
-                        />,
-                        350
-                      );
+                      openDrawer({
+                        drawerName: 'edit-loan-info',
+                        content: (
+                          <EditLoanInfo
+                            loanDetails={selectedLoan}
+                            onSubmitEdit={handleSubmitEdit}
+                            onDismiss={closeDrawer}
+                          />
+                        ),
+                        width: 350,
+                      });
                       break;
                     case 'delete':
                       setShowDeleteLoanModal(true);

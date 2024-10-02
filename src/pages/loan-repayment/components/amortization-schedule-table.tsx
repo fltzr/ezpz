@@ -1,5 +1,5 @@
 import { Table } from '@cloudscape-design/components';
-import { AmortizationSchedule } from '../schema';
+import type { AmortizationSchedule } from '../schema';
 
 export const AmortizationScheduleTable = ({
   schedule,

@@ -1,10 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { nanoid } from 'nanoid';
-import { useSupabase } from '../../../hooks/use-supabase';
-import { useNotificationStore } from '../../../state/notifications';
+
+import { useSupabase } from '@/hooks/use-supabase';
+import { useNotificationStore } from '@/state/notifications';
+import { useAuth } from '@/pages/auth/hooks/use-auth';
+
 import * as api from '../api/loans';
 import type { LoanEntry, LoanEntryInsert, LoanEntryUpdate } from '../utils/types';
-import { useAuth } from '../../../auth/hooks/use-auth';
 
 export const useLoansApi = () => {
   const supabase = useSupabase();
