@@ -1,11 +1,13 @@
-import { Table, Header, StatusIndicator } from '@cloudscape-design/components';
-import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { useAuth } from '../../../auth/hooks/use-auth';
-import { useSupabase } from '../../../hooks/use-supabase';
-import { useNotificationStore } from '../../../state/notifications';
+import { useQuery } from '@tanstack/react-query';
+import { Table, Header, StatusIndicator } from '@cloudscape-design/components';
+
+import { useAuth } from '@/pages/auth/hooks/use-auth';
+import { useSupabase } from '@/hooks/use-supabase';
+import { ManualRefresh } from '@/components/manual-refresh';
+import { useNotificationStore } from '@/state/notifications';
+
 import { fetchBalances } from '../api';
-import { ManualRefresh } from '../../../components/manual-refresh';
 
 export const PlaidBalances = () => {
   const { user } = useAuth();

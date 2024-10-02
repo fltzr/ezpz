@@ -1,9 +1,10 @@
+import { PlaidLinkOnEvent, PlaidLinkOnSuccess, usePlaidLink } from 'react-plaid-link';
 import { useQuery } from '@tanstack/react-query';
 import { Button, Alert } from '@cloudscape-design/components';
-import { PlaidLinkOnEvent, PlaidLinkOnSuccess, usePlaidLink } from 'react-plaid-link';
 
-import { useSupabase } from '../../../hooks/use-supabase';
-import { useAuth } from '../../../auth/hooks/use-auth';
+import { useSupabase } from '@/hooks/use-supabase';
+import { useAuth } from '@/pages/auth/hooks/use-auth';
+
 import { fetchLinkToken } from '../api';
 
 export const PlaidLinkButton = () => {
@@ -60,7 +61,6 @@ export const PlaidLinkButton = () => {
   return (
     <Button
       onClick={() => {
-        // eslint-disable-next-line
         open();
       }}
       disabled={!ready}

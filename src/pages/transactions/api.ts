@@ -1,5 +1,5 @@
-import { useSupabase } from '../../hooks/use-supabase';
 import type { AccountBase, TransactionsSyncResponse } from 'plaid';
+import { useSupabase } from '@/hooks/use-supabase';
 
 export const fetchLinkToken = async (supabase: ReturnType<typeof useSupabase>) => {
   const response = await supabase.functions.invoke<string>('plaid-create_link_token', {
