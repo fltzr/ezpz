@@ -22,7 +22,15 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    "paths": {
+      "@/pages/*": ["./src/pages/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/state/*": ["./src/state/*"],
+      "@/utils/*": ["./src/utils/"]
+    }
   },
   "include": ["src", "supabase.d.ts"]
 }
