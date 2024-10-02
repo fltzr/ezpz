@@ -71,6 +71,7 @@ export type Database = {
           category_id: string
           created_at: string
           id: string
+          is_recurring: boolean
           projected_amount: number
           user_id: string
         }
@@ -80,6 +81,7 @@ export type Database = {
           category_id: string
           created_at?: string
           id?: string
+          is_recurring?: boolean
           projected_amount: number
           user_id: string
         }
@@ -89,6 +91,7 @@ export type Database = {
           category_id?: string
           created_at?: string
           id?: string
+          is_recurring?: boolean
           projected_amount?: number
           user_id?: string
         }
@@ -115,6 +118,7 @@ export type Database = {
           category_name: string
           created_at: string
           id: string
+          is_recurring: boolean
           user_id: string
         }
         Insert: {
@@ -122,6 +126,7 @@ export type Database = {
           category_name: string
           created_at?: string
           id?: string
+          is_recurring?: boolean
           user_id: string
         }
         Update: {
@@ -129,6 +134,7 @@ export type Database = {
           category_name?: string
           created_at?: string
           id?: string
+          is_recurring?: boolean
           user_id?: string
         }
         Relationships: [
@@ -147,6 +153,7 @@ export type Database = {
           created_at: string
           id: string
           income_source_name: string
+          is_recurring: boolean
           projected_amount: number
           user_id: string
         }
@@ -155,6 +162,7 @@ export type Database = {
           created_at?: string
           id?: string
           income_source_name: string
+          is_recurring?: boolean
           projected_amount: number
           user_id: string
         }
@@ -163,6 +171,7 @@ export type Database = {
           created_at?: string
           id?: string
           income_source_name?: string
+          is_recurring?: boolean
           projected_amount?: number
           user_id?: string
         }
