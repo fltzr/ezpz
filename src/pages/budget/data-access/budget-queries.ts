@@ -1,5 +1,6 @@
-import { useSupabase } from '../../../hooks/use-supabase';
-import {
+import { useSupabase } from '@/hooks/use-supabase';
+
+import type {
   BudgetItemInsert,
   BudgetItemUpdate,
   CategoryInsert,

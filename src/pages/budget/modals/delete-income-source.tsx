@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { IncomeSource } from '../utils/types';
+
 import {
   Alert,
   Box,
@@ -9,6 +9,8 @@ import {
   SpaceBetween,
   Table,
 } from '@cloudscape-design/components';
+
+import { IncomeSource } from '../utils/types';
 
 type DeleteIncomeSourceModalProps = {
   visible: boolean;

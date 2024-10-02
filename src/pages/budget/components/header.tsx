@@ -1,8 +1,9 @@
-import { Box, Header } from '@cloudscape-design/components';
+import type { ReactNode } from 'react';
 import { getI18n, useTranslation } from 'react-i18next';
-import { ReactNode } from 'react';
-import { useBudgetProvider } from '../hooks/use-budget-provider';
 import { DateTime } from 'luxon';
+import { Box, Header } from '@cloudscape-design/components';
+
+import { useBudgetProvider } from '../hooks/use-budget-provider';
 
 type PageHeaderProps = {
   actions?: ReactNode;

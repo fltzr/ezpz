@@ -1,3 +1,7 @@
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { DateTime } from 'luxon';
+
 import {
   Button,
   Header,
@@ -5,21 +9,22 @@ import {
   StatusIndicator,
   Table,
 } from '@cloudscape-design/components';
-import { useTranslation } from 'react-i18next';
-import { useBudgetProvider } from '../hooks/use-budget-provider';
-import { BudgetTableItem, isCategoryItem } from '../utils/types';
 import { useCollection } from '@cloudscape-design/collection-hooks';
-import { createBudgetTableColumnDefinitions } from '../utils/table-configs';
+
+import { useDrawer } from '@/components/drawer-provider';
+import { ManualRefresh } from '@/components/manual-refresh';
+
+import { useBudgetProvider } from '../hooks/use-budget-provider';
 import { useBudgetApi } from '../hooks/use-budget-api';
-import { useDrawer } from '../../../components/drawer-provider';
+
 import { AddCategory } from '../drawer/add-category';
 import { AddBudgetItem } from '../drawer/add-budget-item';
 import { DeleteItemModal } from '../modals/delete-item';
-import { useEffect, useState } from 'react';
 import { EditBudgetItem } from '../drawer/edit-budget-item';
 import { EditCategory } from '../drawer/edit-category';
-import { ManualRefresh } from '../../../components/manual-refresh';
-import { DateTime } from 'luxon';
+
+import { type BudgetTableItem, isCategoryItem } from '../utils/types';
+import { createBudgetTableColumnDefinitions } from '../utils/table-configs';
 
 export const BudgetTable = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.budgetTable' });

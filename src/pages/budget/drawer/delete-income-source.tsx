@@ -1,3 +1,9 @@
+import { useEffectOnce } from 'react-use';
+import { useTranslation } from 'react-i18next';
+import { Controller, useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
 import {
   Box,
   Button,
@@ -8,12 +14,8 @@ import {
   Input,
   SpaceBetween,
 } from '@cloudscape-design/components';
-import { Controller, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffectOnce } from 'react-use';
-import { useTranslation } from 'react-i18next';
-import { IncomeSourceInsert } from '../utils/types';
-import { z } from 'zod';
+
+import type { IncomeSourceInsert } from '../utils/types';
 
 type AddIncomeSource = {
   selectedUserId: string;

@@ -1,5 +1,6 @@
-import getUserLocale from 'get-user-locale';
 import { useTranslation } from 'react-i18next';
+import getUserLocale from 'get-user-locale';
+
 import {
   Container,
   Header,
@@ -7,11 +8,13 @@ import {
   PieChartProps,
   StatusIndicator,
 } from '@cloudscape-design/components';
-import { isBudgetItem, isCategoryItem } from '../utils/types';
-import { formatCurrency } from '../../../utils/format-currency';
+
+import { formatCurrency } from '@/utils/format-currency';
+
 import { useBudgetApi } from '../hooks/use-budget-api';
 import { useBudgetProvider } from '../hooks/use-budget-provider';
 import { useIncomeApi } from '../hooks/use-income-api';
+import { isBudgetItem, isCategoryItem } from '../utils/types';
 
 export const MonthlyBreakdown = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.monthlyBreakdown' });

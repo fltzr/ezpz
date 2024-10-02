@@ -1,6 +1,7 @@
-import { Alert, Box, Button, Modal, SpaceBetween } from '@cloudscape-design/components';
-import { type BudgetTableItem, getItemName, isCategoryItem } from '../utils/types';
 import { useTranslation } from 'react-i18next';
+import { Alert, Box, Button, Modal, SpaceBetween } from '@cloudscape-design/components';
+
+import { type BudgetTableItem, getItemName, isCategoryItem } from '../utils/types';
 
 type DeleteItemModalProps = {
   visible: boolean;

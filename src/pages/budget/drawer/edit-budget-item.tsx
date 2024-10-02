@@ -1,3 +1,10 @@
+import { Controller, useForm } from 'react-hook-form';
+import { useEffectOnce } from 'react-use';
+import { useTranslation } from 'react-i18next';
+import getUserLocale from 'get-user-locale';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
 import {
   Box,
   Button,
@@ -11,13 +18,8 @@ import {
   Select,
   SpaceBetween,
 } from '@cloudscape-design/components';
-import { Controller, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffectOnce } from 'react-use';
-import { useTranslation } from 'react-i18next';
+
 import { BudgetItem, BudgetItemUpdate, Category, isCategoryItem } from '../utils/types';
-import { z } from 'zod';
-import getUserLocale from 'get-user-locale';
 import { useBudgetApi } from '../hooks/use-budget-api';
 
 type EditBudgetItemProps = {
@@ -65,7 +67,7 @@ export const EditBudgetItem = ({
       budget_item_name: item?.budget_item_name ?? '',
       projected_amount: item?.projected_amount ?? 0,
       category_id: item?.category_id,
-      is_recurring: item?.is_recurring as boolean,
+      is_recurring: item?.is_recurring,
     },
   });
 

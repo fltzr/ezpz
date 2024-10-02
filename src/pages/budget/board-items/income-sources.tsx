@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import {
   ButtonGroup,
   Container,
@@ -6,16 +9,17 @@ import {
   StatusIndicator,
   Table,
 } from '@cloudscape-design/components';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { IncomeSource } from '../utils/types';
-import { useIncomeApi } from '../hooks/use-income-api';
-import { formatCurrency } from '../../../utils/format-currency';
+
+import { formatCurrency } from '@/utils/format-currency';
+import { useDrawer } from '@/components/drawer-provider';
+import { useNotificationStore } from '@/state/notifications';
+
 import { useBudgetProvider } from '../hooks/use-budget-provider';
-import { useDrawer } from '../../../components/drawer-provider';
+import { useIncomeApi } from '../hooks/use-income-api';
 import { AddIncomeSource } from '../drawer/add-income-source';
-import { useNotificationStore } from '../../../state/notifications';
 import { DeleteIncomeSourceModal } from '../modals/delete-income-source';
+
+import { IncomeSource } from '../utils/types';
 
 export const IncomeSources = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.incomeSources' });

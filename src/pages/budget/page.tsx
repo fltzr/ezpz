@@ -1,9 +1,11 @@
 import { Grid, SpaceBetween } from '@cloudscape-design/components';
-import { PageHeader } from './components/header';
+
 import { IncomeSources } from './board-items/income-sources';
 import { MonthlyBreakdown } from './board-items/monthly-breakdown';
 import { BudgetTable } from './board-items/budget-table';
 import { MonthlyOverview } from './board-items/monthly-overview';
+
+import { PageHeader } from './components/header';
 import { UserSelector } from './components/user-selector';
 
 const BudgetPage = () => {

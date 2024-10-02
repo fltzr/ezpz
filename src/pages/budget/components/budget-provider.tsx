@@ -1,12 +1,13 @@
 import {
+  type Dispatch,
+  type PropsWithChildren,
+  type SetStateAction,
   createContext,
-  Dispatch,
-  PropsWithChildren,
-  SetStateAction,
   useState,
 } from 'react';
-import { useAuth } from '../../../auth/hooks/use-auth';
 import { DateTime } from 'luxon';
+
+import { useAuth } from '@/pages/auth/hooks/use-auth';
 
 type SelectedUser = { userId: string; name: string };
 

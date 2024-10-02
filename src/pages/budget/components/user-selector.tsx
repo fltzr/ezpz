@@ -1,9 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
-import { Select, SelectProps } from '@cloudscape-design/components';
-
-import { useSupabase } from '../../../hooks/use-supabase';
-import { useBudgetProvider } from '../hooks/use-budget-provider';
 import { useTranslation } from 'react-i18next';
+import { useQuery } from '@tanstack/react-query';
+import { Select, type SelectProps } from '@cloudscape-design/components';
+
+import { useSupabase } from '@/hooks/use-supabase';
+
+import { useBudgetProvider } from '../hooks/use-budget-provider';
 
 const fetchUsers = async (supabase: ReturnType<typeof useSupabase>) => {
   const { data, error } = await supabase.from('users').select('*');

@@ -1,3 +1,5 @@
+import type { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import {
   Container,
   DatePicker,
@@ -6,13 +8,13 @@ import {
   KeyValuePairs,
   StatusIndicator,
 } from '@cloudscape-design/components';
-import { useTranslation } from 'react-i18next';
-import { formatCurrency } from '../../../utils/format-currency';
-import { isBudgetItem } from '../utils/types';
+
+import { formatCurrency } from '@/utils/format-currency';
+
 import { useBudgetProvider } from '../hooks/use-budget-provider';
 import { useIncomeApi } from '../hooks/use-income-api';
 import { useBudgetApi } from '../hooks/use-budget-api';
-import { TFunction } from 'i18next';
+import { isBudgetItem } from '../utils/types';
 
 const getBudgetStatus = (t: TFunction, amountSpent: number, budgetAmount?: number) => {
   if (!budgetAmount) {

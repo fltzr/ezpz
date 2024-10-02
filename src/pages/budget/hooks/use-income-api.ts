@@ -1,11 +1,16 @@
+import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { nanoid } from 'nanoid';
-import { useSupabase } from '../../../hooks/use-supabase';
-import { useNotificationStore } from '../../../state/notifications';
 
+import { useSupabase } from '@/hooks/use-supabase';
+import { useNotificationStore } from '@/state/notifications';
+
+import type {
+  IncomeSource,
+  IncomeSourceInsert,
+  IncomeSourceUpdate,
+} from '../utils/types';
 import * as api from '../data-access/income';
-import { IncomeSource, IncomeSourceInsert, IncomeSourceUpdate } from '../utils/types';
-import { useTranslation } from 'react-i18next';
 
 export const useIncomeApi = (userId: string, budgetEntry: string) => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.api.income' });
