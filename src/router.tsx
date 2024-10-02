@@ -3,16 +3,18 @@ import {
   type RouterProviderProps,
   createBrowserRouter,
   Navigate,
+  RouterProvider,
 } from 'react-router-dom';
 
 import ProtectedRoute from '@/pages/auth/components/protected-route';
 import { ErrorPage } from '@/components/error-page/error-page';
+import { SuspenseLoadingBar } from '@/components/suspense-loading-bar';
 
 import { authRoutes } from '@/pages/auth/routes';
 import { profileRoutes } from '@/pages/profile/routes';
 import { budgetRoutes } from '@/pages/budget/routes';
 import { loanRepaymentRoutes } from '@/pages/loan-repayment/routes';
-import { transactionsRoutes } from './pages/transactions/routes';
+import { transactionsRoutes } from '@/pages/transactions/routes';
 
 const routes: RouteObject[] = [
   {
@@ -38,7 +40,12 @@ const routes: RouteObject[] = [
   },
 ];
 
-export const router: RouterProviderProps['router'] = createBrowserRouter(routes);
+const router: RouterProviderProps['router'] = createBrowserRouter(routes);
+const Router = () => (
+  <RouterProvider router={router} fallbackElement={<SuspenseLoadingBar />} />
+);
+
+export default Router;
 
 if (import.meta.hot) {
   import.meta.hot.dispose(() => router.dispose());
