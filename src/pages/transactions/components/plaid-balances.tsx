@@ -5,7 +5,7 @@ import { useAuth } from '../../../auth/hooks/use-auth';
 import { useSupabase } from '../../../common/hooks/use-supabase';
 import { useNotificationStore } from '../../../common/state/notifications';
 import { fetchBalances } from '../api';
-import { ManualRefresh } from './manual-refresh';
+import { ManualRefresh } from '../../../common/components/manual-refresh';
 
 export const PlaidBalances = () => {
   const { user } = useAuth();

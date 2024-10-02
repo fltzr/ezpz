@@ -1,4 +1,10 @@
-import { Button, Header, StatusIndicator, Table } from '@cloudscape-design/components';
+import {
+  Button,
+  Header,
+  SpaceBetween,
+  StatusIndicator,
+  Table,
+} from '@cloudscape-design/components';
 import { useTranslation } from 'react-i18next';
 import { useBudgetProvider } from '../hooks/use-budget-provider';
 import { BudgetTableItem, isCategoryItem } from '../utils/types';
@@ -9,8 +15,11 @@ import { useDrawer } from '../../../common/components/drawer-provider';
 import { AddCategory } from '../drawer/add-category';
 import { AddBudgetItem } from '../drawer/add-budget-item';
 import { DeleteItemModal } from '../modals/delete-item';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { EditBudgetItem } from '../drawer/edit-budget-item';
+import { EditCategory } from '../drawer/edit-category';
+import { ManualRefresh } from '../../../common/components/manual-refresh';
+import { DateTime } from 'luxon';
 
 export const BudgetTable = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.budgetTable' });
@@ -19,7 +28,9 @@ export const BudgetTable = () => {
 
   const {
     data: budgetItems,
-    isLoading,
+    isFetching,
+    dataUpdatedAt,
+    refetch,
     handleAddCategory,
     handleAddBudgetItem,
     handleUpdateBudgetItem,
@@ -36,6 +47,8 @@ export const BudgetTable = () => {
     },
   });
 
+  const [lastRefresh, setLastRefresh] = useState<string | null>(null);
+
   const [deleteItemProps, setDeleteItemProps] = useState<{
     visible: boolean;
     item?: BudgetTableItem;
@@ -44,7 +57,7 @@ export const BudgetTable = () => {
   const onClickAddCategoryDrawer = () => {
     openDrawer({
       drawerName: 'add-category',
-      width: 300,
+      width: 350,
       content: (
         <AddCategory
           selectedUserId={selectedUser.userId}
@@ -62,15 +75,35 @@ export const BudgetTable = () => {
     });
   };
 
+  useEffect(() => {
+    refetch().catch(console.error);
+    // eslint-disable-next-line react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [budgetEntry]);
+
   return (
     <>
       <Table
         {...collectionProps}
         enableKeyboardNavigation
-        loading={isLoading}
+        loading={isFetching}
         variant='container'
         items={items ?? []}
         columnDefinitions={createBudgetTableColumnDefinitions(t, {
+          handleEditCategory: (item) => {
+            openDrawer({
+              drawerName: 'edit-category-item',
+              width: 300,
+              content: (
+                <EditCategory
+                  selectedUserId={selectedUser.userId}
+                  category={item}
+                  onEdit={handleUpdateBudgetItem}
+                  onClose={closeDrawer}
+                />
+              ),
+            });
+          },
           handleAddBudgetLineItem: (item) => {
             openDrawer({
               drawerName: 'add-budget-item',
@@ -111,12 +144,22 @@ export const BudgetTable = () => {
           <Header
             variant='h2'
             actions={
-              <Button
-                variant='primary'
-                iconName='add-plus'
-                onClick={onClickAddCategoryDrawer}>
-                {t('addCategory')}
-              </Button>
+              <SpaceBetween size='xs' direction='horizontal'>
+                <ManualRefresh
+                  lastRefresh={lastRefresh}
+                  loading={isFetching}
+                  onRefresh={() => {
+                    setLastRefresh(DateTime.fromMillis(dataUpdatedAt).toISO());
+                    refetch().catch(console.error);
+                  }}
+                />
+                <Button
+                  variant='primary'
+                  iconName='add-plus'
+                  onClick={onClickAddCategoryDrawer}>
+                  {t('addCategory')}
+                </Button>
+              </SpaceBetween>
             }>
             {t('title')}
           </Header>
