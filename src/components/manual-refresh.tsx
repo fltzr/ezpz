@@ -1,7 +1,7 @@
-import { Box, Button, SpaceBetween } from '@cloudscape-design/components';
-import getUserLocale from 'get-user-locale';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
+import getUserLocale from 'get-user-locale';
+import { Box, Button, SpaceBetween } from '@cloudscape-design/components';
 
 type ManualRefreshProps = {
   lastRefresh?: string | null;

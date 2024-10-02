@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { RouterProvider } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Box, Header, Modal, StatusIndicator } from '@cloudscape-design/components';
 
 import { router } from './router';
-import { useTheme } from './hooks/use-theme';
-import { Box, Header, Modal, StatusIndicator } from '@cloudscape-design/components';
-import { SupabaseProvider } from './components/supabase-provider';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AuthProvider } from './auth/components/auth-provider';
-import { DrawerProvider } from './components/drawer-provider';
+import { AuthProvider } from '@/pages/auth/components/auth-provider';
+import { useTheme } from '@/hooks/use-theme';
+import { SupabaseProvider } from '@/components/supabase-provider';
+import { DrawerProvider } from '@/components/drawer-provider';
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -1,9 +1,3 @@
-/**
- * document.cookie: 'key_one=abc; key_two=def;'
- * .split(';') -> ['key_one=abc', 'key_two=def']
- *
- */
-
 export const getCookie = (cookieName: string) => {
   const documentCookies = document.cookie.split('; ');
 

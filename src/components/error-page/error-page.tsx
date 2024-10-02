@@ -1,8 +1,8 @@
-import { Box, Container, Header } from '@cloudscape-design/components';
 import { isRouteErrorResponse, useRouteError } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Box, Container, Header } from '@cloudscape-design/components';
 
 import styles from './styles.module.scss';
-import { useTranslation } from 'react-i18next';
 
 export const ErrorPage = () => {
   const { t } = useTranslation();

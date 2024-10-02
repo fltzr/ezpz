@@ -1,6 +1,6 @@
-import { type FlashbarProps, Button, Flashbar } from '@cloudscape-design/components';
-import { useNotificationStore } from '../state/notifications';
 import { useEffect } from 'react';
+import { type FlashbarProps, Button, Flashbar } from '@cloudscape-design/components';
+import { useNotificationStore } from '@/state/notifications';
 
 const AUTO_DISMISS_DURATION = 5000;
 

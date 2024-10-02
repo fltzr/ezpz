@@ -1,20 +1,22 @@
 /* eslint-disable react-refresh/only-export-components */
+import { lazy } from 'react';
 import {
   Navigate,
   type RouteObject,
   type RouterProviderProps,
   createBrowserRouter,
 } from 'react-router-dom';
-import { ErrorPage } from './components/error-page/error-page';
-import { lazy } from 'react';
-import ProtectedRoute from './pages/auth/components/protected-route';
-import { SuspenseLoadingBar } from './components/suspense-loading-bar';
-import { BudgetProvider } from './pages/budget/components/budget-provider';
 
-const ProfileOverviewPage = lazy(() => import('./pages/profile/overview'));
-const BudgetPage = lazy(() => import('./pages/budget/page'));
-const CalculatorPage = lazy(() => import('./pages/loan-repayment/calculator'));
-const TransactionsOverview = lazy(() => import('./pages/transactions/overview'));
+import ProtectedRoute from '@/pages/auth/components/protected-route';
+import { ErrorPage } from '@/components/error-page/error-page';
+import { SuspenseLoadingBar } from '@/components/suspense-loading-bar';
+
+const BudgetProvider = lazy(() => import('@/pages/budget/components/budget-provider'));
+const BudgetPage = lazy(() => import('@/pages/budget/page'));
+
+const ProfileOverviewPage = lazy(() => import('@/pages/profile/overview'));
+const CalculatorPage = lazy(() => import('@/pages/loan-repayment/calculator'));
+const TransactionsOverview = lazy(() => import('@/pages/transactions/overview'));
 
 const routes: RouteObject[] = [
   {
@@ -28,7 +30,7 @@ const routes: RouteObject[] = [
       },
       {
         path: 'auth',
-        lazy: () => import('./pages/auth/sign-in'),
+        lazy: () => import('@/pages/auth/sign-in'),
       },
       {
         element: <ProtectedRoute />,

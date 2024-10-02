@@ -1,11 +1,12 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
+import i18n from 'i18next';
+
 import { Spinner } from '@cloudscape-design/components';
+
 import I18nProvider, {
   I18nProviderProps,
   importMessages,
 } from '@cloudscape-design/components/i18n';
-
-import i18n from 'i18next';
 
 export type Locale = 'en' | 'fr' | 'es';
 

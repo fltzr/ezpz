@@ -19,7 +19,7 @@ type BudgetContextProps = {
 
 export const BudgetContext = createContext<BudgetContextProps | undefined>(undefined);
 
-export const BudgetProvider = ({ children }: PropsWithChildren) => {
+const BudgetProvider = ({ children }: PropsWithChildren) => {
   const date = DateTime.now();
   const { user } = useAuth();
 
@@ -44,3 +44,5 @@ export const BudgetProvider = ({ children }: PropsWithChildren) => {
     </BudgetContext.Provider>
   );
 };
+
+export default BudgetProvider;
