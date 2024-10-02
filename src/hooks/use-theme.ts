@@ -1,5 +1,5 @@
-import { applyMode, Mode } from '@cloudscape-design/global-styles';
 import { useEffect, useState } from 'react';
+import { applyMode, Mode } from '@cloudscape-design/global-styles';
 
 export const useTheme = () => {
   const [theme, setTheme] = useState<Mode>(() => {
