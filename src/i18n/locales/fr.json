@@ -1,6 +1,7 @@
 {
   "common": {
-    "or": "ou"
+    "or": "ou",
+    "lastUpdated": "Dernière mise à jour"
   },
   "error": {
     "routeErrorTitle": "Oups !",
@@ -183,7 +184,7 @@
         "projectedAmount": "Montant projeté",
         "actions": {
           "columnName": "Actions",
-          "renameCategory": "Renommer une catégorie",
+          "editCategory": "Modifier une catégorie",
           "deleteCategory": "Supprimer la catégorie",
           "addBudgetItem": "Ajouter un poste budgétarie",
           "editBudgetItem": "Modifier le poste budgétarie",
@@ -197,7 +198,11 @@
         "category": "Catégorie",
         "cancelButton": "Annuler",
         "addButton": "Ajouter",
-        "updateButton": "Mettre à jour"
+        "updateButton": "Mettre à jour",
+        "fields": {
+          "isRecurring": "Est-il récurrent ?",
+          "isRecurringDescription": "Le fait de marquer cet élément comme récurrent sera automatiquement visible dans les périodes budgétaires futures. Veuillez noter qu'à l'heure actuelle, la suppression d'un élément récurrent pour un mois se propage à tous les mois (je suis désolée bébé, J'y travaille hihi)."
+        }
       },
       "addBudgetItem": {
         "title": "Ajoute un poste budgétaire",
@@ -210,6 +215,7 @@
       },
       "addCategory": {
         "title": "Ajouter une catégorie",
+        "warning": "Vous ne pourrez pas visualiser les postes budgétaires récurrents pour les périodes budgétaires ultérieures si la catégorie n'est pas définie comme récurrente.",
         "fields": {
           "categoryName": "Nom de la catégorie",
           "categoryExample": "Par exemple, Factures, Épargne, Logement"
@@ -228,6 +234,17 @@
 
       "editBudgetItem": {
         "title": "Modifier le poste budgétaire",
+        "fields": {
+          "itemName": "Nom de l'article",
+          "itemNameExample": "Par exemple, Épicerie, Loyer, Services Public",
+          "projectedAmount": "Montant projeté",
+          "projectedAmountDescription": "Le montant projeté que vous prévoyez de dépenser pour cet article. Devise actuelle : {{currency}}",
+          "categoryName": "Nom de la catégorie"
+        }
+      },
+
+      "editCategory": {
+        "title": "Modifier une catégorie",
         "fields": {
           "itemName": "Nom de l'article",
           "itemNameExample": "Par exemple, Épicerie, Loyer, Services Public",

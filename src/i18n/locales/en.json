@@ -1,6 +1,7 @@
 {
   "common": {
-    "or": "or"
+    "or": "or",
+    "lastUpdated": "Last updated"
   },
   "layout": {
     "header": {
@@ -275,7 +276,7 @@
         "projectedAmount": "Projected amount",
         "actions": {
           "columnName": "Actions",
-          "renameCategory": "Rename category",
+          "editCategory": "Edit category",
           "deleteCategory": "Delete category",
           "addBudgetItem": "Add budget item",
           "editBudgetItem": "Edit budget item",
@@ -289,7 +290,11 @@
         "category": "Category",
         "cancelButton": "Cancel",
         "addButton": "Add",
-        "updateButton": "Update"
+        "updateButton": "Update",
+        "fields": {
+          "isRecurring": "Is this recurring?",
+          "isRecurringDescription": "Marking this item as recurring will automatically be visible in future budget periods. Be aware that as of now, deleting a recurring item for one month will propogate to every month."
+        }
       },
       "addBudgetItem": {
         "title": "Add budget item",
@@ -297,11 +302,13 @@
           "itemName": "Item name",
           "itemNameExample": "e.g., Groceries, Rent, Utilities",
           "projectedAmount": "Projected amount",
-          "projectedAmountDescription": "The projected amount you plan to spend on this item. Current currency:\t{{currency}}"
+          "projectedAmountDescription": "The projected amount you plan to spend on this item. Current currency:\t{{currency}}",
+          "isRecurring": "Is this a recurring budget item?"
         }
       },
       "addCategory": {
         "title": "Add category",
+        "warning": "You will be unable to view recurring budget items for later budget periods if the category is not set to recurring.",
         "fields": {
           "categoryName": "Name of category",
           "categoryExample": "e.g., Bills, Savings, Housing"
