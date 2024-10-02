@@ -8,8 +8,8 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useAuth } from '../../../auth/hooks/use-auth';
-import { useSupabase } from '../../../common/hooks/use-supabase';
-import { useNotificationStore } from '../../../common/state/notifications';
+import { useSupabase } from '../../../hooks/use-supabase';
+import { useNotificationStore } from '../../../state/notifications';
 import { fetchTransactions } from '../api';
 import { useCollection } from '@cloudscape-design/collection-hooks';
 

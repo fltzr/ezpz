@@ -7,7 +7,7 @@ import {
   StatusIndicator,
 } from '@cloudscape-design/components';
 import { useTranslation } from 'react-i18next';
-import { formatCurrency } from '../../../common/utils/format-currency';
+import { formatCurrency } from '../../../utils/format-currency';
 import { isBudgetItem } from '../utils/types';
 import { useBudgetProvider } from '../hooks/use-budget-provider';
 import { useIncomeApi } from '../hooks/use-income-api';

@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { RouterProvider } from 'react-router-dom';
 
 import { router } from './router';
-import { useTheme } from './common/hooks/use-theme';
+import { useTheme } from './hooks/use-theme';
 import { Box, Header, Modal, StatusIndicator } from '@cloudscape-design/components';
-import { SupabaseProvider } from './common/components/supabase-provider';
+import { SupabaseProvider } from './components/supabase-provider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './auth/components/auth-provider';
-import { DrawerProvider } from './common/components/drawer-provider';
+import { DrawerProvider } from './components/drawer-provider';
 
 const queryClient = new QueryClient({
   defaultOptions: {

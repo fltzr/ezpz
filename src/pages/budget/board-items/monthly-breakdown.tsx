@@ -8,7 +8,7 @@ import {
   StatusIndicator,
 } from '@cloudscape-design/components';
 import { isBudgetItem, isCategoryItem } from '../utils/types';
-import { formatCurrency } from '../../../common/utils/format-currency';
+import { formatCurrency } from '../../../utils/format-currency';
 import { useBudgetApi } from '../hooks/use-budget-api';
 import { useBudgetProvider } from '../hooks/use-budget-provider';
 import { useIncomeApi } from '../hooks/use-income-api';

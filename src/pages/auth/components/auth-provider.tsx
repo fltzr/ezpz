@@ -1,7 +1,7 @@
 import { createContext, PropsWithChildren, useEffect, useState } from 'react';
 import type { User } from '@supabase/supabase-js';
-import { useSupabase } from '../../common/hooks/use-supabase';
-import { useNotificationStore } from '../../common/state/notifications';
+import { useSupabase } from '../../hooks/use-supabase';
+import { useNotificationStore } from '../../state/notifications';
 
 type AuthContextType = {
   user: User | null;

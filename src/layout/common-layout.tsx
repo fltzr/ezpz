@@ -10,13 +10,13 @@ import {
 } from '@cloudscape-design/components';
 
 import { GlobalHeader } from './global-header';
-import { Notifications } from '../common/components/notifications';
-import { useNotificationStore } from '../common/state/notifications';
+import { Notifications } from '../components/notifications';
+import { useNotificationStore } from '../state/notifications';
 import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../auth/hooks/use-auth';
-import { useDrawer } from '../common/components/drawer-provider';
-import { LocaleProvider } from '../common/components/locale-provider';
+import { useDrawer } from '../components/drawer-provider';
+import { LocaleProvider } from '../components/locale-provider';
 
 import { useTranslation } from 'react-i18next';
 

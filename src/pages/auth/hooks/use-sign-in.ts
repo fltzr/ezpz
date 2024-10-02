@@ -6,8 +6,8 @@ import { AuthError } from '@supabase/supabase-js';
 import { nanoid } from 'nanoid';
 import { SignInSchema } from '../validation/sign-in';
 import { UseFormReset, UseFormSetFocus } from 'react-hook-form';
-import { useNotificationStore } from '../../common/state/notifications';
-import { useSupabase } from '../../common/hooks/use-supabase';
+import { useNotificationStore } from '../../state/notifications';
+import { useSupabase } from '../../hooks/use-supabase';
 
 import { useTranslation } from 'react-i18next';
 

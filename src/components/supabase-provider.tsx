@@ -1,7 +1,7 @@
 import { createContext, PropsWithChildren } from 'react';
 import { SupabaseClient } from '@supabase/supabase-js';
-import { Database } from '../../../supabase';
-import { supabase } from '../../lib/supabase';
+import { Database } from '../../supabase';
+import { supabase } from '../utils/supabase';
 
 export const SupabaseContext = createContext<SupabaseClient<Database> | undefined>(
   undefined

@@ -10,11 +10,11 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IncomeSource } from '../utils/types';
 import { useIncomeApi } from '../hooks/use-income-api';
-import { formatCurrency } from '../../../common/utils/format-currency';
+import { formatCurrency } from '../../../utils/format-currency';
 import { useBudgetProvider } from '../hooks/use-budget-provider';
-import { useDrawer } from '../../../common/components/drawer-provider';
+import { useDrawer } from '../../../components/drawer-provider';
 import { AddIncomeSource } from '../drawer/add-income-source';
-import { useNotificationStore } from '../../../common/state/notifications';
+import { useNotificationStore } from '../../../state/notifications';
 import { DeleteIncomeSourceModal } from '../modals/delete-income-source';
 
 export const IncomeSources = () => {

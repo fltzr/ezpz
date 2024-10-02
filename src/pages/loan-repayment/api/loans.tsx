@@ -1,4 +1,4 @@
-import type { useSupabase } from '../../../common/hooks/use-supabase';
+import type { useSupabase } from '../../../hooks/use-supabase';
 import { LoanEntryInsert, LoanEntryUpdate } from '../utils/types';
 
 export const fetchLoans = async (

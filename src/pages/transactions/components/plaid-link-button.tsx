@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Button, Alert } from '@cloudscape-design/components';
 import { PlaidLinkOnEvent, PlaidLinkOnSuccess, usePlaidLink } from 'react-plaid-link';
 
-import { useSupabase } from '../../../common/hooks/use-supabase';
+import { useSupabase } from '../../../hooks/use-supabase';
 import { useAuth } from '../../../auth/hooks/use-auth';
 import { fetchLinkToken } from '../api';
 

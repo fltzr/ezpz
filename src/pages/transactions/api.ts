@@ -1,4 +1,4 @@
-import { useSupabase } from '../../common/hooks/use-supabase';
+import { useSupabase } from '../../hooks/use-supabase';
 import type { AccountBase, TransactionsSyncResponse } from 'plaid';
 
 export const fetchLinkToken = async (supabase: ReturnType<typeof useSupabase>) => {

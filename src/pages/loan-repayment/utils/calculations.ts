@@ -1,4 +1,4 @@
-import { formatCurrency } from '../../../common/utils/format-currency';
+import { formatCurrency } from '../../../utils/format-currency';
 import { AmortizationSchedule, LoanInputSchema } from '../schema';
 
 export const createAmortizationSchedule = (

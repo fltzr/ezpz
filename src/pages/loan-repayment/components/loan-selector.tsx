@@ -1,6 +1,6 @@
 import { Select, SelectProps } from '@cloudscape-design/components';
 import { LoanEntry } from '../utils/types';
-import { formatCurrency } from '../../../common/utils/format-currency';
+import { formatCurrency } from '../../../utils/format-currency';
 
 type LoanSelectorProps = {
   loans: LoanEntry[];

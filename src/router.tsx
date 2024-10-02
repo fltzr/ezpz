@@ -5,10 +5,10 @@ import {
   type RouterProviderProps,
   createBrowserRouter,
 } from 'react-router-dom';
-import { ErrorPage } from './common/components/error-page/error-page';
+import { ErrorPage } from './components/error-page/error-page';
 import { lazy } from 'react';
-import ProtectedRoute from './auth/components/protected-route';
-import { SuspenseLoadingBar } from './common/components/suspense-loading-bar';
+import ProtectedRoute from './pages/auth/components/protected-route';
+import { SuspenseLoadingBar } from './components/suspense-loading-bar';
 import { BudgetProvider } from './pages/budget/components/budget-provider';
 
 const ProfileOverviewPage = lazy(() => import('./pages/profile/overview'));
@@ -28,7 +28,7 @@ const routes: RouteObject[] = [
       },
       {
         path: 'auth',
-        lazy: () => import('./auth/sign-in'),
+        lazy: () => import('./pages/auth/sign-in'),
       },
       {
         element: <ProtectedRoute />,

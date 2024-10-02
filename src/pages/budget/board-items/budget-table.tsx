@@ -11,14 +11,14 @@ import { BudgetTableItem, isCategoryItem } from '../utils/types';
 import { useCollection } from '@cloudscape-design/collection-hooks';
 import { createBudgetTableColumnDefinitions } from '../utils/table-configs';
 import { useBudgetApi } from '../hooks/use-budget-api';
-import { useDrawer } from '../../../common/components/drawer-provider';
+import { useDrawer } from '../../../components/drawer-provider';
 import { AddCategory } from '../drawer/add-category';
 import { AddBudgetItem } from '../drawer/add-budget-item';
 import { DeleteItemModal } from '../modals/delete-item';
 import { useEffect, useState } from 'react';
 import { EditBudgetItem } from '../drawer/edit-budget-item';
 import { EditCategory } from '../drawer/edit-category';
-import { ManualRefresh } from '../../../common/components/manual-refresh';
+import { ManualRefresh } from '../../../components/manual-refresh';
 import { DateTime } from 'luxon';
 
 export const BudgetTable = () => {

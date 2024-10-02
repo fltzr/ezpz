@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { Select, SelectProps } from '@cloudscape-design/components';
 
-import { useSupabase } from '../../../common/hooks/use-supabase';
+import { useSupabase } from '../../../hooks/use-supabase';
 import { useBudgetProvider } from '../hooks/use-budget-provider';
 import { useTranslation } from 'react-i18next';
 

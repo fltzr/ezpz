@@ -1,11 +1,11 @@
 import { TableProps } from '@cloudscape-design/components';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useSupabase } from '../../../common/hooks/use-supabase';
-import { useNotificationStore } from '../../../common/state/notifications';
+import { useSupabase } from '../../../hooks/use-supabase';
+import { useNotificationStore } from '../../../state/notifications';
 
 import * as api from '../data-access/budget-queries';
 import { calculateCategoryTotals } from '../utils/table-configs';
-import { useNotifiedMutation } from '../../../common/hooks/use-notified-mutation';
+import { useNotifiedMutation } from '../../../hooks/use-notified-mutation';
 import {
   BudgetItemInsert,
   BudgetItemUpdate,

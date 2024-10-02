@@ -1,6 +1,6 @@
 import { TFunction } from 'i18next';
 import { ButtonDropdown, type TableProps } from '@cloudscape-design/components';
-import { formatCurrency } from '../../../common/utils/format-currency';
+import { formatCurrency } from '../../../utils/format-currency';
 import {
   BudgetItem,
   type BudgetTableItem,

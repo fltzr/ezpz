@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { nanoid } from 'nanoid';
-import { useSupabase } from '../../../common/hooks/use-supabase';
-import { useNotificationStore } from '../../../common/state/notifications';
+import { useSupabase } from '../../../hooks/use-supabase';
+import { useNotificationStore } from '../../../state/notifications';
 
 import * as api from '../data-access/income';
 import { IncomeSource, IncomeSourceInsert, IncomeSourceUpdate } from '../utils/types';
