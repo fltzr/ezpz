@@ -1,6 +1,5 @@
-import { Button } from '@cloudscape-design/components';
-import styles from './google.module.scss';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@cloudscape-design/components';
 
 export const SignInWithGoogle = () => {
   const { t } = useTranslation();
@@ -9,7 +8,7 @@ export const SignInWithGoogle = () => {
     <Button
       fullWidth
       iconSvg={
-        <div className={styles['gsi-material-button-icon']}>
+        <div>
           <svg
             version='1.1'
             xmlns='http://www.w3.org/2000/svg'

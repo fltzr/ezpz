@@ -1,15 +1,14 @@
 // hooks/useSignIn.ts
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { UseFormReset, UseFormSetFocus } from 'react-hook-form';
+import { nanoid } from 'nanoid';
 
 import { AuthError } from '@supabase/supabase-js';
 
-import { nanoid } from 'nanoid';
+import { useNotificationStore } from '@/state/notifications';
+import { useSupabase } from '@/hooks/use-supabase';
 import { SignInSchema } from '../validation/sign-in';
-import { UseFormReset, UseFormSetFocus } from 'react-hook-form';
-import { useNotificationStore } from '../../state/notifications';
-import { useSupabase } from '../../hooks/use-supabase';
-
-import { useTranslation } from 'react-i18next';
 
 interface UseSignInProps {
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;

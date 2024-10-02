@@ -1,5 +1,5 @@
-import { Button } from '@cloudscape-design/components';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@cloudscape-design/components';
 
 export const SignInWithGithub = () => {
   const { t } = useTranslation();
@@ -23,7 +23,7 @@ export const SignInWithGithub = () => {
           <path d='M9 18c-4.51 2-5-2-7-2' />
         </svg>
       }>
-      {t('auth.continueWithGoogle')}
+      {t('auth.continueWithGithub')}
     </Button>
   );
 };

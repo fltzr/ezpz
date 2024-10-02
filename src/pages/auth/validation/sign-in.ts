@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import i18n from '../../i18n';
+import i18n from '../../../i18n';
 
 export const signInSchema = z.object({
   email: z
