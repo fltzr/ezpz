@@ -1,4 +1,7 @@
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { nanoid } from 'nanoid';
 import {
   AppLayout,
   Box,
@@ -9,16 +12,14 @@ import {
   SpaceBetween,
 } from '@cloudscape-design/components';
 
-import { GlobalHeader } from './global-header';
-import { Notifications } from '../components/notifications';
-import { useNotificationStore } from '../state/notifications';
-import { nanoid } from 'nanoid';
-import { useEffect, useState } from 'react';
-import { useAuth } from '../auth/hooks/use-auth';
-import { useDrawer } from '../components/drawer-provider';
-import { LocaleProvider } from '../components/locale-provider';
+import { useAuth } from '@/pages/auth/hooks/use-auth';
 
-import { useTranslation } from 'react-i18next';
+import { Notifications } from '@/components/notifications';
+import { useNotificationStore } from '@/state/notifications';
+import { useDrawer } from '@/components/drawer-provider';
+import { LocaleProvider } from '@/components/locale-provider';
+
+import { GlobalHeader } from './global-header';
 
 type LocationState = {
   reason?: string;

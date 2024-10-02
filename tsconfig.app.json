@@ -29,7 +29,7 @@
       "@/components/*": ["./src/components/*"],
       "@/hooks/*": ["./src/hooks/*"],
       "@/state/*": ["./src/state/*"],
-      "@/utils/*": ["./src/utils/"]
+      "@/utils/*": ["./src/utils/*"]
     }
   },
   "include": ["src", "supabase.d.ts"]

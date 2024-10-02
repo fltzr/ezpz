@@ -1,15 +1,16 @@
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { TFunction } from 'i18next';
+import { nanoid } from 'nanoid';
+import { User } from '@supabase/supabase-js';
 import { TopNavigation, TopNavigationProps } from '@cloudscape-design/components';
 
+import { useAuth } from '@/pages/auth/hooks/use-auth';
+import { useNotificationStore } from '@/state/notifications';
+import { Locale, useLocale } from '@/components/locale-provider';
+import { supabase } from '@/utils/supabase';
+
 import styles from '../styles/top-navigation.module.scss';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../auth/hooks/use-auth';
-import { User } from '@supabase/supabase-js';
-import { supabase } from '../utils/supabase';
-import { useNotificationStore } from '../state/notifications';
-import { nanoid } from 'nanoid';
-import { Locale, useLocale } from '../components/locale-provider';
-import { useTranslation } from 'react-i18next';
-import { TFunction } from 'i18next';
 
 const generateUserHeaderItems = ({
   t,
