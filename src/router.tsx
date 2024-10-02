@@ -1,22 +1,18 @@
-/* eslint-disable react-refresh/only-export-components */
-import { lazy } from 'react';
 import {
-  Navigate,
   type RouteObject,
   type RouterProviderProps,
   createBrowserRouter,
+  Navigate,
 } from 'react-router-dom';
 
 import ProtectedRoute from '@/pages/auth/components/protected-route';
 import { ErrorPage } from '@/components/error-page/error-page';
-import { SuspenseLoadingBar } from '@/components/suspense-loading-bar';
 
-const BudgetProvider = lazy(() => import('@/pages/budget/components/budget-provider'));
-const BudgetPage = lazy(() => import('@/pages/budget/page'));
-
-const ProfileOverviewPage = lazy(() => import('@/pages/profile/overview'));
-const CalculatorPage = lazy(() => import('@/pages/loan-repayment/calculator'));
-const TransactionsOverview = lazy(() => import('@/pages/transactions/overview'));
+import { authRoutes } from '@/pages/auth/routes';
+import { profileRoutes } from '@/pages/profile/routes';
+import { budgetRoutes } from '@/pages/budget/routes';
+import { loanRepaymentRoutes } from '@/pages/loan-repayment/routes';
+import { transactionsRoutes } from './pages/transactions/routes';
 
 const routes: RouteObject[] = [
   {
@@ -28,47 +24,14 @@ const routes: RouteObject[] = [
         index: true,
         element: <Navigate to='/budget' replace />,
       },
-      {
-        path: 'auth',
-        lazy: () => import('@/pages/auth/sign-in'),
-      },
+      ...authRoutes,
       {
         element: <ProtectedRoute />,
         children: [
-          {
-            path: 'profile',
-            element: (
-              <SuspenseLoadingBar>
-                <ProfileOverviewPage />
-              </SuspenseLoadingBar>
-            ),
-          },
-          {
-            path: 'budget',
-            element: (
-              <SuspenseLoadingBar>
-                <BudgetProvider>
-                  <BudgetPage />
-                </BudgetProvider>
-              </SuspenseLoadingBar>
-            ),
-          },
-          {
-            path: 'loan-calculator',
-            element: (
-              <SuspenseLoadingBar>
-                <CalculatorPage />
-              </SuspenseLoadingBar>
-            ),
-          },
-          {
-            path: 'transactions',
-            element: (
-              <SuspenseLoadingBar>
-                <TransactionsOverview />
-              </SuspenseLoadingBar>
-            ),
-          },
+          ...profileRoutes,
+          ...budgetRoutes,
+          ...loanRepaymentRoutes,
+          ...transactionsRoutes,
         ],
       },
     ],
