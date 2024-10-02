@@ -1,8 +1,9 @@
 /// <reference types="vitest/config" />
 
-import { defineConfig } from 'vite';
 import path from 'path';
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import viteTsconfigPaths from 'vite-tsconfig-paths';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -12,6 +13,7 @@ export default defineConfig({
         plugins: [['babel-plugin-react-compiler']],
       },
     }),
+    viteTsconfigPaths(),
   ],
 
   resolve: {
@@ -22,6 +24,18 @@ export default defineConfig({
       ),
       '@cloudscape-design/components': path.resolve(__dirname, 'build/components'),
       '@cloudscape-design/design-tokens': path.resolve(__dirname, 'build/design-tokens'),
+    },
+  },
+
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          if (id.includes('all.') && !(id.includes('all.en') || id.includes('all.fr'))) {
+            return 'unused-locales';
+          }
+        },
+      },
     },
   },
 
