@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Checkbox,
   Drawer,
   Form,
   FormField,
@@ -35,6 +36,7 @@ const budgetItemSchema = z.object({
   category_id: z.string({
     required_error: 'This budget item must be associated to a category.',
   }),
+  is_recurring: z.boolean(),
 });
 
 type BudgetItemSchema = z.infer<typeof budgetItemSchema>;
@@ -63,6 +65,7 @@ export const EditBudgetItem = ({
       budget_item_name: item?.budget_item_name ?? '',
       projected_amount: item?.projected_amount ?? 0,
       category_id: item?.category_id,
+      is_recurring: item?.is_recurring as boolean,
     },
   });
 
@@ -179,6 +182,22 @@ export const EditBudgetItem = ({
                       : null
                   }
                   onChange={({ detail }) => field.onChange(detail.selectedOption.value)}
+                />
+              </FormField>
+            )}
+          />
+          <Controller
+            name='is_recurring'
+            control={control}
+            render={({ field }) => (
+              <FormField
+                label={t('common.fields.isRecurring')}
+                description={t('common.fields.isRecurringDescription')}
+                errorText={errors.is_recurring?.message}>
+                <Checkbox
+                  {...field}
+                  checked={field.value}
+                  onChange={({ detail }) => field.onChange(detail.checked)}
                 />
               </FormField>
             )}

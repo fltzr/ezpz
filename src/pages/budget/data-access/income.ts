@@ -6,11 +6,13 @@ export const fetchIncomeSources = async (
   budgetEntry: string,
   supabase: ReturnType<typeof useSupabase>
 ) => {
+  const orCondition = `budget_entry.eq.${budgetEntry},and(is_recurring.eq.true,budget_entry.lte.${budgetEntry})`;
+
   const { data, error } = await supabase
     .from('income_sources')
     .select('*')
     .eq('user_id', userId)
-    .eq('budget_entry', budgetEntry);
+    .or(orCondition);
 
   if (error) throw new Error(`Failed to fetch income sources: ${error.message}`);
 

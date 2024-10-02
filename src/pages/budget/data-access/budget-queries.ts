@@ -11,20 +11,14 @@ export const fetchBudgetData = async (
   budgetEntry: string,
   supabase: ReturnType<typeof useSupabase>
 ) => {
+  const orCondition = `budget_entry.eq.${budgetEntry},and(is_recurring.eq.true,budget_entry.lte.${budgetEntry})`;
+
   const [
     { data: categories, error: categoriesError },
     { data: budgetItems, error: budgetItemsError },
   ] = await Promise.all([
-    supabase
-      .from('categories')
-      .select('*')
-      .eq('user_id', userId)
-      .eq('budget_entry', budgetEntry),
-    supabase
-      .from('budget_items')
-      .select('*')
-      .eq('user_id', userId)
-      .eq('budget_entry', budgetEntry),
+    supabase.from('categories').select('*').eq('user_id', userId).or(orCondition),
+    supabase.from('budget_items').select('*').eq('user_id', userId).or(orCondition),
   ]);
 
   if (categoriesError)

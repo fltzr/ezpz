@@ -17,7 +17,7 @@ export const MonthlyBreakdown = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.monthlyBreakdown' });
   const { selectedUser, budgetEntry } = useBudgetProvider();
   const { data: incomeSources } = useIncomeApi(selectedUser.userId, budgetEntry);
-  const { data, isLoading } = useBudgetApi(selectedUser.userId, budgetEntry);
+  const { data, isFetching } = useBudgetApi(selectedUser.userId, budgetEntry);
 
   const currencySymbol = getUserLocale().includes('US') ? '$' : '€';
 
@@ -37,9 +37,8 @@ export const MonthlyBreakdown = () => {
     });
 
     return data
-      ?.filter(isCategoryItem)
+      ?.filter((item) => isCategoryItem(item))
       .map((category) => ({
-        // eslint-disable-next-line
         title: category.category_name,
         value: categoryTotals.get(category.id) || 0,
       }))
@@ -52,7 +51,7 @@ export const MonthlyBreakdown = () => {
         hideDescriptions
         variant='donut'
         data={chartData() ?? []}
-        statusType={isLoading ? 'loading' : 'finished'}
+        statusType={isFetching ? 'loading' : 'finished'}
         detailPopoverContent={(datum) => [
           { key: t('chart.popover.keyCategory'), value: datum.title },
           { key: t('chart.popover.keyAmount'), value: formatCurrency(datum.value) },
@@ -71,7 +70,7 @@ export const MonthlyBreakdown = () => {
         }
         hideFilter
         size='medium'
-        empty={<StatusIndicator type='info'>{t('empty')}</StatusIndicator>}
+        empty={<StatusIndicator type='info'>{t('chart.empty')}</StatusIndicator>}
       />
     </Container>
   );

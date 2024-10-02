@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Checkbox,
   Drawer,
   Form,
   FormField,
@@ -29,6 +30,7 @@ const budgetItemSchema = z.object({
   projected_amount: z
     .number()
     .nonnegative('Projected value must be a non-negative number.'),
+  is_recurring: z.boolean().default(false),
 });
 
 type BudgetItemSchema = z.infer<typeof budgetItemSchema>;
@@ -132,6 +134,22 @@ export const AddBudgetItem = ({
                     onChange={({ detail }) => field.onChange(Number(detail.value))}
                   />
                 </Grid>
+              </FormField>
+            )}
+          />
+          <Controller
+            name='is_recurring'
+            control={control}
+            render={({ field }) => (
+              <FormField
+                label={t('common.fields.isRecurring')}
+                description={t('common.fields.isRecurringDescription')}
+                errorText={errors.budget_item_name?.message}>
+                <Checkbox
+                  {...field}
+                  checked={field.value}
+                  onChange={({ detail }) => field.onChange(detail.checked)}
+                />
               </FormField>
             )}
           />

@@ -1,6 +1,8 @@
 import {
+  Alert,
   Box,
   Button,
+  Checkbox,
   Drawer,
   Form,
   FormField,
@@ -23,6 +25,7 @@ type AddCategoryProps = {
 
 const addCategorySchema = z.object({
   category_name: z.string().min(1, 'Category name is required.'),
+  is_recurring: z.boolean().default(false),
 });
 
 type AddCategorySchema = z.infer<typeof addCategorySchema>;
@@ -53,7 +56,7 @@ export const AddCategory = ({ selectedUserId, onAdd, onClose }: AddCategoryProps
   });
 
   return (
-    <Drawer header={<Header variant='h2'>Add category</Header>}>
+    <Drawer header={<Header variant='h2'>{t('addCategory.title')}</Header>}>
       <Form
         actions={
           <Box float='right'>
@@ -69,27 +72,43 @@ export const AddCategory = ({ selectedUserId, onAdd, onClose }: AddCategoryProps
             </SpaceBetween>
           </Box>
         }>
-        <Form>
-          <SpaceBetween direction='vertical' size='l'>
-            <Controller
-              control={control}
-              name='category_name'
-              render={({ field }) => (
-                <FormField
-                  label={t('addCategory.fields.categoryName')}
-                  errorText={errors.category_name?.message}>
-                  <Input
-                    {...field}
-                    disableBrowserAutocorrect
-                    autoComplete={false}
-                    placeholder={t('addCategory.fields.categoryExample')}
-                    onChange={(event) => field.onChange(event.detail.value)}
-                  />
-                </FormField>
-              )}
-            />
-          </SpaceBetween>
-        </Form>
+        <SpaceBetween direction='vertical' size='l'>
+          <Controller
+            control={control}
+            name='category_name'
+            render={({ field }) => (
+              <FormField
+                label={t('addCategory.fields.categoryName')}
+                errorText={errors.category_name?.message}>
+                <Input
+                  {...field}
+                  disableBrowserAutocorrect
+                  autoComplete={false}
+                  placeholder={t('addCategory.fields.categoryExample')}
+                  onChange={(event) => field.onChange(event.detail.value)}
+                />
+              </FormField>
+            )}
+          />
+          <Controller
+            name='is_recurring'
+            control={control}
+            render={({ field }) => (
+              <FormField
+                label={t('common.fields.isRecurring')}
+                description={t('common.fields.isRecurringDescription')}
+                errorText={errors.is_recurring?.message}>
+                <Checkbox
+                  {...field}
+                  checked={field.value}
+                  onChange={({ detail }) => field.onChange(detail.checked)}
+                />
+              </FormField>
+            )}
+          />
+
+          <Alert type='warning'>{t('addCategory.warning')}</Alert>
+        </SpaceBetween>
       </Form>
     </Drawer>
   );

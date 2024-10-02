@@ -1,5 +1,5 @@
 import {
-  ButtonDropdown,
+  ButtonGroup,
   Container,
   Header,
   Input,
@@ -42,41 +42,45 @@ export const IncomeSources = () => {
         <Header
           variant='h2'
           actions={
-            <ButtonDropdown
-              variant='normal'
+            <ButtonGroup
+              variant='icon'
               items={[
                 {
-                  id: 'add',
-                  text: t('dropdown.add'),
-                  iconName: 'add-plus',
-                },
-                {
-                  id: 'update',
-                  text: t('dropdown.update'),
-                  iconName: 'edit',
-                  disabled: selectedItems.length === 0 || selectedItems.length > 1,
-                  disabledReason:
-                    selectedItems.length > 1
-                      ? t('validation.disabledMultipleSelected')
-                      : t('validation.disabledNoneSelected'),
+                  id: 'refresh',
+                  type: 'icon-button',
+                  text: t('dropdown.refresh'),
+                  iconName: 'refresh',
                 },
                 {
                   id: 'delete',
+                  type: 'icon-button',
                   text: `Delete ${
                     selectedItems.length !== 0 ? `(${selectedItems.length})` : ''
                   }`,
                   iconName: 'delete-marker',
                   disabled: selectedItems.length === 0,
-                  disabledReason:
+                  popoverFeedback:
                     selectedItems.length > 1
                       ? t('validation.disabledMultipleSelected')
                       : t('validation.disabledNoneSelected'),
                 },
                 {
-                  id: 'refresh',
-                  text: t('dropdown.refresh'),
-                  iconName: 'refresh',
+                  id: 'add',
+                  text: t('dropdown.add'),
+                  type: 'icon-button',
+                  iconName: 'add-plus',
                 },
+                // {
+                //   id: 'update',
+                //   type: 'icon-button',
+                //   text: t('dropdown.update'),
+                //   iconName: 'edit',
+                //   disabled: selectedItems.length === 0 || selectedItems.length > 1,
+                //   popoverFeedback:
+                //     selectedItems.length > 1
+                //       ? t('validation.disabledMultipleSelected')
+                //       : t('validation.disabledNoneSelected'),
+                // },
               ]}
               onItemClick={(event) => {
                 switch (event.detail.id) {
@@ -109,9 +113,8 @@ export const IncomeSources = () => {
                   default:
                     break;
                 }
-              }}>
-              {t('dropdown.title')}
-            </ButtonDropdown>
+              }}
+            />
           }>
           {t('title')}
         </Header>

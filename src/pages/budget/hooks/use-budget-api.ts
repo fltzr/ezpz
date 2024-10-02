@@ -22,7 +22,7 @@ export const useBudgetApi = (userId: string, budgetEntry: string) => {
   const queryClient = useQueryClient();
   const { addNotification } = useNotificationStore();
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isFetching, error, refetch, dataUpdatedAt } = useQuery({
     queryKey: ['budget-items', budgetEntry, userId],
     queryFn: () => api.fetchBudgetData(userId, budgetEntry, supabase),
     enabled: !!userId,
@@ -71,11 +71,15 @@ export const useBudgetApi = (userId: string, budgetEntry: string) => {
 
   const updateItemMutation = useNotifiedMutation({
     mutationFn: async (item: BudgetItemUpdate) => {
-      await api.updateBudgetItem(supabase, item.id!, {
-        budget_item_name: item.budget_item_name,
-        projected_amount: item.projected_amount,
-        category_id: item.category_id,
-      });
+      if (isCategoryItem(item)) {
+        await api.updateCategory(supabase, item.id, {
+          category_name: item.category_name,
+          is_recurring: item.is_recurring,
+          budget_entry: item.budget_entry,
+        });
+      } else {
+        await api.updateBudgetItem(supabase, item.id!, item);
+      }
     },
     onSuccess: () => {
       queryClient
@@ -122,7 +126,8 @@ export const useBudgetApi = (userId: string, budgetEntry: string) => {
   };
 
   const handleUpdateBudgetItem = (item: BudgetItemUpdate) => {
-    updateItemMutation.mutate(item);
+    console.log(item.budget_entry);
+    updateItemMutation.mutate({ ...item });
   };
 
   const handleSubmitInlineEdit: TableProps.SubmitEditFunction<BudgetTableItem> = (
@@ -139,8 +144,10 @@ export const useBudgetApi = (userId: string, budgetEntry: string) => {
 
   return {
     data,
-    isLoading,
+    isFetching,
     error,
+    dataUpdatedAt,
+    refetch,
     handleAddCategory,
     handleAddBudgetItem,
     handleUpdateBudgetItem,

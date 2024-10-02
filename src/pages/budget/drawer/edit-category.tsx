@@ -13,27 +13,30 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffectOnce } from 'react-use';
 import { useTranslation } from 'react-i18next';
-import { IncomeSourceInsert } from '../utils/types';
+import { Category, CategoryInsert } from '../utils/types';
 import { z } from 'zod';
-import getUserLocale from 'get-user-locale';
 
-type AddIncomeSource = {
+type EditCategoryProps = {
   selectedUserId: string;
-  onAdd: (IncomeSource: IncomeSourceInsert) => void;
+  category: Category;
+  onEdit: (category: CategoryInsert) => void;
   onClose: () => void;
 };
 
-const addIncomeSourceSchema = z.object({
-  income_source_name: z.string({ required_error: 'Name of income source is required.' }),
-  projected_amount: z
-    .number({ required_error: 'Estimated amount of income source is required.' })
-    .nonnegative('Income source must be a non-negative value.'),
+const editCategorySchema = z.object({
+  id: z.string().optional(),
+  category_name: z.string().min(1, 'Category name is required.'),
   is_recurring: z.boolean().default(false),
 });
 
-type AddIncomeSourceSchema = z.infer<typeof addIncomeSourceSchema>;
+type EditCategorySchema = z.infer<typeof editCategorySchema>;
 
-export const AddIncomeSource = ({ selectedUserId, onAdd, onClose }: AddIncomeSource) => {
+export const EditCategory = ({
+  selectedUserId,
+  category,
+  onEdit,
+  onClose,
+}: EditCategoryProps) => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.drawers' });
   const {
     control,
@@ -41,8 +44,13 @@ export const AddIncomeSource = ({ selectedUserId, onAdd, onClose }: AddIncomeSou
     reset,
     formState: { errors },
     setFocus,
-  } = useForm<AddIncomeSourceSchema>({
-    resolver: zodResolver(addIncomeSourceSchema),
+  } = useForm<EditCategorySchema>({
+    resolver: zodResolver(editCategorySchema),
+    defaultValues: {
+      id: category.id,
+      category_name: category.category_name,
+      is_recurring: category.is_recurring as boolean,
+    },
   });
 
   const handleOnClose = () => {
@@ -50,16 +58,16 @@ export const AddIncomeSource = ({ selectedUserId, onAdd, onClose }: AddIncomeSou
     onClose();
   };
 
-  const handleOnSubmit = (data: AddIncomeSourceSchema) => {
-    onAdd({ ...data, user_id: selectedUserId });
+  const handleOnSubmit = (data: EditCategorySchema) => {
+    onEdit({ ...data, user_id: selectedUserId });
     handleOnClose();
   };
   useEffectOnce(() => {
-    setFocus('income_source_name');
+    setFocus('category_name');
   });
 
   return (
-    <Drawer header={<Header variant='h2'>{t('addIncomeSource.title')}</Header>}>
+    <Drawer header={<Header variant='h2'>{t('editCategory.title')}</Header>}>
       <Form
         actions={
           <Box float='right'>
@@ -79,39 +87,17 @@ export const AddIncomeSource = ({ selectedUserId, onAdd, onClose }: AddIncomeSou
           <SpaceBetween direction='vertical' size='l'>
             <Controller
               control={control}
-              name='income_source_name'
+              name='category_name'
               render={({ field }) => (
                 <FormField
-                  label={t('addIncomeSource.fields.incomeSourceName')}
-                  errorText={errors.income_source_name?.message}>
+                  label={t('editCategory.fields.categoryName')}
+                  errorText={errors.category_name?.message}>
                   <Input
                     {...field}
                     disableBrowserAutocorrect
                     autoComplete={false}
-                    placeholder={t('addIncomeSource.fields.incomeSourceExample')}
+                    placeholder={t('editCategory.fields.categoryExample')}
                     onChange={(event) => field.onChange(event.detail.value)}
-                  />
-                </FormField>
-              )}
-            />
-            <Controller
-              control={control}
-              name='projected_amount'
-              render={({ field }) => (
-                <FormField
-                  label={t('addIncomeSource.fields.projectedAmount')}
-                  description={t('addIncomeSource.fields.projectedAmountDescription', {
-                    currency: getUserLocale().includes('fr') ? '€' : '$',
-                  })}
-                  errorText={errors.projected_amount?.message}>
-                  <Input
-                    {...field}
-                    disableBrowserAutocorrect
-                    autoComplete={false}
-                    type='number'
-                    inputMode='decimal'
-                    value={String(field.value)}
-                    onChange={(event) => field.onChange(Number(event.detail.value))}
                   />
                 </FormField>
               )}

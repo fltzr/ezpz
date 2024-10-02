@@ -60,6 +60,7 @@ export const PlaidLinkButton = () => {
   return (
     <Button
       onClick={() => {
+        // eslint-disable-next-line
         open();
       }}
       disabled={!ready}

@@ -97,6 +97,7 @@ export const AddIncomeSource = ({ selectedUserId, onAdd, onClose }: AddIncomeSou
               render={({ field }) => (
                 <FormField
                   label={t('projectedAmount')}
+                  description={t('common.fields.isRecurringDescription')}
                   errorText={errors.projected_amount?.message}>
                   <Input
                     {...field}

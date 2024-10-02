@@ -34,6 +34,7 @@ export const calculateCategoryTotals = (items: ReadonlyArray<BudgetTableItem>) =
 export const createBudgetTableColumnDefinitions = (
   t: TFunction,
   actions: {
+    handleEditCategory: (item: Category) => void;
     handleAddBudgetLineItem: (item: Category) => void;
     handleEditBudgetItem: (item: BudgetItem) => void;
     handleDeleteItem: (item: BudgetTableItem) => void;
@@ -67,8 +68,8 @@ export const createBudgetTableColumnDefinitions = (
             isCategoryItem(item)
               ? [
                   {
-                    id: 'rename-category',
-                    text: t('columns.actions.renameCategory'),
+                    id: 'edit-category',
+                    text: t('columns.actions.editCategory'),
                     iconName: 'edit',
                   },
                   {
@@ -97,6 +98,11 @@ export const createBudgetTableColumnDefinitions = (
           }
           onItemClick={({ detail }) => {
             switch (detail.id) {
+              case 'edit-category':
+                if (isCategoryItem(item)) {
+                  actions.handleEditCategory(item);
+                }
+                break;
               case 'delete-category':
                 actions.handleDeleteItem(item);
 
