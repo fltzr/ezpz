@@ -211,6 +211,12 @@
     }
   },
   "budget": {
+    "featureFlags": {
+      "configurableDashboard": {
+        "title": "New dashboard!",
+        "message": "This new dashboard layout allows you to adjust the panels to your liking!"
+      }
+    },
     "common": {
       "title": "{{name}}'s budget dashboard",
       "fetchingUsers": "Fetcing users..."

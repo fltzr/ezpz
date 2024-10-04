@@ -119,6 +119,12 @@
     }
   },
   "budget": {
+    "featureFlags": {
+      "configurableDashboard": {
+        "title": "Nouveau tableau de bord !",
+        "message": "Cette nouvelle présentation du tableau de bord vous permet d'organiser les panneaux à votre guise !"
+      }
+    },
     "common": {
       "title": "Tableau de bord budgétarie de {{name}}",
       "fetchingUsers": "Recherche d'utilisateurs"
