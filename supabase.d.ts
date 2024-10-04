@@ -73,6 +73,7 @@ export type Database = {
           id: string
           is_recurring: boolean
           projected_amount: number
+          transaction_date: string | null
           user_id: string
         }
         Insert: {
@@ -83,6 +84,7 @@ export type Database = {
           id?: string
           is_recurring?: boolean
           projected_amount: number
+          transaction_date?: string | null
           user_id: string
         }
         Update: {
@@ -93,6 +95,7 @@ export type Database = {
           id?: string
           is_recurring?: boolean
           projected_amount?: number
+          transaction_date?: string | null
           user_id?: string
         }
         Relationships: [
