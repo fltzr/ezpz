@@ -60,10 +60,7 @@ export const createBudgetTableColumnDefinitions = (
     {
       id: 'transaction_date',
       header: t('columns.transactionDate'),
-      cell: (item) =>
-        isCategoryItem(item)
-          ? ''
-          : (item.transaction_date ?? item.created_at.split('T')[0]),
+      cell: (item) => (isCategoryItem(item) ? '' : (item.transaction_date ?? '-')),
     },
     {
       id: 'actions',

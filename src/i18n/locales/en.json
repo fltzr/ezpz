@@ -215,6 +215,10 @@
       "configurableDashboard": {
         "title": "New dashboard!",
         "message": "This new dashboard layout allows you to adjust the panels to your liking!"
+      },
+      "transactionDateColumn": {
+        "title": "Budget table now has transaction dates!",
+        "message": "Try it out!"
       }
     },
     "common": {

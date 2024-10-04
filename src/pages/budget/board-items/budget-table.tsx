@@ -143,6 +143,7 @@ const BudgetTable = () => {
               content: (
                 <AddBudgetItem
                   selectedUserId={selectedUser.userId}
+                  budgetEntry={budgetEntry}
                   categoryId={item.id}
                   onAdd={handleAddBudgetItem}
                   onClose={closeDrawer}

@@ -9,6 +9,7 @@ import { boardI18nStrings, boardItemI18nStrings } from '../steps/i18n-strings';
 import { getBoardWidgets, exportLayout } from './board-items/config';
 import { EmptyBoard } from './components/empty';
 import { NewDashboardAlert } from './components/new-dashboard-alert';
+import { NewTransactionDateAlert } from './components/new-transaction-date-alert';
 
 const BudgetPage = () => {
   const [layout, setLayout] =
@@ -20,6 +21,7 @@ const BudgetPage = () => {
   return (
     <SpaceBetween direction='vertical' size='m'>
       <NewDashboardAlert />
+      <NewTransactionDateAlert />
       <PageHeader actions={<UserSelector />} />
       {/* <Grid
         gridDefinition={[

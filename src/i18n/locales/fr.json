@@ -123,6 +123,10 @@
       "configurableDashboard": {
         "title": "Nouveau tableau de bord !",
         "message": "Cette nouvelle présentation du tableau de bord vous permet d'organiser les panneaux à votre guise !"
+      },
+      "transactionDateColumn": {
+        "title": "Le tableau budgétaire contient désormais des dates de transaction !",
+        "message": "Essayze-le !"
       }
     },
     "common": {

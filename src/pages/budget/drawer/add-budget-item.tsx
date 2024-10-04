@@ -9,6 +9,7 @@ import {
   Box,
   Button,
   Checkbox,
+  DatePicker,
   Drawer,
   Form,
   FormField,
@@ -19,9 +20,11 @@ import {
 } from '@cloudscape-design/components';
 
 import type { BudgetItemInsert } from '../utils/api-types';
+import { DateTime } from 'luxon';
 
 type AddBudgetItemProps = {
   selectedUserId: string;
+  budgetEntry: string;
   categoryId: string;
   onAdd: (budgetItem: BudgetItemInsert) => void;
   onClose: () => void;
@@ -32,6 +35,7 @@ const budgetItemSchema = z.object({
   projected_amount: z
     .number()
     .nonnegative('Projected value must be a non-negative number.'),
+  transaction_date: z.string().date('Date of transaction is required.'),
   is_recurring: z.boolean().default(false),
 });
 
@@ -39,6 +43,7 @@ type BudgetItemSchema = z.infer<typeof budgetItemSchema>;
 
 export const AddBudgetItem = ({
   selectedUserId,
+  budgetEntry,
   categoryId,
   onAdd,
   onClose,
@@ -53,6 +58,8 @@ export const AddBudgetItem = ({
   } = useForm<BudgetItemSchema>({
     resolver: zodResolver(budgetItemSchema),
   });
+
+  const referenceDate = DateTime.fromFormat(`${budgetEntry}-01`, 'yyyy-MM-dd');
 
   const handleOnClose = () => {
     reset();
@@ -136,6 +143,27 @@ export const AddBudgetItem = ({
                     onChange={({ detail }) => field.onChange(Number(detail.value))}
                   />
                 </Grid>
+              </FormField>
+            )}
+          />
+          <Controller
+            control={control}
+            name='transaction_date'
+            render={({ field }) => (
+              <FormField
+                label={t('addBudgetItem.fields.transactionDate')}
+                description={t('addBudgetItem.fields.transactionDateDescription')}
+                errorText={errors.transaction_date?.message}>
+                <DatePicker
+                  {...field}
+                  placeholder='YYYY/MM/DD'
+                  value={field.value?.toString()}
+                  onChange={({ detail }) => field.onChange(detail.value)}
+                  isDateEnabled={(date) => {
+                    const selectedDate = DateTime.fromJSDate(date);
+                    return selectedDate.hasSame(referenceDate, 'month');
+                  }}
+                />
               </FormField>
             )}
           />
