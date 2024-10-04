@@ -58,6 +58,14 @@ export const createBudgetTableColumnDefinitions = (
           : formatCurrency(item.projected_amount),
     },
     {
+      id: 'transaction_date',
+      header: t('columns.transactionDate'),
+      cell: (item) =>
+        isCategoryItem(item)
+          ? ''
+          : (item.transaction_date ?? item.created_at.split('T')[0]),
+    },
+    {
       id: 'actions',
       header: t('columns.actions.columnName'),
       width: 50,

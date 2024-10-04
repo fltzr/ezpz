@@ -27,6 +27,7 @@ import { createBudgetTableColumnDefinitions } from '../utils/table-configs';
 import { WidgetConfig } from '../utils/widget-types';
 import i18n from '../../../i18n';
 
+// eslint-disable-next-line react-refresh/only-export-components
 const BudgetTableActions = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.budgetTable' });
 

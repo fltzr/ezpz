@@ -280,6 +280,7 @@
       "columns": {
         "category": "Category",
         "projectedAmount": "Projected amount",
+        "transactionDate": "Transaction date",
         "actions": {
           "columnName": "Actions",
           "editCategory": "Edit category",
