@@ -1,10 +1,8 @@
 import type { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import {
-  Container,
   DatePicker,
   FormField,
-  Header,
   KeyValuePairs,
   StatusIndicator,
 } from '@cloudscape-design/components';
@@ -14,7 +12,10 @@ import { formatCurrency } from '@/utils/format-currency';
 import { useBudgetProvider } from '../hooks/use-budget-provider';
 import { useIncomeApi } from '../hooks/use-income-api';
 import { useBudgetApi } from '../hooks/use-budget-api';
-import { isBudgetItem } from '../utils/types';
+import { isBudgetItem } from '../utils/api-types';
+import { WidgetConfig } from '../utils/widget-types';
+import getUserLocale from 'get-user-locale';
+import i18n from '../../../i18n';
 
 const getBudgetStatus = (t: TFunction, amountSpent: number, budgetAmount?: number) => {
   if (!budgetAmount) {
@@ -39,8 +40,10 @@ const getBudgetStatus = (t: TFunction, amountSpent: number, budgetAmount?: numbe
   return <StatusIndicator type='info'>{t('status.onBudget')}</StatusIndicator>;
 };
 
-export const MonthlyOverview = () => {
+// eslint-disable-next-line react-refresh/only-export-components
+const MonthlyOverview = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.monthlyOverview' });
+  const locale = getUserLocale();
   const { selectedUser, budgetEntry, setBudgetEntry } = useBudgetProvider();
   const { data: incomeSources } = useIncomeApi(selectedUser.userId, budgetEntry);
   const { data: budgetItems } = useBudgetApi(selectedUser.userId, budgetEntry);
@@ -57,40 +60,50 @@ export const MonthlyOverview = () => {
     ) ?? 0;
 
   return (
-    <Container header={<Header variant='h2'>{t('title')}</Header>}>
-      <KeyValuePairs
-        columns={4}
-        items={[
-          {
-            label: '',
-            value: (
-              <FormField label={t('budgetPeriod')}>
-                <DatePicker
-                  value={budgetEntry}
-                  onChange={(e) => {
-                    console.log(e.detail.value);
-                    setBudgetEntry(e.detail.value);
-                  }}
-                  granularity='month'
-                  placeholder='YYYY/MM'
-                />
-              </FormField>
-            ),
-          },
-          {
-            label: t('amountToBudget'),
-            value: formatCurrency(amountToBudget),
-          },
-          {
-            label: t('amountSpent'),
-            value: formatCurrency(amountSpent),
-          },
-          {
-            label: t('amountLeft'),
-            value: getBudgetStatus(t, amountSpent, amountToBudget),
-          },
-        ]}
-      />
-    </Container>
+    <KeyValuePairs
+      columns={4}
+      items={[
+        {
+          label: '',
+          value: (
+            <FormField label={t('budgetPeriod')}>
+              <DatePicker
+                expandToViewport
+                locale={locale}
+                value={budgetEntry}
+                onChange={(e) => {
+                  console.log(e.detail.value);
+                  setBudgetEntry(e.detail.value);
+                }}
+                granularity='month'
+                placeholder='YYYY/MM'
+              />
+            </FormField>
+          ),
+        },
+        {
+          label: t('amountToBudget'),
+          value: formatCurrency(amountToBudget),
+        },
+        {
+          label: t('amountSpent'),
+          value: formatCurrency(amountSpent),
+        },
+        {
+          label: t('amountLeft'),
+          value: getBudgetStatus(t, amountSpent, amountToBudget),
+        },
+      ]}
+    />
   );
+};
+
+export const monthlyOverviewWidget: WidgetConfig = {
+  columnOffset: { 4: 0 },
+  definition: { defaultRowSpan: 2, defaultColumnSpan: 2 },
+  data: {
+    title: i18n.t('budget.monthlyOverview.title'),
+    description: 'Monthly overview description',
+    content: <MonthlyOverview />,
+  },
 };

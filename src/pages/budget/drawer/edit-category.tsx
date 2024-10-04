@@ -16,7 +16,7 @@ import {
   SpaceBetween,
 } from '@cloudscape-design/components';
 
-import type { Category, CategoryInsert } from '../utils/types';
+import type { Category, CategoryInsert } from '../utils/api-types';
 
 type EditCategoryProps = {
   selectedUserId: string;

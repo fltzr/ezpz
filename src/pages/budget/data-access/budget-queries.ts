@@ -5,7 +5,7 @@ import type {
   BudgetItemUpdate,
   CategoryInsert,
   CategoryUpdate,
-} from '../utils/types';
+} from '../utils/api-types';
 
 export const fetchBudgetData = async (
   userId: string,

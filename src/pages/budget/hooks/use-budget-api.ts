@@ -15,7 +15,7 @@ import {
   CategoryInsert,
   isBudgetItem,
   isCategoryItem,
-} from '../utils/types';
+} from '../utils/api-types';
 import { useTranslation } from 'react-i18next';
 
 export const useBudgetApi = (userId: string, budgetEntry: string) => {

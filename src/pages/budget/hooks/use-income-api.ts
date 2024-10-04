@@ -9,7 +9,7 @@ import type {
   IncomeSource,
   IncomeSourceInsert,
   IncomeSourceUpdate,
-} from '../utils/types';
+} from '../utils/api-types';
 import * as api from '../data-access/income';
 
 export const useIncomeApi = (userId: string, budgetEntry: string) => {

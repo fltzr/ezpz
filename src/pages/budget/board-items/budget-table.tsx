@@ -4,7 +4,6 @@ import { DateTime } from 'luxon';
 
 import {
   Button,
-  Header,
   SpaceBetween,
   StatusIndicator,
   Table,
@@ -23,10 +22,55 @@ import { DeleteItemModal } from '../modals/delete-item';
 import { EditBudgetItem } from '../drawer/edit-budget-item';
 import { EditCategory } from '../drawer/edit-category';
 
-import { type BudgetTableItem, isCategoryItem } from '../utils/types';
+import { type BudgetTableItem, isCategoryItem } from '../utils/api-types';
 import { createBudgetTableColumnDefinitions } from '../utils/table-configs';
+import { WidgetConfig } from '../utils/widget-types';
+import i18n from '../../../i18n';
 
-export const BudgetTable = () => {
+const BudgetTableActions = () => {
+  const { t } = useTranslation(undefined, { keyPrefix: 'budget.budgetTable' });
+
+  const { openDrawer, closeDrawer } = useDrawer();
+  const { selectedUser, budgetEntry } = useBudgetProvider();
+  const { isFetching, dataUpdatedAt, refetch, handleAddCategory } = useBudgetApi(
+    selectedUser.userId,
+    budgetEntry
+  );
+  const [lastRefresh, setLastRefresh] = useState<string | null>(null);
+
+  const onClickAddCategoryDrawer = () => {
+    openDrawer({
+      drawerName: 'add-category',
+      width: 350,
+      content: (
+        <AddCategory
+          selectedUserId={selectedUser.userId}
+          onAdd={handleAddCategory}
+          onClose={closeDrawer}
+        />
+      ),
+    });
+  };
+
+  return (
+    <SpaceBetween size='xs' direction='horizontal'>
+      <ManualRefresh
+        lastRefresh={lastRefresh}
+        loading={isFetching}
+        onRefresh={() => {
+          setLastRefresh(DateTime.fromMillis(dataUpdatedAt).toISO());
+          refetch().catch(console.error);
+        }}
+      />
+      <Button variant='primary' iconName='add-plus' onClick={onClickAddCategoryDrawer}>
+        {t('addCategory')}
+      </Button>
+    </SpaceBetween>
+  );
+};
+
+// eslint-disable-next-line react-refresh/only-export-components
+const BudgetTable = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.budgetTable' });
   const { openDrawer, closeDrawer } = useDrawer();
   const { selectedUser, budgetEntry } = useBudgetProvider();
@@ -34,9 +78,7 @@ export const BudgetTable = () => {
   const {
     data: budgetItems,
     isFetching,
-    dataUpdatedAt,
     refetch,
-    handleAddCategory,
     handleAddBudgetItem,
     handleUpdateBudgetItem,
     handleDeleteItem,
@@ -52,26 +94,10 @@ export const BudgetTable = () => {
     },
   });
 
-  const [lastRefresh, setLastRefresh] = useState<string | null>(null);
-
   const [deleteItemProps, setDeleteItemProps] = useState<{
     visible: boolean;
     item?: BudgetTableItem;
   }>({ visible: false });
-
-  const onClickAddCategoryDrawer = () => {
-    openDrawer({
-      drawerName: 'add-category',
-      width: 350,
-      content: (
-        <AddCategory
-          selectedUserId={selectedUser.userId}
-          onAdd={handleAddCategory}
-          onClose={closeDrawer}
-        />
-      ),
-    });
-  };
 
   const onCloseDeleteModal = () => {
     setDeleteItemProps({
@@ -91,8 +117,8 @@ export const BudgetTable = () => {
       <Table
         {...collectionProps}
         enableKeyboardNavigation
+        variant='embedded'
         loading={isFetching}
-        variant='container'
         items={items ?? []}
         columnDefinitions={createBudgetTableColumnDefinitions(t, {
           handleEditCategory: (item) => {
@@ -145,30 +171,6 @@ export const BudgetTable = () => {
             });
           },
         })}
-        header={
-          <Header
-            variant='h2'
-            actions={
-              <SpaceBetween size='xs' direction='horizontal'>
-                <ManualRefresh
-                  lastRefresh={lastRefresh}
-                  loading={isFetching}
-                  onRefresh={() => {
-                    setLastRefresh(DateTime.fromMillis(dataUpdatedAt).toISO());
-                    refetch().catch(console.error);
-                  }}
-                />
-                <Button
-                  variant='primary'
-                  iconName='add-plus'
-                  onClick={onClickAddCategoryDrawer}>
-                  {t('addCategory')}
-                </Button>
-              </SpaceBetween>
-            }>
-            {t('title')}
-          </Header>
-        }
         empty={<StatusIndicator type='info'>{t('empty')}</StatusIndicator>}
       />
       <DeleteItemModal
@@ -182,4 +184,15 @@ export const BudgetTable = () => {
       />
     </>
   );
+};
+
+export const budgetTableWidget: WidgetConfig = {
+  columnOffset: { 4: 0 },
+  definition: { defaultRowSpan: 3, defaultColumnSpan: 4 },
+  data: {
+    title: i18n.t('budget.budgetTable.title'),
+    description: 'Budget description',
+    content: <BudgetTable />,
+    actions: <BudgetTableActions />,
+  },
 };

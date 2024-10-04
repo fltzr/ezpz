@@ -1,9 +1,9 @@
+/* eslint-disable react-refresh/only-export-components */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
   ButtonGroup,
-  Container,
   Header,
   Input,
   StatusIndicator,
@@ -19,9 +19,11 @@ import { useIncomeApi } from '../hooks/use-income-api';
 import { AddIncomeSource } from '../drawer/add-income-source';
 import { DeleteIncomeSourceModal } from '../modals/delete-income-source';
 
-import { IncomeSource } from '../utils/types';
+import { IncomeSource } from '../utils/api-types';
+import { WidgetConfig } from '../utils/widget-types';
+import i18n from '../../../i18n';
 
-export const IncomeSources = () => {
+const IncomeSources = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.incomeSources' });
   const { selectedUser, budgetEntry } = useBudgetProvider();
   const { openDrawer, closeDrawer } = useDrawer();
@@ -40,89 +42,73 @@ export const IncomeSources = () => {
   } = useIncomeApi(selectedUser.userId, budgetEntry);
 
   return (
-    <Container
-      fitHeight
-      header={
-        <Header
-          variant='h2'
-          actions={
-            <ButtonGroup
-              variant='icon'
-              items={[
-                {
-                  id: 'refresh',
-                  type: 'icon-button',
-                  text: t('dropdown.refresh'),
-                  iconName: 'refresh',
-                },
-                {
-                  id: 'delete',
-                  type: 'icon-button',
-                  text: `Delete ${
-                    selectedItems.length !== 0 ? `(${selectedItems.length})` : ''
-                  }`,
-                  iconName: 'delete-marker',
-                  disabled: selectedItems.length === 0,
-                  popoverFeedback:
-                    selectedItems.length > 1
-                      ? t('validation.disabledMultipleSelected')
-                      : t('validation.disabledNoneSelected'),
-                },
-                {
-                  id: 'add',
-                  text: t('dropdown.add'),
-                  type: 'icon-button',
-                  iconName: 'add-plus',
-                },
-                // {
-                //   id: 'update',
-                //   type: 'icon-button',
-                //   text: t('dropdown.update'),
-                //   iconName: 'edit',
-                //   disabled: selectedItems.length === 0 || selectedItems.length > 1,
-                //   popoverFeedback:
-                //     selectedItems.length > 1
-                //       ? t('validation.disabledMultipleSelected')
-                //       : t('validation.disabledNoneSelected'),
-                // },
-              ]}
-              onItemClick={(event) => {
-                switch (event.detail.id) {
-                  case 'add':
-                    openDrawer({
-                      drawerName: 'add-income-source',
-                      width: 350,
-                      content: (
-                        <AddIncomeSource
-                          selectedUserId={selectedUser.userId}
-                          onAdd={handleAddIncomeSource}
-                          onClose={closeDrawer}
-                        />
-                      ),
+    <>
+      <Header
+        variant='h2'
+        actions={
+          <ButtonGroup
+            variant='icon'
+            items={[
+              {
+                id: 'refresh',
+                type: 'icon-button',
+                text: t('dropdown.refresh'),
+                iconName: 'refresh',
+              },
+              {
+                id: 'delete',
+                type: 'icon-button',
+                text: `Delete ${
+                  selectedItems.length !== 0 ? `(${selectedItems.length})` : ''
+                }`,
+                iconName: 'delete-marker',
+                disabled: selectedItems.length === 0,
+                popoverFeedback:
+                  selectedItems.length > 1
+                    ? t('validation.disabledMultipleSelected')
+                    : t('validation.disabledNoneSelected'),
+              },
+              {
+                id: 'add',
+                text: t('dropdown.add'),
+                type: 'icon-button',
+                iconName: 'add-plus',
+              },
+            ]}
+            onItemClick={(event) => {
+              switch (event.detail.id) {
+                case 'add':
+                  openDrawer({
+                    drawerName: 'add-income-source',
+                    width: 350,
+                    content: (
+                      <AddIncomeSource
+                        selectedUserId={selectedUser.userId}
+                        onAdd={handleAddIncomeSource}
+                        onClose={closeDrawer}
+                      />
+                    ),
+                  });
+                  break;
+                case 'delete':
+                  setIsDeleteModalVisible(true);
+                  break;
+                case 'refresh':
+                  refetch().catch((error: Error) => {
+                    addNotification({
+                      type: 'error',
+                      message: t('dropdown.errorRefetching', {
+                        error: error.message,
+                      }),
                     });
-                    break;
-                  case 'delete':
-                    setIsDeleteModalVisible(true);
-                    break;
-                  case 'refresh':
-                    refetch().catch((error: Error) => {
-                      addNotification({
-                        type: 'error',
-                        message: t('dropdown.errorRefetching', {
-                          error: error.message,
-                        }),
-                      });
-                    });
-                    break;
-                  default:
-                    break;
-                }
-              }}
-            />
-          }>
-          {t('title')}
-        </Header>
-      }>
+                  });
+                  break;
+                default:
+                  break;
+              }
+            }}
+          />
+        }></Header>
       <Table
         variant='borderless'
         selectionType='multi'
@@ -219,6 +205,16 @@ export const IncomeSources = () => {
           setIsDeleteModalVisible(false);
         }}
       />
-    </Container>
+    </>
   );
+};
+
+export const incomeSourcesWidget: WidgetConfig = {
+  columnOffset: { 4: 0 },
+  definition: { defaultRowSpan: 2, defaultColumnSpan: 2 },
+  data: {
+    title: i18n.t('budget.incomeSources.title'),
+    description: 'Income sources description',
+    content: <IncomeSources />,
+  },
 };

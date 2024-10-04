@@ -19,7 +19,12 @@ import {
   SpaceBetween,
 } from '@cloudscape-design/components';
 
-import { BudgetItem, BudgetItemUpdate, Category, isCategoryItem } from '../utils/types';
+import {
+  BudgetItem,
+  BudgetItemUpdate,
+  Category,
+  isCategoryItem,
+} from '../utils/api-types';
 import { useBudgetApi } from '../hooks/use-budget-api';
 
 type EditBudgetItemProps = {

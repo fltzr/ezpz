@@ -18,7 +18,7 @@ import {
   SpaceBetween,
 } from '@cloudscape-design/components';
 
-import type { BudgetItemInsert } from '../utils/types';
+import type { BudgetItemInsert } from '../utils/api-types';
 
 type AddBudgetItemProps = {
   selectedUserId: string;

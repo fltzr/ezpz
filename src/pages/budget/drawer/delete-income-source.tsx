@@ -15,7 +15,7 @@ import {
   SpaceBetween,
 } from '@cloudscape-design/components';
 
-import type { IncomeSourceInsert } from '../utils/types';
+import type { IncomeSourceInsert } from '../utils/api-types';
 
 type AddIncomeSource = {
   selectedUserId: string;

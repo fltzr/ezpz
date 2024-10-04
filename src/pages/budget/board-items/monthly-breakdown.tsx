@@ -1,22 +1,19 @@
 import { useTranslation } from 'react-i18next';
 import getUserLocale from 'get-user-locale';
 
-import {
-  Container,
-  Header,
-  PieChart,
-  PieChartProps,
-  StatusIndicator,
-} from '@cloudscape-design/components';
+import { PieChart, PieChartProps, StatusIndicator } from '@cloudscape-design/components';
 
 import { formatCurrency } from '@/utils/format-currency';
 
 import { useBudgetApi } from '../hooks/use-budget-api';
 import { useBudgetProvider } from '../hooks/use-budget-provider';
 import { useIncomeApi } from '../hooks/use-income-api';
-import { isBudgetItem, isCategoryItem } from '../utils/types';
+import { isBudgetItem, isCategoryItem } from '../utils/api-types';
+import { WidgetConfig } from '../utils/widget-types';
+import i18n from '../../../i18n';
 
-export const MonthlyBreakdown = () => {
+// eslint-disable-next-line react-refresh/only-export-components
+const MonthlyBreakdown = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.monthlyBreakdown' });
   const { selectedUser, budgetEntry } = useBudgetProvider();
   const { data: incomeSources } = useIncomeApi(selectedUser.userId, budgetEntry);
@@ -49,32 +46,41 @@ export const MonthlyBreakdown = () => {
   };
 
   return (
-    <Container header={<Header variant='h2'>{t('title')}</Header>}>
-      <PieChart
-        hideDescriptions
-        variant='donut'
-        data={chartData() ?? []}
-        statusType={isFetching ? 'loading' : 'finished'}
-        detailPopoverContent={(datum) => [
-          { key: t('chart.popover.keyCategory'), value: datum.title },
-          { key: t('chart.popover.keyAmount'), value: formatCurrency(datum.value) },
-          amountToBudget
-            ? {
-                key: t('chart.popover.keyPercentageTotal'),
-                value: `${((datum.value / amountToBudget) * 100).toFixed(2)}%`,
-              }
-            : { key: '', value: '' },
-        ]}
-        segmentDescription={(datum, sum) =>
-          `${datum.title}: ${currencySymbol}${datum.value.toFixed(2)} (${(
-            (datum.value / sum) *
-            100
-          ).toFixed()}%)`
-        }
-        hideFilter
-        size='medium'
-        empty={<StatusIndicator type='info'>{t('chart.empty')}</StatusIndicator>}
-      />
-    </Container>
+    <PieChart
+      fitHeight
+      hideDescriptions
+      variant='donut'
+      size='small'
+      data={chartData() ?? []}
+      statusType={isFetching ? 'loading' : 'finished'}
+      detailPopoverContent={(datum) => [
+        { key: t('chart.popover.keyCategory'), value: datum.title },
+        { key: t('chart.popover.keyAmount'), value: formatCurrency(datum.value) },
+        amountToBudget
+          ? {
+              key: t('chart.popover.keyPercentageTotal'),
+              value: `${((datum.value / amountToBudget) * 100).toFixed(2)}%`,
+            }
+          : { key: '', value: '' },
+      ]}
+      segmentDescription={(datum, sum) =>
+        `${datum.title}: ${currencySymbol}${datum.value.toFixed(2)} (${(
+          (datum.value / sum) *
+          100
+        ).toFixed()}%)`
+      }
+      hideFilter
+      empty={<StatusIndicator type='info'>{t('chart.empty')}</StatusIndicator>}
+    />
   );
+};
+
+export const monthlyBreakdownWidget: WidgetConfig = {
+  columnOffset: { 4: 2 },
+  definition: { defaultRowSpan: 4, defaultColumnSpan: 2 },
+  data: {
+    title: i18n.t('budget.monthlyBreakdown.title'),
+    description: 'Monthly breakdown description',
+    content: <MonthlyBreakdown />,
+  },
 };

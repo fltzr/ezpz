@@ -1,6 +1,6 @@
 import { useSupabase } from '@/hooks/use-supabase';
 
-import { IncomeSourceInsert, IncomeSourceUpdate } from '../utils/types';
+import { IncomeSourceInsert, IncomeSourceUpdate } from '../utils/api-types';
 
 export const fetchIncomeSources = async (
   userId: string,
