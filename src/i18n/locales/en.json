@@ -277,6 +277,7 @@
       "title": "Budget table",
       "empty": "No budget items added!",
       "addCategory": "Add category",
+      "addBudgetItem": "Add budget item",
       "columns": {
         "category": "Category",
         "projectedAmount": "Projected amount",

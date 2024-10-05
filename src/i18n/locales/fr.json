@@ -95,7 +95,7 @@
         "actionButtons": {
           "renameCategory": "Renommer une catégorie",
           "deleteCategory": "Supprimer la catégorie",
-          "addBudgetLineItem": "Ajouter un poste budgétaire",
+          "addBudgetLineItem": "Ajoute un poste budgétaire",
           "editBudgetItem": "Editer",
           "deleteBudgetItem": "Supprimer",
           "changeCategory": "Changer de catégorie"
@@ -185,6 +185,7 @@
       "title": "Tableau du budget",
       "empty": "Aucune poste budgétaire ajouté !",
       "addCategory": "Ajouter une catégorie",
+      "addBudgetItem": "Ajoute un poste budgétaire",
       "columns": {
         "category": "Catégorie",
         "projectedAmount": "Montant projeté",
@@ -192,7 +193,7 @@
           "columnName": "Actions",
           "editCategory": "Modifier une catégorie",
           "deleteCategory": "Supprimer la catégorie",
-          "addBudgetItem": "Ajouter un poste budgétaire",
+          "addBudgetItem": "Ajoute un poste budgétaire",
           "editBudgetItem": "Modifier le poste budgétaire",
           "deleteBudgetItem": "Supprimer le poste budgétaire"
         }
