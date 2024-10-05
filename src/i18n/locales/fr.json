@@ -216,7 +216,9 @@
           "itemName": "Nom de l'article",
           "itemNameExample": "Par exemple, Épicerie, Loyer, Services Public",
           "projectedAmount": "Montant projeté",
-          "projectedAmountDescription": "Le montant projeté que vous prévoyez de dépenser pour cet article. Devise actuelle : {{currency}}"
+          "projectedAmountDescription": "Le montant projeté que vous prévoyez de dépenser pour cet article. Devise actuelle : {{currency}}",
+          "categoryName": "Nom de la catégorie",
+          "categoryPlaceholder": "Sélectionner une catégorie"
         }
       },
       "addCategory": {
