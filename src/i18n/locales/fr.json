@@ -122,7 +122,7 @@
     "featureFlags": {
       "configurableDashboard": {
         "title": "Nouveau tableau de bord !",
-        "message": "Cette nouvelle présentation du tableau de bord vous permet d'organiser les panneaux à votre guise !"
+        "message": "Cette nouvelle présentation du tableau de bord vous permet d'organiser les panneaux à votre guise. Cliquez et faites glisser le coin inférieur droit d'un panneau pour le redimensionner, ou cliquez et maintenez le coin supérieur gauche pour le réorganiser !"
       }
     },
     "common": {

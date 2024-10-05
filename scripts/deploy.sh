@@ -52,7 +52,7 @@ ssh -i "${REMOTE_KEY_PATH}" "${REMOTE_USER}@${REMOTE_HOST}" bash -s << EOF
   
   cd "${REMOTE_DIR}" || { echo "Failed to cd to ${REMOTE_DIR}"; exit 1; }
   docker compose down || { echo "Failed to bring down Docker Compose services; exit 1; }
-  docker image rm "${IMAGE_NAME}:latest -f"
+  docker image rm "${IMAGE_NAME}" -f
   docker load -i "${TAR_FILE}" || { echo "Failed to load ${TAR_FILE} to Docker; exit 1; }
   docker compose up -d || { echo "Failed to start Docker Compose services"; exit 1; }
 EOF

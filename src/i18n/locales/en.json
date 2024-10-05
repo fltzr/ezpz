@@ -214,7 +214,7 @@
     "featureFlags": {
       "configurableDashboard": {
         "title": "New dashboard!",
-        "message": "This new dashboard layout allows you to adjust the panels to your liking!"
+        "message": "This new dashboard layout allows you to adjust the panels to your liking. Click and drag the bottom right corner of a panel to resize it, or click and hold the top left corner to rearrange it!"
       }
     },
     "common": {
