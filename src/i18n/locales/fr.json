@@ -49,10 +49,10 @@
   },
   "pages": {
     "budget": {
-      "pageTitle": "Tableau de bord budgétarie de {{name}}",
+      "pageTitle": "Tableau de bord budgétaire de {{name}}",
       "tableTitle": "Le budget",
       "addCategory": "Ajouter une catégorie",
-      "empty": "Aucun poste budgétarie ajouté !",
+      "empty": "Aucun poste budgétaire ajouté !",
       "overview": {
         "title": "Vue d'ensemble",
         "amountToBudget": "Montant au budget",
@@ -86,7 +86,7 @@
         "keyCategory": "Catégorie",
         "keyAmount": "Montant",
         "keyPercentageTotal": "Pourcentage du budget total",
-        "empty": "Ajoutez des sources de revenus et des postes budgétaries pour voir ce graphique !"
+        "empty": "Ajoutez des sources de revenus et des postes budgétaires pour voir ce graphique !"
       },
       "budgetTable": {
         "columnCategory": "Catégorie",
@@ -95,7 +95,7 @@
         "actionButtons": {
           "renameCategory": "Renommer une catégorie",
           "deleteCategory": "Supprimer la catégorie",
-          "addBudgetLineItem": "Ajouter un poste budgétarie",
+          "addBudgetLineItem": "Ajouter un poste budgétaire",
           "editBudgetItem": "Editer",
           "deleteBudgetItem": "Supprimer",
           "changeCategory": "Changer de catégorie"
@@ -126,12 +126,12 @@
       }
     },
     "common": {
-      "title": "Tableau de bord budgétarie de {{name}}",
+      "title": "Tableau de bord budgétaire de {{name}}",
       "fetchingUsers": "Recherche d'utilisateurs"
     },
     "monthlyOverview": {
       "title": "Vue mensuel",
-      "budgetPeriod": "Périod budgétarie",
+      "budgetPeriod": "Périod budgétaire",
       "amountToBudget": "Montant à budgéter",
       "amountSpent": "Montant dépensé",
       "amountLeft": "Montant restant",
@@ -192,9 +192,9 @@
           "columnName": "Actions",
           "editCategory": "Modifier une catégorie",
           "deleteCategory": "Supprimer la catégorie",
-          "addBudgetItem": "Ajouter un poste budgétarie",
-          "editBudgetItem": "Modifier le poste budgétarie",
-          "deleteBudgetItem": "Supprimer le poste budgétarie"
+          "addBudgetItem": "Ajouter un poste budgétaire",
+          "editBudgetItem": "Modifier le poste budgétaire",
+          "deleteBudgetItem": "Supprimer le poste budgétaire"
         }
       }
     },
@@ -270,7 +270,7 @@
         "title": "Supprimer la source de revenus{{s}} ?",
         "deleteContentp1": "Supprimer définitivment ",
         "deleteContentp2": "Vous ne pouvez pas annuler cette action.",
-        "deleteContentAlert": "En procédent à la suppression de cette catégorie, tous les postes budgétaries associés seront supprimés."
+        "deleteContentAlert": "En procédent à la suppression de cette catégorie, tous les postes budgétaires associés seront supprimés."
       },
       "deleteBudgetItem": {
         "title": "Supprimer {{name}}?",
@@ -285,10 +285,10 @@
       "budget": {
         "addCategorySuccess": "Catégorie ajoutee avec succés: {{category}}",
         "unknownError": "Une erreur inconnue s'est produite. Veuillez réessayer.",
-        "addBudgetItemSuccess": "Poste budgétarie ajouté avec succés: {{budgetItem}}",
+        "addBudgetItemSuccess": "Poste budgétaire ajouté avec succés: {{budgetItem}}",
         "addBudgetItemError": "Échec de l'ajoute du post budgétaire: {{message}}",
         "refetchBudgetItemError": "Échec de la récupération des postes budgétaires: {{message}}",
-        "updateBudgetItemSuccess": "Poste budgétarie mis à jour avec succés",
+        "updateBudgetItemSuccess": "Poste budgétaire mis à jour avec succés",
         "updateBudgetItemError": "Failed to update budget item: {{message}}",
         "deleteBudgetItemSuccess": "Poste supprimé avec succès.",
         "deleteBudgetItemError": "Échec de la suppression du poste : {{message}}"
