@@ -66,7 +66,7 @@ export const BudgetTableActions = () => {
       </Button>
 
       <Button variant='normal' iconName='add-plus' onClick={onClickAddBudgetItemDrawer}>
-        {t('addCategory')}
+        {t('addBudgetItem')}
       </Button>
     </SpaceBetween>
   );

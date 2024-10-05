@@ -14,8 +14,6 @@ export const PageHeader = ({ actions }: PageHeaderProps) => {
   const locale = getI18n().language;
   const { selectedUser, budgetEntry } = useBudgetProvider();
 
-  console.log(locale);
-
   const formatedDate = DateTime.fromFormat(budgetEntry, 'yyyy-MM')
     .setLocale(locale)
     .toFormat('LLLL yyyy');

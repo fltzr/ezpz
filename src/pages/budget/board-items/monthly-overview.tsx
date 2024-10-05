@@ -72,7 +72,6 @@ const MonthlyOverview = () => {
                 locale={locale}
                 value={budgetEntry}
                 onChange={(e) => {
-                  console.log(e.detail.value);
                   setBudgetEntry(e.detail.value);
                 }}
                 granularity='month'
