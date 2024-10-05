@@ -5,7 +5,7 @@ import { UserSelector } from './components/user-selector';
 import { useLocalStorage } from 'react-use';
 import { StoredWidgetPlacement } from './utils/widget-types';
 import { Board, BoardItem } from '@cloudscape-design/board-components';
-import { boardI18nStrings, boardItemI18nStrings } from '../steps/i18n-strings';
+import { boardI18nStrings, boardItemI18nStrings } from './utils/i18n-strings';
 import { getBoardWidgets, exportLayout } from './board-items/config';
 import { EmptyBoard } from './components/empty';
 import { NewDashboardAlert } from './components/new-dashboard-alert';
@@ -21,18 +21,6 @@ const BudgetPage = () => {
     <SpaceBetween direction='vertical' size='m'>
       <NewDashboardAlert />
       <PageHeader actions={<UserSelector />} />
-      {/* <Grid
-        gridDefinition={[
-          { colspan: { s: 12, default: 12 } },
-          { colspan: { s: 7, default: 12 } },
-          { colspan: { s: 5, default: 12 } },
-          { colspan: { s: 12, default: 12 } },
-        ]}>
-        <MonthlyOverview />
-        <IncomeSources />
-        <MonthlyBreakdown />
-        <BudgetTable />
-      </Grid> */}
       <Board
         i18nStrings={boardI18nStrings}
         empty={<EmptyBoard />}

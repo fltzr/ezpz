@@ -277,6 +277,7 @@
       "title": "Budget table",
       "empty": "No budget items added!",
       "addCategory": "Add category",
+      "addBudgetItem": "Add budget item",
       "columns": {
         "category": "Category",
         "projectedAmount": "Projected amount",
@@ -309,7 +310,8 @@
           "itemNameExample": "e.g., Groceries, Rent, Utilities",
           "projectedAmount": "Projected amount",
           "projectedAmountDescription": "The projected amount you plan to spend on this item. Current currency:\t{{currency}}",
-          "isRecurring": "Is this a recurring budget item?"
+          "categoryName": "Category name",
+          "categoryPlaceholder": "Select a category"
         }
       },
       "addCategory": {

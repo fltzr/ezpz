@@ -27,9 +27,6 @@ export const PlaidBalances = () => {
 
   useEffect(() => {
     if (balancesError) {
-      console.log(JSON.stringify(balancesError.message, null, 2));
-      console.log(JSON.stringify(balancesError.name, null, 2));
-      console.log(JSON.stringify(balancesError?.stack, null, 2));
       addNotification({
         type: 'warning',
         message: `Error fetching balances. Please try again later | Error: ${balancesError?.message}`,

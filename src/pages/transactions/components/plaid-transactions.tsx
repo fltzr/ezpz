@@ -43,8 +43,6 @@ export const PlaidTransactions = () => {
   const filteredTransactions = () => {
     if (!transactions?.added) return [];
 
-    console.log(transactions.added);
-
     return [...transactions.added]
       .filter((tx) => !tx.name.includes('From Share') || !tx.name.includes('From Share'))
       .map((tx) => ({

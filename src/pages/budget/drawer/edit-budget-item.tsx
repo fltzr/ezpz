@@ -170,7 +170,7 @@ export const EditBudgetItem = ({
             name='category_id'
             render={({ field }) => (
               <FormField
-                label={t('editBudgetItem.categoryName')}
+                label={t('editBudgetItem.fields.categoryName')}
                 errorText={errors.category_id?.message}>
                 <Select
                   {...field}

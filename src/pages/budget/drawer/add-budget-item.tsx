@@ -15,14 +15,17 @@ import {
   Grid,
   Header,
   Input,
+  Select,
   SpaceBetween,
 } from '@cloudscape-design/components';
 
-import type { BudgetItemInsert } from '../utils/api-types';
+import { isCategoryItem, type BudgetItemInsert, type Category } from '../utils/api-types';
+import { useBudgetApi } from '../hooks/use-budget-api';
 
 type AddBudgetItemProps = {
+  budgetEntry: string;
   selectedUserId: string;
-  categoryId: string;
+  categoryId?: string;
   onAdd: (budgetItem: BudgetItemInsert) => void;
   onClose: () => void;
 };
@@ -32,18 +35,22 @@ const budgetItemSchema = z.object({
   projected_amount: z
     .number()
     .nonnegative('Projected value must be a non-negative number.'),
+  category_id: z.string().uuid(),
   is_recurring: z.boolean().default(false),
 });
 
 type BudgetItemSchema = z.infer<typeof budgetItemSchema>;
 
 export const AddBudgetItem = ({
+  budgetEntry,
   selectedUserId,
   categoryId,
   onAdd,
   onClose,
 }: AddBudgetItemProps) => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.drawers' });
+  const { data } = useBudgetApi(selectedUserId, budgetEntry);
+  const categories = (data?.filter(isCategoryItem) as Category[]) ?? [];
   const {
     control,
     handleSubmit,
@@ -63,7 +70,7 @@ export const AddBudgetItem = ({
     onAdd({
       ...data,
       user_id: selectedUserId,
-      category_id: categoryId,
+      category_id: categoryId ?? '',
     });
     handleOnClose();
   };
@@ -136,6 +143,35 @@ export const AddBudgetItem = ({
                     onChange={({ detail }) => field.onChange(Number(detail.value))}
                   />
                 </Grid>
+              </FormField>
+            )}
+          />
+          <Controller
+            control={control}
+            name='category_id'
+            render={({ field }) => (
+              <FormField
+                label={t('addBudgetItem.fields.categoryName')}
+                errorText={errors.category_id?.message}>
+                <Select
+                  {...field}
+                  placeholder={t('addBudgetItem.fields.categoryPlaceholder')}
+                  options={categories.map((category) => ({
+                    label: category.category_name,
+                    value: category.id,
+                  }))}
+                  selectedOption={
+                    field.value
+                      ? {
+                          label: categories.find(
+                            (category) => category.id === field.value
+                          )?.category_name,
+                          value: field.value,
+                        }
+                      : null
+                  }
+                  onChange={({ detail }) => field.onChange(detail.selectedOption.value)}
+                />
               </FormField>
             )}
           />

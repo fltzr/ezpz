@@ -34,7 +34,6 @@ export const UserSelector = () => {
   }));
 
   const handleUserChange: SelectProps['onChange'] = ({ detail }) => {
-    console.log(detail.selectedOption);
     setSelectedUser({
       userId: detail.selectedOption.value!,
       name: detail.selectedOption.label!,
