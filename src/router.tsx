@@ -15,7 +15,6 @@ import { profileRoutes } from '@/pages/profile/routes';
 import { budgetRoutes } from '@/pages/budget/routes';
 import { loanRepaymentRoutes } from '@/pages/loan-repayment/routes';
 import { transactionsRoutes } from '@/pages/transactions/routes';
-import { stepsRoutes } from './pages/steps/routes';
 
 const routes: RouteObject[] = [
   {
@@ -31,7 +30,6 @@ const routes: RouteObject[] = [
       {
         element: <ProtectedRoute />,
         children: [
-          ...stepsRoutes,
           ...profileRoutes,
           ...budgetRoutes,
           ...loanRepaymentRoutes,
