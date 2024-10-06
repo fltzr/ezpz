@@ -1,4 +1,5 @@
 import { formatCurrency } from '@/utils/format-currency';
+
 import type { AmortizationSchedule, LoanInputSchema } from '../schema';
 
 export const createAmortizationSchedule = (

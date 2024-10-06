@@ -1,7 +1,9 @@
+import '@/i18n';
+
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+
 import App from './app';
-import './i18n';
 
 import '@cloudscape-design/global-styles/index.css';
 import './styles/index.scss';

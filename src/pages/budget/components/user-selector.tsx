@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { useQuery } from '@tanstack/react-query';
+
 import { Select, type SelectProps } from '@cloudscape-design/components';
+import { useQuery } from '@tanstack/react-query';
 
 import { useSupabase } from '@/hooks/use-supabase';
 

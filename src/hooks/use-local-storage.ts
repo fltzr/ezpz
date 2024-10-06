@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export const load = <T>(key: string): T | undefined => {
   const value = localStorage.getItem(key);

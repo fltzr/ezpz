@@ -1,13 +1,15 @@
 import { BoardProps } from '@cloudscape-design/board-components';
+
 import {
   StoredWidgetPlacement,
   WidgetConfig,
   WidgetDataType,
 } from '../utils/widget-types';
+
 import { budgetTableWidget } from './budget-table';
-import { monthlyOverviewWidget } from './monthly-overview';
-import { monthlyBreakdownWidget } from './monthly-breakdown';
 import { incomeSourcesWidget } from './income-sources';
+import { monthlyBreakdownWidget } from './monthly-breakdown';
+import { monthlyOverviewWidget } from './monthly-overview';
 
 const allWidgets: Record<string, WidgetConfig> = {
   monthlyOverviewWidget,

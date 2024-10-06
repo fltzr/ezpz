@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'react-i18next';
 
-import { useSignIn } from '../hooks/use-sign-in';
-import { type SignInSchema, signInSchema } from '../validation/sign-in';
 import {
   Box,
   Button,
@@ -13,8 +11,11 @@ import {
   Input,
   SpaceBetween,
 } from '@cloudscape-design/components';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Turnstile } from '@marsidev/react-turnstile';
-import { useTranslation } from 'react-i18next';
+
+import { useSignIn } from '../hooks/use-sign-in';
+import { type SignInSchema, signInSchema } from '../validation/sign-in';
 
 export const SignInForm = () => {
   const { t } = useTranslation();

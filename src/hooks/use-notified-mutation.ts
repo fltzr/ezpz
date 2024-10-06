@@ -3,8 +3,9 @@ import {
   UseMutationOptions,
   UseMutationResult,
 } from '@tanstack/react-query';
-import { useNotificationStore } from '../state/notifications';
 import { nanoid } from 'nanoid';
+
+import { useNotificationStore } from '../state/notifications';
 
 type NotificationOptions<TData, TError> = {
   successMessage?: string | ((data: TData) => string);

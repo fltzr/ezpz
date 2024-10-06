@@ -1,11 +1,12 @@
 import { lazy, useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Box, Header, Modal, StatusIndicator } from '@cloudscape-design/components';
 
-import { AuthProvider } from '@/pages/auth/components/auth-provider';
-import { useTheme } from '@/hooks/use-theme';
-import { SupabaseProvider } from '@/components/supabase-provider';
+import { Box, Header, Modal, StatusIndicator } from '@cloudscape-design/components';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 import { DrawerProvider } from '@/components/drawer-provider';
+import { SupabaseProvider } from '@/components/supabase-provider';
+import { useTheme } from '@/hooks/use-theme';
+import { AuthProvider } from '@/pages/auth/components/auth-provider';
 
 const Router = lazy(() => import('./router'));
 

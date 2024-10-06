@@ -1,25 +1,32 @@
-import type { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
+
 import {
   DatePicker,
   FormField,
   KeyValuePairs,
   StatusIndicator,
 } from '@cloudscape-design/components';
+import getUserLocale from 'get-user-locale';
+import type { TFunction } from 'i18next';
 
+import i18n from '@/i18n';
 import { formatCurrency } from '@/utils/format-currency';
 
+import { useBudgetApi } from '../hooks/use-budget-api';
 import { useBudgetProvider } from '../hooks/use-budget-provider';
 import { useIncomeApi } from '../hooks/use-income-api';
-import { useBudgetApi } from '../hooks/use-budget-api';
 import { isBudgetItem } from '../utils/api-types';
 import { WidgetConfig } from '../utils/widget-types';
-import getUserLocale from 'get-user-locale';
-import i18n from '../../../i18n';
+
+import styles from './monthly-overview/styles.module.scss';
 
 const getBudgetStatus = (t: TFunction, amountSpent: number, budgetAmount?: number) => {
   if (!budgetAmount) {
-    return <StatusIndicator type='warning'>{t('status.noIncomeSet')}</StatusIndicator>;
+    return (
+      <StatusIndicator type='warning' wrapText={true}>
+        <div className={styles['no-word-break']}>{t('status.noIncomeSet')}</div>
+      </StatusIndicator>
+    );
   }
 
   const difference = amountSpent - budgetAmount;
@@ -27,17 +34,25 @@ const getBudgetStatus = (t: TFunction, amountSpent: number, budgetAmount?: numbe
 
   if (difference < 0)
     return (
-      <StatusIndicator type='success'>
-        {t('status.underBudget', { amount: differenceFormatted })}
-      </StatusIndicator>
+      <div className={styles['no-word-break']}>
+        <StatusIndicator type='success'>
+          {t('status.underBudget', { amount: differenceFormatted })}
+        </StatusIndicator>
+      </div>
     );
   if (difference > 0)
     return (
       <StatusIndicator type='error'>
-        {t('status.overBudget', { amount: differenceFormatted })}
+        <div className={styles['no-word-break']}>
+          {t('status.overBudget', { amount: differenceFormatted })}
+        </div>
       </StatusIndicator>
     );
-  return <StatusIndicator type='info'>{t('status.onBudget')}</StatusIndicator>;
+  return (
+    <StatusIndicator type='info' wrapText={true}>
+      {t('status.onBudget')}
+    </StatusIndicator>
+  );
 };
 
 // eslint-disable-next-line react-refresh/only-export-components

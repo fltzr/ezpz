@@ -1,8 +1,6 @@
 import { Controller, useForm } from 'react-hook-form';
-import { useEffectOnce } from 'react-use';
 import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffectOnce } from 'react-use';
 
 import {
   Box,
@@ -15,6 +13,8 @@ import {
   Input,
   SpaceBetween,
 } from '@cloudscape-design/components';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
 import type { Category, CategoryInsert } from '../utils/api-types';
 

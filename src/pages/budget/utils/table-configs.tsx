@@ -1,5 +1,5 @@
-import { TFunction } from 'i18next';
 import { ButtonDropdown, type TableProps } from '@cloudscape-design/components';
+import { TFunction } from 'i18next';
 
 import { formatCurrency } from '@/utils/format-currency';
 

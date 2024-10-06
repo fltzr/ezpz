@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import {
   Box,
   Button,
@@ -12,18 +13,16 @@ import {
   SpaceBetween,
 } from '@cloudscape-design/components';
 
-import { formatCurrency } from '../../utils/format-currency';
 import { useDrawer } from '../../components/drawer-provider';
-
-import type { LoanInputSchema } from './schema';
-import { useLoansApi } from './hooks/use-loans-api';
+import { formatCurrency } from '../../utils/format-currency';
 
 import { AmortizationScheduleTable } from './components/amortization-schedule-table';
 import { LoanSelector } from './components/loan-selector';
 import { AddLoanInfo } from './drawer/add-loan-info';
 import { EditLoanInfo } from './drawer/edit-loan-info';
+import { useLoansApi } from './hooks/use-loans-api';
 import { DeleteLoanModal } from './modals/delete-loan-modal';
-
+import type { LoanInputSchema } from './schema';
 import { addMonths } from './utils/add-months';
 import { createAmortizationSchedule } from './utils/calculations';
 import { toDatabaseSchema, toZodSchema } from './utils/dto';

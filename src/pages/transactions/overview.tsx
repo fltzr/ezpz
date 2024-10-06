@@ -1,7 +1,7 @@
 import { Header, SpaceBetween } from '@cloudscape-design/components';
 
-import { PlaidLinkButton } from './components/plaid-link-button';
 import { PlaidBalances } from './components/plaid-balances';
+import { PlaidLinkButton } from './components/plaid-link-button';
 import { PlaidTransactions } from './components/plaid-transactions';
 
 const TransactionsOverview = () => {

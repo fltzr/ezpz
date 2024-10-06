@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { nanoid } from 'nanoid';
+
 import {
   AppLayout,
   Box,
@@ -11,13 +11,13 @@ import {
   SideNavigation,
   SpaceBetween,
 } from '@cloudscape-design/components';
+import { nanoid } from 'nanoid';
 
-import { useAuth } from '@/pages/auth/hooks/use-auth';
-
-import { Notifications } from '@/components/notifications';
-import { useNotificationStore } from '@/state/notifications';
 import { useDrawer } from '@/components/drawer-provider';
 import { LocaleProvider } from '@/components/locale-provider';
+import { Notifications } from '@/components/notifications';
+import { useAuth } from '@/pages/auth/hooks/use-auth';
+import { useNotificationStore } from '@/state/notifications';
 
 import { GlobalHeader } from './global-header';
 

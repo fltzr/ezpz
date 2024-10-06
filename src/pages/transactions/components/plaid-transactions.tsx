@@ -1,17 +1,17 @@
 import { useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
 
 import { useCollection } from '@cloudscape-design/collection-hooks';
 import {
-  Table,
-  Header,
   Button,
-  StatusIndicator,
+  Header,
   Pagination,
+  StatusIndicator,
+  Table,
 } from '@cloudscape-design/components';
+import { useQuery } from '@tanstack/react-query';
 
-import { useAuth } from '@/pages/auth/hooks/use-auth';
 import { useSupabase } from '@/hooks/use-supabase';
+import { useAuth } from '@/pages/auth/hooks/use-auth';
 import { useNotificationStore } from '@/state/notifications';
 
 import { fetchTransactions } from '../api';

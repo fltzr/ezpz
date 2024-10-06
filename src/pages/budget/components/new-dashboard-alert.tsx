@@ -1,6 +1,7 @@
-import { Alert, Header } from '@cloudscape-design/components';
 import { useTranslation } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
+
+import { Alert, Header } from '@cloudscape-design/components';
 
 export const NewDashboardAlert = () => {
   const { t } = useTranslation(undefined, {

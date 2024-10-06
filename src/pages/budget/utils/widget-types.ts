@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+
 import { BoardProps } from '@cloudscape-design/board-components';
 
 export type StoredWidgetPlacement = {

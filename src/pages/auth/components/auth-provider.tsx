@@ -1,4 +1,5 @@
 import { createContext, PropsWithChildren, useEffect, useState } from 'react';
+
 import type { User } from '@supabase/supabase-js';
 
 import { useSupabase } from '@/hooks/use-supabase';

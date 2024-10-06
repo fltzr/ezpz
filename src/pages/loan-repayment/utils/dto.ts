@@ -1,4 +1,5 @@
 import type { LoanInputSchema } from '../schema';
+
 import type { LoanEntry } from './types';
 
 export const toDatabaseSchema = (loan: LoanInputSchema) => ({

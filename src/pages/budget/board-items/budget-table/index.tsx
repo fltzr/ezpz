@@ -1,5 +1,7 @@
+import i18n from '@/i18n';
+
 import { WidgetConfig } from '../../utils/widget-types';
-import i18n from '../../../../i18n';
+
 import { BudgetTableActions } from './actions';
 import { BudgetTable } from './table';
 

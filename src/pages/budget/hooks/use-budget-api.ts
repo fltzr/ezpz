@@ -1,13 +1,12 @@
+import { useTranslation } from 'react-i18next';
+
 import { TableProps } from '@cloudscape-design/components';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { useNotifiedMutation } from '../../../hooks/use-notified-mutation';
 import { useSupabase } from '../../../hooks/use-supabase';
 import { useNotificationStore } from '../../../state/notifications';
-import { useNotifiedMutation } from '../../../hooks/use-notified-mutation';
-
 import * as api from '../data-access/budget-queries';
-import { calculateCategoryTotals } from '../utils/table-configs';
-
 import {
   BudgetItemInsert,
   BudgetItemUpdate,
@@ -16,7 +15,7 @@ import {
   isBudgetItem,
   isCategoryItem,
 } from '../utils/api-types';
-import { useTranslation } from 'react-i18next';
+import { calculateCategoryTotals } from '../utils/table-configs';
 
 export const useBudgetApi = (userId: string, budgetEntry: string) => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.api.budget' });

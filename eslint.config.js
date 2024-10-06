@@ -13,7 +13,7 @@ export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   {
-    ignores: ['supabase/**'],
+    ignores: ['supabase/**', 'build', 'dist', 'scripts'],
   },
   {
     files: ['**/*.{ts,tsx}'],

@@ -1,13 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+
+import { TopNavigation, TopNavigationProps } from '@cloudscape-design/components';
+import { User } from '@supabase/supabase-js';
 import { TFunction } from 'i18next';
 import { nanoid } from 'nanoid';
-import { User } from '@supabase/supabase-js';
-import { TopNavigation, TopNavigationProps } from '@cloudscape-design/components';
 
+import { Locale, useLocale } from '@/components/locale-provider';
 import { useAuth } from '@/pages/auth/hooks/use-auth';
 import { useNotificationStore } from '@/state/notifications';
-import { Locale, useLocale } from '@/components/locale-provider';
 import { supabase } from '@/utils/supabase';
 
 import styles from '../styles/top-navigation.module.scss';

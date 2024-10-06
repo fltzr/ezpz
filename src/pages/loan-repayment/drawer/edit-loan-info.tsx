@@ -1,5 +1,4 @@
 import { Controller, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
   Box,
@@ -11,8 +10,9 @@ import {
   Input,
   SpaceBetween,
 } from '@cloudscape-design/components';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { loanInputSchema, LoanInputSchema } from '../schema';
+import { LoanInputSchema,loanInputSchema } from '../schema';
 
 type EditLoanInfoProps = {
   loanDetails?: LoanInputSchema;

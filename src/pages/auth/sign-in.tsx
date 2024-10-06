@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import {
   Box,
@@ -11,11 +11,11 @@ import {
   SpaceBetween,
 } from '@cloudscape-design/components';
 
-import { useAuth } from './hooks/use-auth';
 import { OrSeperator } from './components/or-seperator/or-seperator';
-import { SignInWithGoogle } from './components/providers/google';
 import { SignInWithGithub } from './components/providers/github';
+import { SignInWithGoogle } from './components/providers/google';
 import { SignInForm } from './components/sign-in-form';
+import { useAuth } from './hooks/use-auth';
 
 const SignInPage = () => {
   const { t } = useTranslation();

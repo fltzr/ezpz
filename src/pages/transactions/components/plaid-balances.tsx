@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { Table, Header, StatusIndicator } from '@cloudscape-design/components';
 
-import { useAuth } from '@/pages/auth/hooks/use-auth';
-import { useSupabase } from '@/hooks/use-supabase';
+import { Header, StatusIndicator,Table } from '@cloudscape-design/components';
+import { useQuery } from '@tanstack/react-query';
+
 import { ManualRefresh } from '@/components/manual-refresh';
+import { useSupabase } from '@/hooks/use-supabase';
+import { useAuth } from '@/pages/auth/hooks/use-auth';
 import { useNotificationStore } from '@/state/notifications';
 
 import { fetchBalances } from '../api';

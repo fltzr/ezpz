@@ -1,4 +1,5 @@
 import { Navigate, Outlet } from 'react-router-dom';
+
 import { LoadingBar } from '@cloudscape-design/chat-components';
 
 import { useAuth } from '../hooks/use-auth';

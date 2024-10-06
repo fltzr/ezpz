@@ -1,6 +1,7 @@
 import { PlaidLinkOnEvent, PlaidLinkOnSuccess, usePlaidLink } from 'react-plaid-link';
+
+import { Alert,Button } from '@cloudscape-design/components';
 import { useQuery } from '@tanstack/react-query';
-import { Button, Alert } from '@cloudscape-design/components';
 
 import { useSupabase } from '@/hooks/use-supabase';
 import { useAuth } from '@/pages/auth/hooks/use-auth';

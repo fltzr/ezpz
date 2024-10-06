@@ -1,4 +1,5 @@
 import { Container, Header, SpaceBetween } from '@cloudscape-design/components';
+
 import { useAuth } from '@/pages/auth/hooks/use-auth';
 
 const ProfileOverview = () => {

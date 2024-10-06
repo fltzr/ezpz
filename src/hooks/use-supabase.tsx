@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+
 import { SupabaseContext } from '@/components/supabase-provider';
 
 export const useSupabase = () => {

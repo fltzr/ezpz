@@ -1,8 +1,9 @@
 import type {
+  BoardItemProps,
   BoardProps,
   ItemsPaletteProps,
-  BoardItemProps,
 } from '@cloudscape-design/board-components';
+
 import type { WidgetDataType } from './widget-types';
 
 export const boardItemI18nStrings: BoardItemProps.I18nStrings = {
