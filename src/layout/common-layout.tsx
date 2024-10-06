@@ -84,10 +84,27 @@ const CommonLayout = () => {
                 activeHref={activeHref}
                 items={[
                   {
-                    type: 'link',
+                    type: 'section',
                     text: t('layout.navItems.budgets'),
-                    href: '/budget',
+                    items: [
+                      {
+                        type: 'link',
+                        text: 'Dashboard',
+                        href: '/budget',
+                      },
+                      {
+                        type: 'link',
+                        text: 'Budget',
+                        href: '/#',
+                      },
+                      {
+                        type: 'link',
+                        text: 'Accounts',
+                        href: '/#',
+                      },
+                    ],
                   },
+                  { type: 'divider' },
                   {
                     type: 'link',
                     text: t('layout.navItems.loanCalculator'),
