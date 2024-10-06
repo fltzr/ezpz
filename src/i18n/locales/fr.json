@@ -5,7 +5,8 @@
   },
   "error": {
     "routeErrorTitle": "Oups !",
-    "routeErrorMessage": "Nous sommes désolés. Une errur inattendue est survenue."
+    "routeErrorMessage": "Nous sommes désolés. Une errur inattendue est survenue.",
+    "navigateBack": "Retourner"
   },
   "layout": {
     "header": {

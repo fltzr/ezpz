@@ -1,46 +1,47 @@
 import { useTranslation } from 'react-i18next';
-import { isRouteErrorResponse, useRouteError } from 'react-router-dom';
+import { isRouteErrorResponse, useNavigate, useRouteError } from 'react-router-dom';
 
-import { Box, Container, Header } from '@cloudscape-design/components';
+import { Box, Button, Container, Header } from '@cloudscape-design/components';
 
 import styles from './styles.module.scss';
 
 export const ErrorPage = () => {
   const { t } = useTranslation();
   const error = useRouteError();
+  const navigate = useNavigate();
 
-  if (isRouteErrorResponse(error)) {
-    return (
-      <Container
-        header={
-          <Header info={error.status} variant='h1'>
-            {t('routeErrorTitle')}
-          </Header>
-        }>
-        <Box variant='p'>
-          {t('error.routeErrorMessage')}
-          <Box variant='pre'>
-            {error.statusText} | {error.data}
-          </Box>
-        </Box>
-      </Container>
-    );
-  }
+  const isRouteError = isRouteErrorResponse(error);
+  const errorTitle = t('error.routeErrorTitle');
+  const errorInfo = isRouteError
+    ? error.status
+    : error instanceof Error
+      ? error.name
+      : String(error);
+  const errorMessage = isRouteError
+    ? `${error.statusText} | ${error.data}`
+    : error instanceof Error
+      ? error.message
+      : String(error);
 
   return (
     <div className={styles['error-page']}>
       <Container
         header={
-          <Header info={error instanceof Error ? error.name : String(error)} variant='h1'>
-            {t('error.routeErrorTitle')}
+          <Header variant='h1' info={errorInfo}>
+            {errorTitle}
           </Header>
+        }
+        footer={
+          isRouteError && (
+            <Box float='right'>
+              <Button variant='primary' iconName='undo' onClick={() => navigate(-1)}>
+                {t('error.navigateBack')}
+              </Button>
+            </Box>
+          )
         }>
-        <Box variant='p'>
-          {t('error.routeErrorMessage')}
-          <Box variant='pre'>
-            {error instanceof Error ? error.message : String(error)}
-          </Box>
-        </Box>
+        <Box variant='p'>{t('error.routeErrorMessage')}</Box>
+        <Box variant='pre'>{errorMessage}</Box>
       </Container>
     </div>
   );

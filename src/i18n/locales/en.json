@@ -19,7 +19,8 @@
   },
   "error": {
     "routeErrorTitle": "Oops!",
-    "routeErrorMessage": "We're sorry, an unexpected error occured."
+    "routeErrorMessage": "We're sorry, an unexpected error occured.",
+    "navigateBack": "Go back"
   },
   "auth": {
     "welcome": "Welcome to ezpz!",
