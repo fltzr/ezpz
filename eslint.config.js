@@ -6,6 +6,8 @@ import pluginReact from 'eslint-plugin-react';
 import pluginReactCompiler from 'eslint-plugin-react-compiler';
 import pluginReactHooks from 'eslint-plugin-react-hooks';
 import pluginReactRefresh from 'eslint-plugin-react-refresh';
+import pluginImport from 'eslint-plugin-import';
+import pluginImportSort from 'eslint-plugin-simple-import-sort';
 
 export default tseslint.config(
   eslint.configs.recommended,
@@ -28,6 +30,8 @@ export default tseslint.config(
       'react-compiler': pluginReactCompiler,
       'react-hooks': fixupPluginRules(pluginReactHooks),
       'react-refresh': fixupPluginRules(pluginReactRefresh),
+      import: pluginImport,
+      'simple-import-sort': pluginImportSort,
     },
     rules: {
       ...pluginReact.configs.recommended.rules,
@@ -37,6 +41,24 @@ export default tseslint.config(
       'react-hooks/exhaustive-deps': 'error',
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       '@typescript-eslint/no-unsafe-call': 'off',
+
+      'simple-import-sort/imports': [
+        'warn',
+        {
+          groups: [
+            ['^\\u0000'],
+            ['^node:'],
+            ['^react'],
+            ['^'],
+            ['^@?\\w'],
+            ['^@/'],
+            ['^\\.\\.'],
+            ['^\\.'],
+            ['^.+\\.s?css$', '^.+\\.svg$'],
+          ],
+        },
+      ],
+      'simple-import-sort/exports': 'warn',
     },
     settings: {
       react: {

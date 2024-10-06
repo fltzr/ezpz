@@ -25,6 +25,7 @@
     "noFallthroughCasesInSwitch": true,
 
     "paths": {
+      "@/i18n": ["./src/i18n/index.ts"],
       "@/pages/*": ["./src/pages/*"],
       "@/components/*": ["./src/components/*"],
       "@/hooks/*": ["./src/hooks/*"],
