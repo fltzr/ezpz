@@ -17,7 +17,12 @@
       }
     },
     "navItems": {
-      "budgets": "Budgets",
+      "budget": {
+        "title": "Budget",
+        "linkDashboard": "Tableau de bord",
+        "linkTransactions": "Transactions",
+        "linkAccounts": "Comptes"
+      },
       "loanCalculator": "Calculatrice de prêt",
       "transactions": "Transactions"
     }

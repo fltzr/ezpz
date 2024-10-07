@@ -16,22 +16,22 @@ export const Navigation = () => {
       items={[
         {
           type: 'section',
-          text: t('layout.navItems.budgets'),
+          text: t('layout.navItems.budget.title'),
           items: [
             {
               type: 'link',
-              text: 'Dashboard',
+              text: t('layout.navItems.budget.linkDashboard'),
               href: '/budget',
             },
             {
               type: 'link',
-              text: 'Transactions',
-              href: '/budget/transactions',
+              text: t('layout.navItems.budget.linkTransactions'),
+              href: '/budget?',
             },
             {
               type: 'link',
-              text: 'Accounts',
-              href: '/#',
+              text: t('layout.navItems.budget.linkAccounts'),
+              href: '/budget?',
             },
           ],
         },

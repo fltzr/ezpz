@@ -12,7 +12,12 @@
       }
     },
     "navItems": {
-      "budgets": "Budgets",
+      "budget": {
+        "title": "Budget",
+        "linkDashboard": "Dashboard",
+        "linkTransactions": "Transactions",
+        "linkAccounts": "Accounts"
+      },
       "loanCalculator": "Loan calculator",
       "transactions": "Transactions"
     }
