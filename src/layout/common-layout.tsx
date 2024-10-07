@@ -1,24 +1,25 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 
 import {
   AppLayout,
   Box,
-  BreadcrumbGroup,
   ContentLayout,
   Header,
-  SideNavigation,
   SpaceBetween,
 } from '@cloudscape-design/components';
 import { nanoid } from 'nanoid';
 
 import { useDrawer } from '@/components/drawer-provider';
 import { LocaleProvider } from '@/components/locale-provider';
-import { Notifications } from '@/components/notifications';
 import { useAuth } from '@/pages/auth/hooks/use-auth';
+import { useLayoutState } from '@/state/layout';
 import { useNotificationStore } from '@/state/notifications';
 
+import { Breadcrumbs } from './components/breadcrumbs';
+import { Navigation } from './components/navigation';
+import { Notifications } from './components/notifications';
 import { GlobalHeader } from './global-header';
 
 type LocationState = {
@@ -27,15 +28,13 @@ type LocationState = {
 
 const CommonLayout = () => {
   const { t } = useTranslation();
+  const { contentType } = useLayoutState();
   const { activeDrawerId, drawerContent, closeDrawer, panelWidth } = useDrawer();
 
   const { addNotification } = useNotificationStore();
   const { user } = useAuth();
-  const navigate = useNavigate();
   const location = useLocation();
   const isAuthRoute = location.pathname.includes('/auth');
-  const activeHref = location.pathname;
-  const breadcrumbs = [''];
 
   const [navigationOpen, setNavigationOpen] = useState(false);
 
@@ -74,54 +73,11 @@ const CommonLayout = () => {
           <AppLayout
             stickyNotifications
             toolsHide
+            contentType={contentType}
             headerSelector='#h'
             notifications={<Notifications />}
-            breadcrumbs={
-              isAuthRoute && breadcrumbs ? <BreadcrumbGroup items={[]} /> : undefined
-            }
-            navigation={
-              <SideNavigation
-                activeHref={activeHref}
-                items={[
-                  {
-                    type: 'section',
-                    text: t('layout.navItems.budgets'),
-                    items: [
-                      {
-                        type: 'link',
-                        text: 'Dashboard',
-                        href: '/budget',
-                      },
-                      {
-                        type: 'link',
-                        text: 'Budget',
-                        href: '/#',
-                      },
-                      {
-                        type: 'link',
-                        text: 'Accounts',
-                        href: '/#',
-                      },
-                    ],
-                  },
-                  { type: 'divider' },
-                  {
-                    type: 'link',
-                    text: t('layout.navItems.loanCalculator'),
-                    href: '/loan-calculator',
-                  },
-                  {
-                    type: 'link',
-                    text: t('layout.navItems.transactions'),
-                    href: '/transactions',
-                  },
-                ]}
-                onFollow={(event) => {
-                  event.preventDefault();
-                  navigate(event.detail.href);
-                }}
-              />
-            }
+            breadcrumbs={!isAuthRoute ? <Breadcrumbs /> : undefined}
+            navigation={<Navigation />}
             navigationOpen={navigationOpen}
             navigationHide={!user || isAuthRoute}
             navigationWidth={200}
