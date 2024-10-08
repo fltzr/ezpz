@@ -6,6 +6,7 @@ import {
   Box,
   Button,
   Checkbox,
+  DatePicker,
   Drawer,
   Form,
   FormField,
@@ -37,6 +38,7 @@ type EditBudgetItemProps = {
 
 const budgetItemSchema = z.object({
   budget_item_name: z.string().min(1, 'Item name is required.'),
+  transaction_date: z.string().date('A valid transaction date is required.'),
   projected_amount: z
     .number()
     .nonnegative('Projected value must be a non-negative number.'),
@@ -121,7 +123,7 @@ export const EditBudgetItem = ({
             control={control}
             render={({ field }) => (
               <FormField
-                label={t('itemName')}
+                label={t('editBudgetItem.fields.itemName')}
                 errorText={errors.budget_item_name?.message}>
                 <Input
                   {...field}
@@ -134,12 +136,27 @@ export const EditBudgetItem = ({
             )}
           />
           <Controller
+            name='transaction_date'
+            control={control}
+            render={({ field }) => (
+              <FormField
+                label={t('common.fields.transactionDate')}
+                errorText={errors.budget_item_name?.message}>
+                <DatePicker
+                  {...field}
+                  placeholder='YYYY/MM/DD'
+                  onChange={({ detail }) => field.onChange(detail.value)}
+                />
+              </FormField>
+            )}
+          />
+          <Controller
             name='projected_amount'
             control={control}
             render={({ field }) => (
               <FormField
-                label={t('editBudgetItem.projectedAmount')}
-                description={t('editBudgetItem.projectedAmountDescription', {
+                label={t('editBudgetItem.fields.projectedAmount')}
+                description={t('editBudgetItem.fields.projectedAmountDescription', {
                   currency: getUserLocale().includes('fr') ? '€' : '$',
                 })}
                 errorText={errors.projected_amount?.message}>

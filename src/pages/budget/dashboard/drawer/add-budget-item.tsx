@@ -6,6 +6,7 @@ import {
   Box,
   Button,
   Checkbox,
+  DatePicker,
   Drawer,
   Form,
   FormField,
@@ -36,6 +37,7 @@ type AddBudgetItemProps = {
 
 const budgetItemSchema = z.object({
   budget_item_name: z.string().min(1, 'Item name is required.'),
+  transaction_date: z.string().date('A valid date is required.'),
   projected_amount: z
     .number()
     .nonnegative('Projected value must be a non-negative number.'),
@@ -113,6 +115,21 @@ export const AddBudgetItem = ({
                   disableBrowserAutocorrect
                   autoComplete={false}
                   placeholder={t('addBudgetItem.fields.itemNameExample')}
+                  onChange={({ detail }) => field.onChange(detail.value)}
+                />
+              </FormField>
+            )}
+          />
+          <Controller
+            name='transaction_date'
+            control={control}
+            render={({ field }) => (
+              <FormField
+                label={t('common.fields.transactionDate')}
+                errorText={errors.budget_item_name?.message}>
+                <DatePicker
+                  {...field}
+                  placeholder='YYYY/MM/DD'
                   onChange={({ detail }) => field.onChange(detail.value)}
                 />
               </FormField>

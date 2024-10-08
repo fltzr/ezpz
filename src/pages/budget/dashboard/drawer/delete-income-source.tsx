@@ -33,7 +33,7 @@ const addIncomeSourceSchema = z.object({
 type AddIncomeSourceSchema = z.infer<typeof addIncomeSourceSchema>;
 
 export const AddIncomeSource = ({ selectedUserId, onAdd, onClose }: AddIncomeSource) => {
-  const { t } = useTranslation(undefined, { keyPrefix: 'pages.budget.modals' });
+  const { t } = useTranslation(undefined, { keyPrefix: 'budget.modals' });
   const {
     control,
     handleSubmit,

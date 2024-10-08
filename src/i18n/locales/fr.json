@@ -195,6 +195,7 @@
       "columns": {
         "category": "Catégorie",
         "projectedAmount": "Montant projeté",
+        "transactionDate": "Date de la transaction",
         "actions": {
           "columnName": "Actions",
           "editCategory": "Modifier une catégorie",
@@ -213,6 +214,7 @@
         "addButton": "Ajouter",
         "updateButton": "Mettre à jour",
         "fields": {
+          "transactionDate": "Date de la transaction",
           "isRecurring": "Est-il récurrent ?",
           "isRecurringDescription": "Le fait de marquer cet élément comme récurrent sera automatiquement visible dans les périodes budgétaires futures. Veuillez noter qu'à l'heure actuelle, la suppression d'un élément récurrent pour un mois se propage à tous les mois (je suis désolée bébé, J'y travaille hihi)."
         }
@@ -278,7 +280,8 @@
       "deleteIncomeSource": {
         "title": "Supprimer la source de revenus{{s}} ?",
         "deleteContentp1": "Supprimer définitivment ",
-        "deleteContentp2": "Vous ne pouvez pas annuler cette action.",
+        "deleteContentp2": "{{count}} articles ?",
+        "deleteContentp3": "Vous ne pouvez pas annuler cette action.",
         "deleteContentAlert": "En procédent à la suppression de cette catégorie, tous les postes budgétaires associés seront supprimés."
       },
       "deleteBudgetItem": {

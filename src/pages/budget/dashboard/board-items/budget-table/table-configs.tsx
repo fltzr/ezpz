@@ -45,7 +45,7 @@ export const createBudgetTableColumnDefinitions = (
   const columns: TableProps.ColumnDefinition<BudgetTableItem>[] = [
     {
       id: 'category',
-      header: '',
+      header: 'Category',
       cell: (item) => (isCategoryItem(item) ? item.category_name : item.budget_item_name),
       width: 400,
     },
@@ -56,6 +56,11 @@ export const createBudgetTableColumnDefinitions = (
         isCategoryItem(item)
           ? formatCurrency(item.total || 0)
           : formatCurrency(item.projected_amount),
+    },
+    {
+      id: 'transaction_date',
+      header: t('columns.transactionDate'),
+      cell: (item) => (isBudgetItem(item) ? item.transaction_date : ''),
     },
     {
       id: 'actions',
