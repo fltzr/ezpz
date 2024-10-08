@@ -6,14 +6,15 @@ import { StatusIndicator, Table } from '@cloudscape-design/components';
 
 import { useDrawer } from '@/components/drawer-provider';
 
+import { useBudgetApi } from '../../../hooks/use-budget-api';
+import { useBudgetProvider } from '../../../hooks/use-budget-provider';
+import { type BudgetTableItem, isCategoryItem } from '../../../utils/api-types';
 import { AddBudgetItem } from '../../drawer/add-budget-item';
 import { EditBudgetItem } from '../../drawer/edit-budget-item';
 import { EditCategory } from '../../drawer/edit-category';
-import { useBudgetApi } from '../../hooks/use-budget-api';
-import { useBudgetProvider } from '../../hooks/use-budget-provider';
 import { DeleteItemModal } from '../../modals/delete-item';
-import { type BudgetTableItem, isCategoryItem } from '../../utils/api-types';
-import { createBudgetTableColumnDefinitions } from '../../utils/table-configs';
+
+import { createBudgetTableColumnDefinitions } from './table-configs';
 
 export const BudgetTable = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.budgetTable' });

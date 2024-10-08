@@ -4,7 +4,7 @@ import { Box, Button, SpaceBetween } from '@cloudscape-design/components';
 import getUserLocale from 'get-user-locale';
 import { DateTime } from 'luxon';
 
-type ManualRefreshProps = {
+export type ManualRefreshProps = {
   lastRefresh?: string | null;
   loading?: boolean;
   onRefresh: () => void;

@@ -17,7 +17,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import getUserLocale from 'get-user-locale';
 import { z } from 'zod';
 
-import type { IncomeSourceInsert } from '../utils/api-types';
+import type { IncomeSourceInsert } from '../../utils/api-types';
 
 type AddIncomeSource = {
   selectedUserId: string;

@@ -15,12 +15,12 @@ import i18n from '@/i18n';
 import { useNotificationStore } from '@/state/notifications';
 import { formatCurrency } from '@/utils/format-currency';
 
+import { useBudgetProvider } from '../../hooks/use-budget-provider';
+import { useIncomeApi } from '../../hooks/use-income-api';
+import { IncomeSource } from '../../utils/api-types';
+import { WidgetConfig } from '../../utils/widget-types';
 import { AddIncomeSource } from '../drawer/add-income-source';
-import { useBudgetProvider } from '../hooks/use-budget-provider';
-import { useIncomeApi } from '../hooks/use-income-api';
 import { DeleteIncomeSourceModal } from '../modals/delete-income-source';
-import { IncomeSource } from '../utils/api-types';
-import { WidgetConfig } from '../utils/widget-types';
 
 const IncomeSources = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.incomeSources' });

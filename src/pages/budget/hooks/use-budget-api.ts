@@ -15,7 +15,7 @@ import {
   isBudgetItem,
   isCategoryItem,
 } from '../utils/api-types';
-import { calculateCategoryTotals } from '../utils/table-configs';
+import { calculateCategoryTotals } from '../dashboard/board-items/budget-table/table-configs';
 
 export const useBudgetApi = (userId: string, budgetEntry: string) => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.api.budget' });

@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { useSupabase } from '@/hooks/use-supabase';
 
-import { useBudgetProvider } from '../hooks/use-budget-provider';
+import { useBudgetProvider } from '../../hooks/use-budget-provider';
 
 const fetchUsers = async (supabase: ReturnType<typeof useSupabase>) => {
   const { data, error } = await supabase.from('users').select('*');

@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Alert, Box, Button, Modal, SpaceBetween } from '@cloudscape-design/components';
 
-import { type BudgetTableItem, getItemName, isCategoryItem } from '../utils/api-types';
+import { type BudgetTableItem, getItemName, isCategoryItem } from '../../utils/api-types';
 
 type DeleteItemModalProps = {
   visible: boolean;
@@ -18,6 +18,10 @@ export const DeleteItemModal = ({
   item,
 }: DeleteItemModalProps) => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.modals' });
+
+  if (!item) {
+    return;
+  }
 
   return (
     <Modal

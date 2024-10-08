@@ -26,7 +26,7 @@ export const Navigation = () => {
             {
               type: 'link',
               text: t('layout.navItems.budget.linkTransactions'),
-              href: '/budget?',
+              href: '/budget/transactions',
             },
             {
               type: 'link',

@@ -19,19 +19,18 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import getUserLocale from 'get-user-locale';
 import { z } from 'zod';
 
-import { useBudgetApi } from '../hooks/use-budget-api';
+import { useBudgetApi } from '../../hooks/use-budget-api';
 import {
-  BudgetItem,
-  BudgetItemUpdate,
-  Category,
+  type BudgetItemInsert,
+  type Category,
   isCategoryItem,
-} from '../utils/api-types';
+} from '../../utils/api-types';
 
-type EditBudgetItemProps = {
-  selectedUserId: string;
+type AddBudgetItemProps = {
   budgetEntry: string;
-  item: BudgetItem;
-  onEdit: (budgetItem: BudgetItemUpdate) => void;
+  selectedUserId: string;
+  categoryId?: string;
+  onAdd: (budgetItem: BudgetItemInsert) => void;
   onClose: () => void;
 };
 
@@ -40,26 +39,22 @@ const budgetItemSchema = z.object({
   projected_amount: z
     .number()
     .nonnegative('Projected value must be a non-negative number.'),
-  category_id: z.string({
-    required_error: 'This budget item must be associated to a category.',
-  }),
-  is_recurring: z.boolean(),
+  category_id: z.string().uuid(),
+  is_recurring: z.boolean().default(false),
 });
 
 type BudgetItemSchema = z.infer<typeof budgetItemSchema>;
 
-export const EditBudgetItem = ({
-  selectedUserId,
+export const AddBudgetItem = ({
   budgetEntry,
-  item,
-  onEdit,
+  selectedUserId,
+  categoryId,
+  onAdd,
   onClose,
-}: EditBudgetItemProps) => {
+}: AddBudgetItemProps) => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.drawers' });
-
   const { data } = useBudgetApi(selectedUserId, budgetEntry);
   const categories = (data?.filter(isCategoryItem) as Category[]) ?? [];
-
   const {
     control,
     handleSubmit,
@@ -68,30 +63,20 @@ export const EditBudgetItem = ({
     setFocus,
   } = useForm<BudgetItemSchema>({
     resolver: zodResolver(budgetItemSchema),
-    defaultValues: {
-      budget_item_name: item?.budget_item_name ?? '',
-      projected_amount: item?.projected_amount ?? 0,
-      category_id: item?.category_id,
-      is_recurring: item?.is_recurring,
-    },
   });
 
-  const handleClose = () => {
+  const handleOnClose = () => {
     reset();
     onClose();
   };
 
   const handleOnSubmit = (data: BudgetItemSchema) => {
-    const updates: BudgetItemUpdate = {
-      id: item.id,
-      ...Object.fromEntries(
-        Object.entries(data).filter(
-          ([key, value]) => value !== item[key as keyof BudgetItem]
-        )
-      ),
-    };
-    onEdit(updates);
-    handleClose();
+    onAdd({
+      ...data,
+      user_id: selectedUserId,
+      category_id: categoryId ?? '',
+    });
+    handleOnClose();
   };
 
   useEffectOnce(() => {
@@ -99,12 +84,12 @@ export const EditBudgetItem = ({
   });
 
   return (
-    <Drawer header={<Header variant='h2'>{t('editBudgetItem.title')}</Header>}>
+    <Drawer header={<Header variant='h2'>{t('addBudgetItem.title')}</Header>}>
       <Form
         actions={
           <Box float='right'>
             <SpaceBetween direction='horizontal' size='xs'>
-              <Button variant='link' onClick={handleClose}>
+              <Button variant='link' onClick={handleOnClose}>
                 {t('common.cancelButton')}
               </Button>
               <Button
@@ -121,13 +106,13 @@ export const EditBudgetItem = ({
             control={control}
             render={({ field }) => (
               <FormField
-                label={t('itemName')}
+                label={t('addBudgetItem.fields.itemName')}
                 errorText={errors.budget_item_name?.message}>
                 <Input
                   {...field}
                   disableBrowserAutocorrect
                   autoComplete={false}
-                  placeholder={t('itemNameExample')}
+                  placeholder={t('addBudgetItem.fields.itemNameExample')}
                   onChange={({ detail }) => field.onChange(detail.value)}
                 />
               </FormField>
@@ -138,8 +123,8 @@ export const EditBudgetItem = ({
             control={control}
             render={({ field }) => (
               <FormField
-                label={t('editBudgetItem.projectedAmount')}
-                description={t('editBudgetItem.projectedAmountDescription', {
+                label={t('addBudgetItem.fields.projectedAmount')}
+                description={t('addBudgetItem.fields.projectedAmountDescription', {
                   currency: getUserLocale().includes('fr') ? '€' : '$',
                 })}
                 errorText={errors.projected_amount?.message}>
@@ -170,10 +155,11 @@ export const EditBudgetItem = ({
             name='category_id'
             render={({ field }) => (
               <FormField
-                label={t('editBudgetItem.fields.categoryName')}
+                label={t('addBudgetItem.fields.categoryName')}
                 errorText={errors.category_id?.message}>
                 <Select
                   {...field}
+                  placeholder={t('addBudgetItem.fields.categoryPlaceholder')}
                   options={categories.map((category) => ({
                     label: category.category_name,
                     value: category.id,
@@ -200,7 +186,7 @@ export const EditBudgetItem = ({
               <FormField
                 label={t('common.fields.isRecurring')}
                 description={t('common.fields.isRecurringDescription')}
-                errorText={errors.is_recurring?.message}>
+                errorText={errors.budget_item_name?.message}>
                 <Checkbox
                   {...field}
                   checked={field.value}

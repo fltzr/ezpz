@@ -3,13 +3,13 @@ import { useLocalStorage } from 'react-use';
 import { Board, BoardItem } from '@cloudscape-design/board-components';
 import { Header, SpaceBetween } from '@cloudscape-design/components';
 
-import { exportLayout,getBoardWidgets } from './board-items/config';
-import { EmptyBoard } from './components/empty';
+import { StoredWidgetPlacement } from '../utils/widget-types';
+
+import { exportLayout, getBoardWidgets } from './board-items/config';
 import { PageHeader } from './components/header';
 import { NewDashboardAlert } from './components/new-dashboard-alert';
 import { UserSelector } from './components/user-selector';
-import { boardI18nStrings, boardItemI18nStrings } from './utils/i18n-strings';
-import { StoredWidgetPlacement } from './utils/widget-types';
+import { boardI18nStrings, boardItemI18nStrings } from './i18n-strings';
 
 const BudgetPage = () => {
   const [layout, setLayout] =
@@ -24,7 +24,7 @@ const BudgetPage = () => {
       <PageHeader actions={<UserSelector />} />
       <Board
         i18nStrings={boardI18nStrings}
-        empty={<EmptyBoard />}
+        empty={<></>}
         items={getBoardWidgets(
           layout ?? [
             { id: 'monthlyOverviewWidget' },

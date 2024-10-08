@@ -26,6 +26,7 @@
 
     "paths": {
       "@/i18n": ["./src/i18n/index.ts"],
+      "@/supabase": ["./supabase.d.ts"],
       "@/pages/*": ["./src/pages/*"],
       "@/components/*": ["./src/components/*"],
       "@/hooks/*": ["./src/hooks/*"],

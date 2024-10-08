@@ -17,7 +17,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
-import type { CategoryInsert } from '../utils/api-types';
+import type { CategoryInsert } from '../../utils/api-types';
 
 type AddCategoryProps = {
   selectedUserId: string;
