@@ -261,6 +261,51 @@ export type Database = {
           },
         ]
       }
+      transactions: {
+        Row: {
+          category_id: string | null
+          created_at: string
+          id: string
+          memo: string | null
+          outflow: number | null
+          transaction_date: string
+          user_id: string
+        }
+        Insert: {
+          category_id?: string | null
+          created_at?: string
+          id?: string
+          memo?: string | null
+          outflow?: number | null
+          transaction_date: string
+          user_id: string
+        }
+        Update: {
+          category_id?: string | null
+          created_at?: string
+          id?: string
+          memo?: string | null
+          outflow?: number | null
+          transaction_date?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users: {
         Row: {
           id: number

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { nanoid } from 'nanoid';
 
+import { useSelectedUser } from '@/hooks/use-selected-user';
 import { useSupabase } from '@/hooks/use-supabase';
 import { useNotificationStore } from '@/state/notifications';
 
@@ -13,24 +14,32 @@ import type {
   IncomeSourceUpdate,
 } from '../utils/api-types';
 
-export const useIncomeApi = (userId: string, budgetEntry: string) => {
+import { useBudgetProvider } from './use-budget-provider';
+
+export const useIncomeApi = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.api.income' });
   const supabase = useSupabase();
   const queryClient = useQueryClient();
   const { addNotification } = useNotificationStore();
 
+  const { budgetEntry } = useBudgetProvider();
+  const { selectedUser } = useSelectedUser();
+
   const { data, refetch, isFetching, isLoading, error } = useQuery({
-    queryKey: ['income-sources', budgetEntry, userId],
-    queryFn: () => api.fetchIncomeSources(userId, budgetEntry, supabase),
-    enabled: !!userId,
+    queryKey: ['income-sources', budgetEntry, selectedUser!.userId],
+    queryFn: () => api.fetchIncomeSources(selectedUser!.userId, budgetEntry, supabase),
+    enabled: !!selectedUser!.userId,
   });
 
   const addIncomeSourceMutation = useMutation({
     mutationFn: (newIncomeSource: IncomeSourceInsert) =>
-      api.addIncomeSource(supabase, { ...newIncomeSource, user_id: userId }),
+      api.addIncomeSource(supabase, {
+        ...newIncomeSource,
+        user_id: selectedUser!.userId,
+      }),
     onSuccess: (newIncomeSource) => {
       queryClient.setQueryData<IncomeSource[]>(
-        ['income-sources', budgetEntry, userId],
+        ['income-sources', budgetEntry, selectedUser!.userId],
         (old) => (old ? [...old, newIncomeSource] : [newIncomeSource])
       );
 
@@ -60,7 +69,9 @@ export const useIncomeApi = (userId: string, budgetEntry: string) => {
     },
     onSuccess: (_, updatedIncomeSource) => {
       queryClient
-        .refetchQueries({ queryKey: ['income-sources', budgetEntry, userId] })
+        .refetchQueries({
+          queryKey: ['income-sources', budgetEntry, selectedUser!.userId],
+        })
         .catch((error: Error) => {
           addNotification({
             type: 'error',
@@ -96,7 +107,9 @@ export const useIncomeApi = (userId: string, budgetEntry: string) => {
     },
     onSuccess: (_, deletedIncomeSources) => {
       queryClient
-        .refetchQueries({ queryKey: ['income-sources', budgetEntry, userId] })
+        .refetchQueries({
+          queryKey: ['income-sources', budgetEntry, selectedUser!.userId],
+        })
         .catch((error: Error) => {
           addNotification({
             type: 'error',

@@ -59,9 +59,9 @@ const getBudgetStatus = (t: TFunction, amountSpent: number, budgetAmount?: numbe
 const MonthlyOverview = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.monthlyOverview' });
   const locale = getUserLocale();
-  const { selectedUser, budgetEntry, setBudgetEntry } = useBudgetProvider();
-  const { data: incomeSources } = useIncomeApi(selectedUser.userId, budgetEntry);
-  const { data: budgetItems } = useBudgetApi(selectedUser.userId, budgetEntry);
+  const { budgetEntry, setBudgetEntry } = useBudgetProvider();
+  const { data: incomeSources } = useIncomeApi();
+  const { data: budgetItems } = useBudgetApi();
 
   const amountToBudget = incomeSources?.reduce(
     (acc, curr) => (acc = acc + curr.projected_amount),

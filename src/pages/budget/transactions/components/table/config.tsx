@@ -1,27 +1,35 @@
-import { DatePicker, Input, Select, TableProps } from '@cloudscape-design/components';
+import {
+  DatePicker,
+  Input,
+  Select,
+  SelectProps,
+  TableProps,
+} from '@cloudscape-design/components';
 
 import i18n from '@/i18n';
 import { formatCurrency } from '@/utils/format-currency';
 
-export type Transaction = {
-  id: string;
-  date: string;
-  category: string;
-  memo: string;
-  outflow?: number;
-  inflow?: number;
-};
+import { Transaction } from '../../types/api';
 
-export const getColumnDefintions = (): TableProps<Transaction>['columnDefinitions'] => {
+export const getColumnDefintions = (
+  categories?: { id: string; category_name: string }[]
+): TableProps<Transaction>['columnDefinitions'] => {
+  const convertedCategories: SelectProps['options'] =
+    categories?.map((c) => ({
+      label: c.category_name,
+      value: c.id,
+    })) ?? [];
+
   const resolvedCurrencySymbol = i18n.resolvedLanguage === 'fr' ? '€' : '$';
 
   return [
     {
       id: 'date',
       header: 'Date',
-      cell: (item) => item.date,
+      cell: (item) => item.transaction_date,
       width: 216,
       editConfig: {
+        constraintText: 'The date follows `YYYY/MM/DD` format.',
         editingCell: (
           item,
           ctx: {
@@ -31,7 +39,7 @@ export const getColumnDefintions = (): TableProps<Transaction>['columnDefinition
         ) => (
           <DatePicker
             expandToViewport
-            value={ctx.currentValue ?? item.date}
+            value={ctx.currentValue ?? item.transaction_date}
             onChange={(event) => {
               ctx.setValue(event.detail.value);
             }}
@@ -42,15 +50,34 @@ export const getColumnDefintions = (): TableProps<Transaction>['columnDefinition
     {
       id: 'category',
       header: 'Category',
-      cell: (item) => item.category,
+      cell: (item) => item.category?.category_name,
       editConfig: {
         editingCell: (
           item,
           ctx: {
             currentValue: string | undefined;
-            setValue: (value: string | undefined) => void;
+            setValue: (value: string) => void;
           }
-        ) => <Select selectedOption={null} />,
+        ) => (
+          <Select
+            expandToViewport
+            virtualScroll
+            inlineLabelText='Select a category'
+            options={convertedCategories}
+            selectedOption={
+              ctx.currentValue
+                ? {
+                    value: ctx.currentValue,
+                    label: categories?.find((c) => c.id === ctx.currentValue)
+                      ?.category_name,
+                  }
+                : { value: item.category?.id, label: item.category?.category_name }
+            }
+            onChange={(event) => {
+              ctx.setValue(event.detail.selectedOption.value!);
+            }}
+          />
+        ),
       },
     },
     {
@@ -67,7 +94,7 @@ export const getColumnDefintions = (): TableProps<Transaction>['columnDefinition
           }
         ) => (
           <Input
-            value={ctx.currentValue ?? item.memo}
+            value={ctx.currentValue ?? item.memo ?? ''}
             onChange={(event) => {
               ctx.setValue(event.detail.value);
             }}
@@ -96,32 +123,6 @@ export const getColumnDefintions = (): TableProps<Transaction>['columnDefinition
             placeholder={`${resolvedCurrencySymbol} ${item?.outflow ?? ''}`}
             value={ctx.currentValue ?? String(item.outflow || 0)}
             onChange={({ detail }) => ctx.setValue(detail.value)}
-          />
-        ),
-      },
-    },
-    {
-      id: 'inflow',
-      header: 'Inflow',
-      cell: (item) => formatCurrency(item.inflow),
-      width: 176,
-      editConfig: {
-        editingCell: (
-          item,
-          ctx: {
-            currentValue: string | undefined;
-            setValue: (value: string | undefined) => void;
-          }
-        ) => (
-          <Input
-            autoFocus
-            type='number'
-            autoComplete={false}
-            placeholder={`${resolvedCurrencySymbol} ${item?.inflow ?? ''}`}
-            value={ctx.currentValue ?? String(item?.inflow)}
-            onChange={({ detail }) => {
-              ctx.setValue(detail.value);
-            }}
           />
         ),
       },

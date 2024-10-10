@@ -6,6 +6,7 @@ import { DateTime } from 'luxon';
 
 import { useDrawer } from '@/components/drawer-provider';
 import { ManualRefresh } from '@/components/manual-refresh';
+import { useSelectedUser } from '@/hooks/use-selected-user';
 
 import { useBudgetApi } from '../../../hooks/use-budget-api';
 import { useBudgetProvider } from '../../../hooks/use-budget-provider';
@@ -16,9 +17,10 @@ export const BudgetTableActions = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.budgetTable' });
 
   const { openDrawer, closeDrawer } = useDrawer();
-  const { selectedUser, budgetEntry } = useBudgetProvider();
+  const { selectedUser } = useSelectedUser();
+  const { budgetEntry } = useBudgetProvider();
   const { isFetching, dataUpdatedAt, refetch, handleAddCategory, handleAddBudgetItem } =
-    useBudgetApi(selectedUser.userId, budgetEntry);
+    useBudgetApi();
   const [lastRefresh, setLastRefresh] = useState<string | null>(null);
 
   const onClickAddCategoryDrawer = () => {
@@ -27,7 +29,7 @@ export const BudgetTableActions = () => {
       width: 350,
       content: (
         <AddCategory
-          selectedUserId={selectedUser.userId}
+          selectedUserId={selectedUser!.userId}
           onAdd={handleAddCategory}
           onClose={closeDrawer}
         />
@@ -42,7 +44,7 @@ export const BudgetTableActions = () => {
       content: (
         <AddBudgetItem
           budgetEntry={budgetEntry}
-          selectedUserId={selectedUser.userId}
+          selectedUserId={selectedUser!.userId}
           onAdd={handleAddBudgetItem}
           onClose={closeDrawer}
         />

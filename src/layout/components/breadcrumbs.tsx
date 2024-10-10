@@ -6,12 +6,7 @@ export const Breadcrumbs = () => {
   const navigate = useNavigate();
   const matches = useMatches() as UIMatch<undefined, { crumb?: string }>[];
 
-  const crumbs = matches
-    .filter((item) => !!item.handle)
-    .map((item) => {
-      console.log(`items: ${JSON.stringify(item.handle, null, 2)}`);
-      return item;
-    });
+  const crumbs = matches.filter((item) => !!item.handle);
 
   return (
     <BreadcrumbGroup

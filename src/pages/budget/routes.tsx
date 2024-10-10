@@ -4,7 +4,8 @@ import { Outlet, type RouteObject } from 'react-router-dom';
 
 import { SuspenseLoadingBar } from '@/components/suspense-loading-bar';
 
-const BudgetProvider = lazy(() => import('./components/budget-provider'));
+import BudgetProvider from './components/budget-provider';
+
 const BudgetPage = lazy(() => import('./dashboard/page'));
 const BudgetTransactionsTablePage = lazy(() => import('./transactions/page'));
 

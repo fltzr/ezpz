@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { SideNavigation } from '@cloudscape-design/components';
 
+import { UserSelector } from '@/components/user-selector';
+
 export const Navigation = () => {
   const { t } = useTranslation();
 
@@ -13,6 +15,7 @@ export const Navigation = () => {
   return (
     <SideNavigation
       activeHref={activeHref}
+      itemsControl={<UserSelector />}
       items={[
         {
           type: 'section',

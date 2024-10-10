@@ -5,6 +5,7 @@ import { useCollection } from '@cloudscape-design/collection-hooks';
 import { StatusIndicator, Table } from '@cloudscape-design/components';
 
 import { useDrawer } from '@/components/drawer-provider';
+import { useSelectedUser } from '@/hooks/use-selected-user';
 
 import { useBudgetApi } from '../../../hooks/use-budget-api';
 import { useBudgetProvider } from '../../../hooks/use-budget-provider';
@@ -19,7 +20,8 @@ import { createBudgetTableColumnDefinitions } from './table-configs';
 export const BudgetTable = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.budgetTable' });
   const { openDrawer, closeDrawer } = useDrawer();
-  const { selectedUser, budgetEntry } = useBudgetProvider();
+  const { selectedUser } = useSelectedUser();
+  const { budgetEntry } = useBudgetProvider();
 
   const {
     data: budgetItems,
@@ -28,7 +30,7 @@ export const BudgetTable = () => {
     handleAddBudgetItem,
     handleUpdateBudgetItem,
     handleDeleteItem,
-  } = useBudgetApi(selectedUser.userId, budgetEntry);
+  } = useBudgetApi();
 
   const { items, collectionProps } = useCollection(budgetItems ?? [], {
     selection: {},
@@ -73,7 +75,7 @@ export const BudgetTable = () => {
               width: 300,
               content: (
                 <EditCategory
-                  selectedUserId={selectedUser.userId}
+                  selectedUserId={selectedUser!.userId}
                   category={item}
                   onEdit={handleUpdateBudgetItem}
                   onClose={closeDrawer}
@@ -88,7 +90,7 @@ export const BudgetTable = () => {
               content: (
                 <AddBudgetItem
                   budgetEntry={budgetEntry}
-                  selectedUserId={selectedUser.userId}
+                  selectedUserId={selectedUser!.userId}
                   categoryId={item.id}
                   onAdd={handleAddBudgetItem}
                   onClose={closeDrawer}
@@ -104,7 +106,7 @@ export const BudgetTable = () => {
                 <EditBudgetItem
                   item={item}
                   budgetEntry={budgetEntry}
-                  selectedUserId={selectedUser.userId}
+                  selectedUserId={selectedUser!.userId}
                   onEdit={handleUpdateBudgetItem}
                   onClose={closeDrawer}
                 />

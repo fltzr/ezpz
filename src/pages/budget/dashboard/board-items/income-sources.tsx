@@ -11,11 +11,11 @@ import {
 } from '@cloudscape-design/components';
 
 import { useDrawer } from '@/components/drawer-provider';
+import { useSelectedUser } from '@/hooks/use-selected-user';
 import i18n from '@/i18n';
 import { useNotificationStore } from '@/state/notifications';
 import { formatCurrency } from '@/utils/format-currency';
 
-import { useBudgetProvider } from '../../hooks/use-budget-provider';
 import { useIncomeApi } from '../../hooks/use-income-api';
 import { IncomeSource } from '../../utils/api-types';
 import { WidgetConfig } from '../../utils/widget-types';
@@ -24,7 +24,7 @@ import { DeleteIncomeSourceModal } from '../modals/delete-income-source';
 
 const IncomeSources = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.incomeSources' });
-  const { selectedUser, budgetEntry } = useBudgetProvider();
+  const { selectedUser } = useSelectedUser();
   const { openDrawer, closeDrawer } = useDrawer();
   const { addNotification } = useNotificationStore();
 
@@ -38,7 +38,7 @@ const IncomeSources = () => {
     handleAddIncomeSource,
     handleUpdateIncomeSource,
     handleDeleteIncomeSource,
-  } = useIncomeApi(selectedUser.userId, budgetEntry);
+  } = useIncomeApi();
 
   return (
     <>
@@ -82,7 +82,7 @@ const IncomeSources = () => {
                     width: 350,
                     content: (
                       <AddIncomeSource
-                        selectedUserId={selectedUser.userId}
+                        selectedUserId={selectedUser!.userId}
                         onAdd={handleAddIncomeSource}
                         onClose={closeDrawer}
                       />

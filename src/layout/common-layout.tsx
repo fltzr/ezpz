@@ -13,6 +13,7 @@ import { nanoid } from 'nanoid';
 
 import { useDrawer } from '@/components/drawer-provider';
 import { LocaleProvider } from '@/components/locale-provider';
+import { SelectedUserProvider } from '@/components/selected-user-provider';
 import { useAuth } from '@/pages/auth/hooks/use-auth';
 import { useLayoutState } from '@/state/layout';
 import { useNotificationStore } from '@/state/notifications';
@@ -36,7 +37,7 @@ const CommonLayout = () => {
   const location = useLocation();
   const isAuthRoute = location.pathname.includes('/auth');
 
-  const [navigationOpen, setNavigationOpen] = useState(false);
+  const [navigationOpen, setNavigationOpen] = useState(true);
 
   useEffect(() => {
     const state = location.state as LocationState;
@@ -70,26 +71,28 @@ const CommonLayout = () => {
             <Outlet />
           </ContentLayout>
         ) : (
-          <AppLayout
-            stickyNotifications
-            toolsHide
-            contentType={contentType}
-            headerSelector='#h'
-            notifications={<Notifications />}
-            breadcrumbs={!isAuthRoute ? <Breadcrumbs /> : undefined}
-            navigation={<Navigation />}
-            navigationOpen={navigationOpen}
-            navigationHide={!user || isAuthRoute}
-            navigationWidth={200}
-            onNavigationChange={({ detail }) => setNavigationOpen(detail.open)}
-            content={<Outlet />}
-            drawers={drawerContent ? [drawerContent] : undefined}
-            toolsWidth={panelWidth}
-            onDrawerChange={() => {
-              closeDrawer();
-            }}
-            activeDrawerId={activeDrawerId}
-          />
+          <SelectedUserProvider>
+            <AppLayout
+              stickyNotifications
+              toolsHide
+              contentType={contentType}
+              headerSelector='#h'
+              notifications={<Notifications />}
+              breadcrumbs={!isAuthRoute ? <Breadcrumbs /> : undefined}
+              navigation={<Navigation />}
+              navigationOpen={navigationOpen}
+              navigationHide={!user || isAuthRoute}
+              navigationWidth={200}
+              onNavigationChange={({ detail }) => setNavigationOpen(detail.open)}
+              content={<Outlet />}
+              drawers={drawerContent ? [drawerContent] : undefined}
+              toolsWidth={panelWidth}
+              onDrawerChange={() => {
+                closeDrawer();
+              }}
+              activeDrawerId={activeDrawerId}
+            />
+          </SelectedUserProvider>
         )}
       </div>
     </LocaleProvider>

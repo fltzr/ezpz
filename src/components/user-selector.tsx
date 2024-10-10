@@ -3,9 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Select, type SelectProps } from '@cloudscape-design/components';
 import { useQuery } from '@tanstack/react-query';
 
+import { useSelectedUser } from '@/hooks/use-selected-user';
 import { useSupabase } from '@/hooks/use-supabase';
-
-import { useBudgetProvider } from '../../hooks/use-budget-provider';
 
 const fetchUsers = async (supabase: ReturnType<typeof useSupabase>) => {
   const { data, error } = await supabase.from('users').select('*');
@@ -27,7 +26,7 @@ export const UserSelector = () => {
     queryFn: () => fetchUsers(supabase),
   });
 
-  const { selectedUser, setSelectedUser } = useBudgetProvider();
+  const { selectedUser, setSelectedUser } = useSelectedUser();
 
   const options: SelectProps['options'] = users?.map((u) => ({
     label: u.name,
@@ -44,12 +43,13 @@ export const UserSelector = () => {
   return (
     <Select
       expandToViewport
+      inlineLabelText='Select a user'
       options={options ?? undefined}
       selectedOption={
         selectedUser
           ? {
-              label: selectedUser.name,
-              value: selectedUser.userId,
+              label: selectedUser.name ?? '',
+              value: selectedUser.userId ?? '',
             }
           : null
       }
