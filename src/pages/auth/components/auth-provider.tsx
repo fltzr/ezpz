@@ -14,9 +14,10 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const supabase = useSupabase();
+  const { addNotification } = useNotificationStore();
+
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const { addNotification } = useNotificationStore();
 
   useEffect(() => {
     const checkUser = async () => {

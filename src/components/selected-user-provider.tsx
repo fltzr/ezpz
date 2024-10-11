@@ -9,8 +9,6 @@ import {
 
 import { useAuth } from '@/pages/auth/hooks/use-auth';
 
-import { SuspenseLoadingBar } from './suspense-loading-bar';
-
 type SelectedUser = { userId: string; name: string } | null;
 
 type SelectedUserContextProps = {
@@ -35,10 +33,6 @@ export const SelectedUserProvider = ({ children }: PropsWithChildren) => {
       });
     }
   }, [user]);
-
-  if (!user) {
-    return <SuspenseLoadingBar />;
-  }
 
   return (
     <SelectedUserContext.Provider value={{ selectedUser, setSelectedUser }}>

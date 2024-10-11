@@ -42,8 +42,6 @@ export const UserSelector = () => {
 
   return (
     <Select
-      expandToViewport
-      inlineLabelText='Select a user'
       options={options ?? undefined}
       selectedOption={
         selectedUser
@@ -53,6 +51,7 @@ export const UserSelector = () => {
             }
           : null
       }
+      inlineLabelText=''
       statusType={isLoading ? 'loading' : error ? 'error' : 'finished'}
       loadingText={t('common.fetchingUsers')}
       onChange={handleUserChange}

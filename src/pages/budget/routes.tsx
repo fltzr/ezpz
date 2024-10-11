@@ -2,8 +2,6 @@
 import { lazy } from 'react';
 import { Outlet, type RouteObject } from 'react-router-dom';
 
-import { SuspenseLoadingBar } from '@/components/suspense-loading-bar';
-
 import BudgetProvider from './components/budget-provider';
 
 const BudgetPage = lazy(() => import('./dashboard/page'));
@@ -15,11 +13,9 @@ export const budgetRoutes: RouteObject[] = [
     handle: { crumb: 'Budget' },
 
     element: (
-      <SuspenseLoadingBar>
-        <BudgetProvider>
-          <Outlet />
-        </BudgetProvider>
-      </SuspenseLoadingBar>
+      <BudgetProvider>
+        <Outlet />
+      </BudgetProvider>
     ),
     children: [
       {

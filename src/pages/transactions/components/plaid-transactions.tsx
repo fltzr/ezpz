@@ -68,7 +68,7 @@ export const PlaidTransactions = () => {
       items={items ?? []}
       loading={isFetching}
       loadingText='Fetching transactions'
-      totalItemsCount={transactions?.added.length ?? 0}
+      totalItemsCount={transactions?.added?.length ?? 0}
       header={
         <Header
           variant='h2'

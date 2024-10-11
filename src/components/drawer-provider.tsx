@@ -1,4 +1,5 @@
 import { createContext, PropsWithChildren, ReactNode, useContext, useState } from 'react';
+import { useLogger } from 'react-use';
 
 import { AppLayoutProps } from '@cloudscape-design/components';
 
@@ -19,6 +20,7 @@ type DrawerContextProps = {
 const DrawerContext = createContext<DrawerContextProps | undefined>(undefined);
 
 export const DrawerProvider = ({ children }: PropsWithChildren) => {
+  useLogger('DrawerProvider');
   const [activeDrawerId, setActiveDrawerId] = useState<string | null>(null);
   const [drawerContent, setDrawerContent] = useState<AppLayoutProps.Drawer | undefined>(
     undefined

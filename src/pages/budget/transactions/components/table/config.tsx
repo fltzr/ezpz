@@ -27,7 +27,7 @@ export const getColumnDefintions = (
       id: 'date',
       header: 'Date',
       cell: (item) => item.transaction_date,
-      width: 216,
+      width: 200,
       editConfig: {
         constraintText: 'The date follows `YYYY/MM/DD` format.',
         editingCell: (

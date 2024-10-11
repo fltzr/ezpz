@@ -21,8 +21,6 @@ export const TransactionsTable = () => {
     isFetching: isFetchingCategories,
   } = useCategoriesApi();
 
-  console.log(`TT Categories: ${JSON.stringify(categories, null, 2)}`);
-
   return (
     <Table
       stripedRows

@@ -48,14 +48,13 @@ const budgetItemSchema = z.object({
 type BudgetItemSchema = z.infer<typeof budgetItemSchema>;
 
 export const AddBudgetItem = ({
-  budgetEntry,
   selectedUserId,
   categoryId,
   onAdd,
   onClose,
 }: AddBudgetItemProps) => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.drawers' });
-  const { data } = useBudgetApi(selectedUserId, budgetEntry);
+  const { data } = useBudgetApi();
   const categories = (data?.filter(isCategoryItem) as Category[]) ?? [];
   const {
     control,

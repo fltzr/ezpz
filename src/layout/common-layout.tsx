@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
+import { useLogger } from 'react-use';
 
 import {
   AppLayout,
@@ -14,6 +15,7 @@ import { nanoid } from 'nanoid';
 import { useDrawer } from '@/components/drawer-provider';
 import { LocaleProvider } from '@/components/locale-provider';
 import { SelectedUserProvider } from '@/components/selected-user-provider';
+import { SuspenseLoadingBar } from '@/components/suspense-loading-bar';
 import { useAuth } from '@/pages/auth/hooks/use-auth';
 import { useLayoutState } from '@/state/layout';
 import { useNotificationStore } from '@/state/notifications';
@@ -28,6 +30,7 @@ type LocationState = {
 };
 
 const CommonLayout = () => {
+  useLogger('CommonLayout');
   const { t } = useTranslation();
   const { contentType } = useLayoutState();
   const { activeDrawerId, drawerContent, closeDrawer, panelWidth } = useDrawer();
@@ -53,25 +56,25 @@ const CommonLayout = () => {
 
   return (
     <LocaleProvider>
-      <GlobalHeader />
-      <div id='c'>
-        {location.pathname.includes('auth') ? (
-          <ContentLayout
-            defaultPadding
-            headerVariant='high-contrast'
-            maxContentWidth={800}
-            notifications={<Notifications />}
-            header={
-              <Box padding={{ vertical: 'xxxl' }}>
-                <SpaceBetween direction='vertical' size='xl' alignItems='center'>
-                  <Header variant='h1'>{t('auth.welcome')}</Header>
-                </SpaceBetween>
-              </Box>
-            }>
-            <Outlet />
-          </ContentLayout>
-        ) : (
-          <SelectedUserProvider>
+      <SelectedUserProvider>
+        <GlobalHeader />
+        <div id='c'>
+          {location.pathname.includes('auth') ? (
+            <ContentLayout
+              defaultPadding
+              headerVariant='high-contrast'
+              maxContentWidth={800}
+              notifications={<Notifications />}
+              header={
+                <Box padding={{ vertical: 'xxxl' }}>
+                  <SpaceBetween direction='vertical' size='xl' alignItems='center'>
+                    <Header variant='h1'>{t('auth.welcome')}</Header>
+                  </SpaceBetween>
+                </Box>
+              }>
+              <Outlet />
+            </ContentLayout>
+          ) : (
             <AppLayout
               stickyNotifications
               toolsHide
@@ -82,9 +85,13 @@ const CommonLayout = () => {
               navigation={<Navigation />}
               navigationOpen={navigationOpen}
               navigationHide={!user || isAuthRoute}
-              navigationWidth={200}
+              navigationWidth={250}
               onNavigationChange={({ detail }) => setNavigationOpen(detail.open)}
-              content={<Outlet />}
+              content={
+                <SuspenseLoadingBar>
+                  <Outlet />
+                </SuspenseLoadingBar>
+              }
               drawers={drawerContent ? [drawerContent] : undefined}
               toolsWidth={panelWidth}
               onDrawerChange={() => {
@@ -92,9 +99,9 @@ const CommonLayout = () => {
               }}
               activeDrawerId={activeDrawerId}
             />
-          </SelectedUserProvider>
-        )}
-      </div>
+          )}
+        </div>
+      </SelectedUserProvider>
     </LocaleProvider>
   );
 };
