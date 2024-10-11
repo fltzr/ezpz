@@ -12,11 +12,11 @@ import type { TFunction } from 'i18next';
 import i18n from '@/i18n';
 import { formatCurrency } from '@/utils/format-currency';
 
-import { useBudgetApi } from '../../../hooks/use-budget-api';
-import { useBudgetProvider } from '../../../hooks/use-budget-provider';
-import { useIncomeApi } from '../../../hooks/use-income-api';
-import { isBudgetItem } from '../../../utils/api-types';
-import { WidgetConfig } from '../../../utils/widget-types';
+import { useBudgetApi } from '../../../../hooks/use-budget-api';
+import { useBudgetProvider } from '../../../../hooks/use-budget-provider';
+import { useIncomeApi } from '../../../../hooks/use-income-api';
+import { isBudgetItem } from '../../../../utils/api-types';
+import { WidgetConfig } from '../../../../utils/widget-types';
 
 import styles from './styles.module.scss';
 

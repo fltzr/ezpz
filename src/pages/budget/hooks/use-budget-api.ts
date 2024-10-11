@@ -8,7 +8,7 @@ import { useSelectedUser } from '@/hooks/use-selected-user';
 import { useNotifiedMutation } from '../../../hooks/use-notified-mutation';
 import { useSupabase } from '../../../hooks/use-supabase';
 import { useNotificationStore } from '../../../state/notifications';
-import { calculateCategoryTotals } from '../dashboard/board-items/budget-table/table-configs';
+import { calculateCategoryTotals } from '../dashboard/components/board-items/budget-table/table-configs';
 import * as api from '../data-access/budget-queries';
 import {
   BudgetItemInsert,

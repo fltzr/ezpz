@@ -4,7 +4,7 @@ import {
   StoredWidgetPlacement,
   WidgetConfig,
   WidgetDataType,
-} from '../../utils/widget-types';
+} from '../../../utils/widget-types';
 
 import { budgetTableWidget } from './budget-table';
 import { incomeSourcesWidget } from './income-sources';

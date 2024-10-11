@@ -9,7 +9,7 @@ import {
   type Category,
   isBudgetItem,
   isCategoryItem,
-} from '../../../utils/api-types';
+} from '../../../../utils/api-types';
 
 export const calculateCategoryTotals = (items: ReadonlyArray<BudgetTableItem>) => {
   const categoryTotals = new Map<string, number>();

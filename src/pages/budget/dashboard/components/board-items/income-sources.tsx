@@ -16,11 +16,11 @@ import i18n from '@/i18n';
 import { useNotificationStore } from '@/state/notifications';
 import { formatCurrency } from '@/utils/format-currency';
 
-import { useIncomeApi } from '../../hooks/use-income-api';
-import { IncomeSource } from '../../utils/api-types';
-import { WidgetConfig } from '../../utils/widget-types';
+import { useIncomeApi } from '../../../hooks/use-income-api';
+import { IncomeSource } from '../../../utils/api-types';
+import { WidgetConfig } from '../../../utils/widget-types';
+import { DeleteIncomeSourceModal } from '../../components/modals/delete-income-source';
 import { AddIncomeSource } from '../drawer/add-income-source';
-import { DeleteIncomeSourceModal } from '../modals/delete-income-source';
 
 const IncomeSources = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.incomeSources' });

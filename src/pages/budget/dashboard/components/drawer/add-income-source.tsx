@@ -5,6 +5,7 @@ import { useEffectOnce } from 'react-use';
 import {
   Box,
   Button,
+  Checkbox,
   Drawer,
   Form,
   FormField,
@@ -13,12 +14,13 @@ import {
   SpaceBetween,
 } from '@cloudscape-design/components';
 import { zodResolver } from '@hookform/resolvers/zod';
+import getUserLocale from 'get-user-locale';
 import { z } from 'zod';
 
-import type { IncomeSourceInsert } from '../../utils/api-types';
+import type { IncomeSourceInsert } from '../../../utils/api-types';
 
 type AddIncomeSource = {
-  selectedUserId: string;
+  selectedUserId?: string;
   onAdd: (IncomeSource: IncomeSourceInsert) => void;
   onClose: () => void;
 };
@@ -28,12 +30,13 @@ const addIncomeSourceSchema = z.object({
   projected_amount: z
     .number({ required_error: 'Estimated amount of income source is required.' })
     .nonnegative('Income source must be a non-negative value.'),
+  is_recurring: z.boolean().default(false),
 });
 
 type AddIncomeSourceSchema = z.infer<typeof addIncomeSourceSchema>;
 
 export const AddIncomeSource = ({ selectedUserId, onAdd, onClose }: AddIncomeSource) => {
-  const { t } = useTranslation(undefined, { keyPrefix: 'budget.modals' });
+  const { t } = useTranslation(undefined, { keyPrefix: 'budget.drawers' });
   const {
     control,
     handleSubmit,
@@ -50,6 +53,10 @@ export const AddIncomeSource = ({ selectedUserId, onAdd, onClose }: AddIncomeSou
   };
 
   const handleOnSubmit = (data: AddIncomeSourceSchema) => {
+    if (!selectedUserId) {
+      return;
+    }
+
     onAdd({ ...data, user_id: selectedUserId });
     handleOnClose();
   };
@@ -58,18 +65,18 @@ export const AddIncomeSource = ({ selectedUserId, onAdd, onClose }: AddIncomeSou
   });
 
   return (
-    <Drawer header={<Header variant='h2'>Add loan</Header>}>
+    <Drawer header={<Header variant='h2'>{t('addIncomeSource.title')}</Header>}>
       <Form
         actions={
           <Box float='right'>
             <SpaceBetween direction='horizontal' size='xs'>
               <Button variant='link' onClick={handleOnClose}>
-                {t('cancelButton')}
+                {t('common.cancelButton')}
               </Button>
               <Button
                 variant='primary'
                 onClick={() => void handleSubmit(handleOnSubmit)()}>
-                {t('addButton')}
+                {t('common.addButton')}
               </Button>
             </SpaceBetween>
           </Box>
@@ -81,13 +88,13 @@ export const AddIncomeSource = ({ selectedUserId, onAdd, onClose }: AddIncomeSou
               name='income_source_name'
               render={({ field }) => (
                 <FormField
-                  label={t('incomeSourceName')}
+                  label={t('addIncomeSource.fields.incomeSourceName')}
                   errorText={errors.income_source_name?.message}>
                   <Input
                     {...field}
                     disableBrowserAutocorrect
                     autoComplete={false}
-                    placeholder={t('incomeSourceExample')}
+                    placeholder={t('addIncomeSource.fields.incomeSourceExample')}
                     onChange={(event) => field.onChange(event.detail.value)}
                   />
                 </FormField>
@@ -98,8 +105,10 @@ export const AddIncomeSource = ({ selectedUserId, onAdd, onClose }: AddIncomeSou
               name='projected_amount'
               render={({ field }) => (
                 <FormField
-                  label={t('projectedAmount')}
-                  description={t('common.fields.isRecurringDescription')}
+                  label={t('addIncomeSource.fields.projectedAmount')}
+                  description={t('addIncomeSource.fields.projectedAmountDescription', {
+                    currency: getUserLocale().includes('fr') ? '€' : '$',
+                  })}
                   errorText={errors.projected_amount?.message}>
                   <Input
                     {...field}
@@ -109,6 +118,22 @@ export const AddIncomeSource = ({ selectedUserId, onAdd, onClose }: AddIncomeSou
                     inputMode='decimal'
                     value={String(field.value)}
                     onChange={(event) => field.onChange(Number(event.detail.value))}
+                  />
+                </FormField>
+              )}
+            />
+            <Controller
+              name='is_recurring'
+              control={control}
+              render={({ field }) => (
+                <FormField
+                  label={t('common.fields.isRecurring')}
+                  description={t('common.fields.isRecurringDescription')}
+                  errorText={errors.is_recurring?.message}>
+                  <Checkbox
+                    {...field}
+                    checked={field.value}
+                    onChange={({ detail }) => field.onChange(detail.checked)}
                   />
                 </FormField>
               )}

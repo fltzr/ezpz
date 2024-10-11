@@ -8,8 +8,8 @@ import { useDrawer } from '@/components/drawer-provider';
 import { ManualRefresh } from '@/components/manual-refresh';
 import { useSelectedUser } from '@/hooks/use-selected-user';
 
-import { useBudgetApi } from '../../../hooks/use-budget-api';
-import { useBudgetProvider } from '../../../hooks/use-budget-provider';
+import { useBudgetApi } from '../../../../hooks/use-budget-api';
+import { useBudgetProvider } from '../../../../hooks/use-budget-provider';
 import { AddBudgetItem } from '../../drawer/add-budget-item';
 import { AddCategory } from '../../drawer/add-category';
 

@@ -20,12 +20,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import getUserLocale from 'get-user-locale';
 import { z } from 'zod';
 
-import { useBudgetApi } from '../../hooks/use-budget-api';
+import { useBudgetApi } from '../../../hooks/use-budget-api';
 import {
   type BudgetItemInsert,
   type Category,
   isCategoryItem,
-} from '../../utils/api-types';
+} from '../../../utils/api-types';
 
 type AddBudgetItemProps = {
   budgetEntry: string;

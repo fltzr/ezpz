@@ -10,7 +10,7 @@ import {
   Table,
 } from '@cloudscape-design/components';
 
-import { IncomeSource } from '../../utils/api-types';
+import { IncomeSource } from '../../../utils/api-types';
 
 type DeleteIncomeSourceModalProps = {
   visible: boolean;

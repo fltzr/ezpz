@@ -5,7 +5,7 @@ import { Header, SpaceBetween } from '@cloudscape-design/components';
 
 import { StoredWidgetPlacement } from '../utils/widget-types';
 
-import { exportLayout, getBoardWidgets } from './board-items/config';
+import { exportLayout, getBoardWidgets } from './components/board-items/config';
 import { PageHeader } from './components/header';
 import { NewDashboardAlert } from './components/new-dashboard-alert';
 import { boardI18nStrings, boardItemI18nStrings } from './i18n-strings';
