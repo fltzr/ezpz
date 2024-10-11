@@ -25,7 +25,7 @@ export const getColumnDefintions = (
   return [
     {
       id: 'date',
-      header: 'Date',
+      header: i18n.t('budget-transactions.common.columns.date'),
       cell: (item) => item.transaction_date,
       width: 200,
       editConfig: {
@@ -49,7 +49,7 @@ export const getColumnDefintions = (
     },
     {
       id: 'category',
-      header: 'Category',
+      header: i18n.t('budget-transactions.common.columns.category'),
       cell: (item) => item.category?.category_name,
       editConfig: {
         editingCell: (
@@ -82,7 +82,7 @@ export const getColumnDefintions = (
     },
     {
       id: 'memo',
-      header: 'Memo',
+      header: i18n.t('budget-transactions.common.columns.memo'),
       cell: (item) => item.memo,
       width: '35%',
       editConfig: {
@@ -104,7 +104,7 @@ export const getColumnDefintions = (
     },
     {
       id: 'outflow',
-      header: 'Outflow',
+      header: i18n.t('budget-transactions.common.columns.outflow'),
       cell: (item) => formatCurrency(item.outflow),
       width: 176,
       editConfig: {

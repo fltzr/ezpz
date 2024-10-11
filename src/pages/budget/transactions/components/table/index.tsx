@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import {
   Button,
   Header,
@@ -13,6 +15,7 @@ import { Transaction } from '../../types/api';
 import { getColumnDefintions } from './config';
 
 export const TransactionsTable = () => {
+  const { t } = useTranslation(undefined, { keyPrefix: 'budget-transactions' });
   const { data, error, isFetching } = useTransactionsApi();
 
   const {
@@ -38,7 +41,7 @@ export const TransactionsTable = () => {
               </Button>
             </SpaceBetween>
           }>
-          Transactions (WORK IN PROGRESS | DO NOT USE)
+          {t('table.header')}
         </Header>
       }
       filter={<TextFilter filteringText='' />}

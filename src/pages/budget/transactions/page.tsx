@@ -1,5 +1,7 @@
 import { useEffectOnce } from 'react-use';
 
+import { Box } from '@cloudscape-design/components';
+
 import { useLayoutState } from '@/state/layout';
 
 import { TransactionsTable } from './components/table';
@@ -15,7 +17,11 @@ const TransactionsTablePage = () => {
     };
   });
 
-  return <TransactionsTable />;
+  return (
+    <Box padding={{ vertical: 'l' }}>
+      <TransactionsTable />
+    </Box>
+  );
 };
 
 export default TransactionsTablePage;

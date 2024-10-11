@@ -261,6 +261,9 @@
         "memo": "Memo",
         "outflow": "Outflow"
       }
+    },
+    "table": {
+      "header": "Transactions"
     }
   }
 }
