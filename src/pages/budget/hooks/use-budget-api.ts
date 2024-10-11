@@ -31,8 +31,8 @@ export const useBudgetApi = () => {
   const { selectedUser } = useSelectedUser();
 
   const { data, isFetching, error, refetch, dataUpdatedAt } = useQuery({
-    queryKey: ['budget-items', budgetEntry, selectedUser!.userId],
-    queryFn: () => api.fetchBudgetData(selectedUser!.userId, budgetEntry, supabase),
+    queryKey: ['budget-items', budgetEntry, selectedUser?.userId],
+    queryFn: () => api.fetchBudgetData(budgetEntry, supabase, selectedUser?.userId),
     enabled: !!selectedUser?.userId,
     select: calculateCategoryTotals,
   });

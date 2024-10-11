@@ -75,7 +75,7 @@ export const BudgetTable = () => {
               width: 300,
               content: (
                 <EditCategory
-                  selectedUserId={selectedUser!.userId}
+                  selectedUserId={selectedUser?.userId}
                   category={item}
                   onEdit={handleUpdateBudgetItem}
                   onClose={closeDrawer}
@@ -90,7 +90,7 @@ export const BudgetTable = () => {
               content: (
                 <AddBudgetItem
                   budgetEntry={budgetEntry}
-                  selectedUserId={selectedUser!.userId}
+                  selectedUserId={selectedUser?.userId}
                   categoryId={item.id}
                   onAdd={handleAddBudgetItem}
                   onClose={closeDrawer}
@@ -106,7 +106,7 @@ export const BudgetTable = () => {
                 <EditBudgetItem
                   item={item}
                   budgetEntry={budgetEntry}
-                  selectedUserId={selectedUser!.userId}
+                  selectedUserId={selectedUser?.userId}
                   onEdit={handleUpdateBudgetItem}
                   onClose={closeDrawer}
                 />

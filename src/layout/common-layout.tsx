@@ -56,25 +56,25 @@ const CommonLayout = () => {
 
   return (
     <LocaleProvider>
-      <SelectedUserProvider>
-        <GlobalHeader />
-        <div id='c'>
-          {location.pathname.includes('auth') ? (
-            <ContentLayout
-              defaultPadding
-              headerVariant='high-contrast'
-              maxContentWidth={800}
-              notifications={<Notifications />}
-              header={
-                <Box padding={{ vertical: 'xxxl' }}>
-                  <SpaceBetween direction='vertical' size='xl' alignItems='center'>
-                    <Header variant='h1'>{t('auth.welcome')}</Header>
-                  </SpaceBetween>
-                </Box>
-              }>
-              <Outlet />
-            </ContentLayout>
-          ) : (
+      <GlobalHeader />
+      <div id='c'>
+        {location.pathname.includes('auth') ? (
+          <ContentLayout
+            defaultPadding
+            headerVariant='high-contrast'
+            maxContentWidth={800}
+            notifications={<Notifications />}
+            header={
+              <Box padding={{ vertical: 'xxxl' }}>
+                <SpaceBetween direction='vertical' size='xl' alignItems='center'>
+                  <Header variant='h1'>{t('auth.welcome')}</Header>
+                </SpaceBetween>
+              </Box>
+            }>
+            <Outlet />
+          </ContentLayout>
+        ) : (
+          <SelectedUserProvider>
             <AppLayout
               stickyNotifications
               toolsHide
@@ -99,9 +99,9 @@ const CommonLayout = () => {
               }}
               activeDrawerId={activeDrawerId}
             />
-          )}
-        </div>
-      </SelectedUserProvider>
+          </SelectedUserProvider>
+        )}
+      </div>
     </LocaleProvider>
   );
 };

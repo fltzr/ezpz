@@ -20,7 +20,7 @@ import { z } from 'zod';
 import type { CategoryInsert } from '../../utils/api-types';
 
 type AddCategoryProps = {
-  selectedUserId: string;
+  selectedUserId?: string;
   onAdd: (category: CategoryInsert) => void;
   onClose: () => void;
 };
@@ -50,6 +50,8 @@ export const AddCategory = ({ selectedUserId, onAdd, onClose }: AddCategoryProps
   };
 
   const handleOnSubmit = (data: AddCategorySchema) => {
+    if (!selectedUserId) return;
+
     onAdd({ ...data, user_id: selectedUserId });
     handleOnClose();
   };

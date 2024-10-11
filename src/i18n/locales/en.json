@@ -12,6 +12,7 @@
       }
     },
     "navItems": {
+      "userSelectorInlineText": "Select a user",
       "budget": {
         "title": "Budget",
         "linkDashboard": "Dashboard",
@@ -54,6 +55,23 @@
     }
   },
 
+  "pages": {
+    "loanRepayment": {
+      "title": "Loan repayment calculator",
+      "description": "Add or select a loan and view an amortization table.",
+      "summary": {
+        "months": "Months",
+        "totalInterest": "Total interest paid",
+        "totalCost": "Total cost of loan",
+        "payoffDate": "Payoff date"
+      },
+      "actions": {
+        "addLoan": "Add loan",
+        "edit": "Edit",
+        "delete": "Delete"
+      }
+    }
+  },
   "budget": {
     "featureFlags": {
       "configurableDashboard": {
@@ -232,6 +250,16 @@
         "deleteIncomeSourceError": "Failed to delete item: {{message}}",
         "refetchIncomeSourceError": "Failed to refetch income sources: {{message}}",
         "unknownError": "An unknown error occured. Please try again."
+      }
+    }
+  },
+  "budget-transactions": {
+    "common": {
+      "columns": {
+        "date": "Date",
+        "category": "Category",
+        "memo": "Memo",
+        "outflow": "Outflow"
       }
     }
   }

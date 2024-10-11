@@ -29,7 +29,7 @@ export const BudgetTableActions = () => {
       width: 350,
       content: (
         <AddCategory
-          selectedUserId={selectedUser!.userId}
+          selectedUserId={selectedUser?.userId}
           onAdd={handleAddCategory}
           onClose={closeDrawer}
         />
@@ -44,7 +44,7 @@ export const BudgetTableActions = () => {
       content: (
         <AddBudgetItem
           budgetEntry={budgetEntry}
-          selectedUserId={selectedUser!.userId}
+          selectedUserId={selectedUser?.userId}
           onAdd={handleAddBudgetItem}
           onClose={closeDrawer}
         />

@@ -29,7 +29,7 @@ import {
 
 type AddBudgetItemProps = {
   budgetEntry: string;
-  selectedUserId: string;
+  selectedUserId?: string;
   categoryId?: string;
   onAdd: (budgetItem: BudgetItemInsert) => void;
   onClose: () => void;
@@ -72,6 +72,7 @@ export const AddBudgetItem = ({
   };
 
   const handleOnSubmit = (data: BudgetItemSchema) => {
+    if (!selectedUserId) return;
     onAdd({
       ...data,
       user_id: selectedUserId,

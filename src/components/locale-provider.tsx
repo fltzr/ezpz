@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
 
-import { Spinner } from '@cloudscape-design/components';
+import { LoadingBar } from '@cloudscape-design/chat-components';
 import I18nProvider, {
   I18nProviderProps,
   importMessages,
@@ -72,7 +72,7 @@ export const LocaleProvider = ({ children }: PropsWithChildren) => {
   };
 
   if (loading) {
-    return <Spinner size='big' />;
+    return <LoadingBar variant='gen-ai-masked' />;
   }
 
   return (

@@ -28,7 +28,7 @@ export const PageHeader = ({ actions }: PageHeaderProps) => {
         variant='awsui-h1-sticky'
         info={<Box variant='span'>{formatedDate}</Box>}
         actions={actions}>
-        {t('common.title', { name: selectedUser!.name })}
+        {t('common.title', { name: selectedUser?.name })}
       </Header>
     </>
   );

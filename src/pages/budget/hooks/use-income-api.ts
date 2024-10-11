@@ -26,20 +26,23 @@ export const useIncomeApi = () => {
   const { selectedUser } = useSelectedUser();
 
   const { data, refetch, isFetching, isLoading, error } = useQuery({
-    queryKey: ['income-sources', budgetEntry, selectedUser!.userId],
-    queryFn: () => api.fetchIncomeSources(selectedUser!.userId, budgetEntry, supabase),
-    enabled: !!selectedUser!.userId,
+    queryKey: ['income-sources', budgetEntry, selectedUser?.userId],
+    queryFn: () => api.fetchIncomeSources(budgetEntry, supabase, selectedUser?.userId),
+    enabled: !!selectedUser?.userId,
   });
 
   const addIncomeSourceMutation = useMutation({
-    mutationFn: (newIncomeSource: IncomeSourceInsert) =>
-      api.addIncomeSource(supabase, {
+    mutationFn: (newIncomeSource: IncomeSourceInsert) => {
+      if (!selectedUser?.userId) throw new Error('No User ID provided!');
+
+      return api.addIncomeSource(supabase, {
         ...newIncomeSource,
-        user_id: selectedUser!.userId,
-      }),
+        user_id: selectedUser?.userId,
+      });
+    },
     onSuccess: (newIncomeSource) => {
       queryClient.setQueryData<IncomeSource[]>(
-        ['income-sources', budgetEntry, selectedUser!.userId],
+        ['income-sources', budgetEntry, selectedUser?.userId],
         (old) => (old ? [...old, newIncomeSource] : [newIncomeSource])
       );
 
@@ -70,7 +73,7 @@ export const useIncomeApi = () => {
     onSuccess: (_, updatedIncomeSource) => {
       queryClient
         .refetchQueries({
-          queryKey: ['income-sources', budgetEntry, selectedUser!.userId],
+          queryKey: ['income-sources', budgetEntry, selectedUser?.userId],
         })
         .catch((error: Error) => {
           addNotification({
@@ -108,7 +111,7 @@ export const useIncomeApi = () => {
     onSuccess: (_, deletedIncomeSources) => {
       queryClient
         .refetchQueries({
-          queryKey: ['income-sources', budgetEntry, selectedUser!.userId],
+          queryKey: ['income-sources', budgetEntry, selectedUser?.userId],
         })
         .catch((error: Error) => {
           addNotification({

@@ -82,7 +82,7 @@ const IncomeSources = () => {
                     width: 350,
                     content: (
                       <AddIncomeSource
-                        selectedUserId={selectedUser!.userId}
+                        selectedUserId={selectedUser?.userId}
                         onAdd={handleAddIncomeSource}
                         onClose={closeDrawer}
                       />

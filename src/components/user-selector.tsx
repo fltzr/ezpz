@@ -14,7 +14,7 @@ const fetchUsers = async (supabase: ReturnType<typeof useSupabase>) => {
 };
 
 export const UserSelector = () => {
-  const { t } = useTranslation(undefined, { keyPrefix: 'budget' });
+  const { t } = useTranslation(undefined, { keyPrefix: 'layout.navItems' });
   const supabase = useSupabase();
 
   const {
@@ -51,7 +51,7 @@ export const UserSelector = () => {
             }
           : null
       }
-      inlineLabelText=''
+      inlineLabelText={t('userSelectorInlineText')}
       statusType={isLoading ? 'loading' : error ? 'error' : 'finished'}
       loadingText={t('common.fetchingUsers')}
       onChange={handleUserChange}

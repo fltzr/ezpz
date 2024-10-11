@@ -29,7 +29,7 @@ import {
 } from '../../utils/api-types';
 
 type EditBudgetItemProps = {
-  selectedUserId: string;
+  selectedUserId?: string;
   budgetEntry: string;
   item: BudgetItem;
   onEdit: (budgetItem: BudgetItemUpdate) => void;
@@ -50,16 +50,10 @@ const budgetItemSchema = z.object({
 
 type BudgetItemSchema = z.infer<typeof budgetItemSchema>;
 
-export const EditBudgetItem = ({
-  selectedUserId,
-  budgetEntry,
-  item,
-  onEdit,
-  onClose,
-}: EditBudgetItemProps) => {
+export const EditBudgetItem = ({ item, onEdit, onClose }: EditBudgetItemProps) => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.drawers' });
 
-  const { data } = useBudgetApi(selectedUserId, budgetEntry);
+  const { data } = useBudgetApi();
   const categories = (data?.filter(isCategoryItem) as Category[]) ?? [];
 
   const {

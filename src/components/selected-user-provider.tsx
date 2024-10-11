@@ -26,7 +26,7 @@ export const SelectedUserProvider = ({ children }: PropsWithChildren) => {
   const [selectedUser, setSelectedUser] = useState<SelectedUser | null>(null);
 
   useEffect(() => {
-    if (user) {
+    if (user && typeof user !== 'undefined') {
       setSelectedUser({
         userId: user.id,
         name: user.id.startsWith('d') ? 'Juliette' : 'Josh',

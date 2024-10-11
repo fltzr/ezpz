@@ -20,7 +20,7 @@ import { z } from 'zod';
 import type { IncomeSourceInsert } from '../../utils/api-types';
 
 type AddIncomeSource = {
-  selectedUserId: string;
+  selectedUserId?: string;
   onAdd: (IncomeSource: IncomeSourceInsert) => void;
   onClose: () => void;
 };
@@ -53,6 +53,10 @@ export const AddIncomeSource = ({ selectedUserId, onAdd, onClose }: AddIncomeSou
   };
 
   const handleOnSubmit = (data: AddIncomeSourceSchema) => {
+    if (!selectedUserId) {
+      return;
+    }
+
     onAdd({ ...data, user_id: selectedUserId });
     handleOnClose();
   };

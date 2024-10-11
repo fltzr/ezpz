@@ -17,6 +17,7 @@
       }
     },
     "navItems": {
+      "userSelectorInlineText": "Sélectionner un utilisateur",
       "budget": {
         "title": "Budget",
         "linkDashboard": "Tableau de bord",
@@ -54,60 +55,6 @@
     }
   },
   "pages": {
-    "budget": {
-      "pageTitle": "Tableau de bord budgétaire de {{name}}",
-      "tableTitle": "Le budget",
-      "addCategory": "Ajouter une catégorie",
-      "empty": "Aucun poste budgétaire ajouté !",
-      "overview": {
-        "title": "Vue d'ensemble",
-        "amountToBudget": "Montant au budget",
-        "amountSpent": "Montant dépensé",
-        "amountLeft": "Amount restant"
-      },
-      "incomeSources": {
-        "title": "Sources de revenus",
-        "dropdown": {
-          "title": "Actions",
-          "add": "Ajouter",
-          "update": "Mise à jour",
-          "delete": "Supprimer ({{count}})",
-          "refresh": "Rafraīchir",
-          "disabledMultipleSelected": "Plusieurs sources de revenus sont sélectionnées.",
-          "disabledNoneSelected": "Aucune source de revenu n'est sélectionnée.",
-          "errorRefetching": "Errur dans la récupération des sources de revenus: {{error}}"
-        }
-      },
-      "table": {
-        "source": "Source",
-        "projectedAmount": "Montant prévu",
-        "incomeSourceExample": "Por exemple, Salarie, baby-sitting, etc.",
-        "nameError": "Nom de la source de revenu invalide !",
-        "noChangesError": "Le nom doit être différent pour être mis à jour !",
-        "typeError": "Type non valide",
-        "negativeValueError": "Le montant prévu doit être une valeur non négative !",
-        "empty": "Aucun source de revenu ajoutée !"
-      },
-      "pieChart": {
-        "keyCategory": "Catégorie",
-        "keyAmount": "Montant",
-        "keyPercentageTotal": "Pourcentage du budget total",
-        "empty": "Ajoutez des sources de revenus et des postes budgétaires pour voir ce graphique !"
-      },
-      "budgetTable": {
-        "columnCategory": "Catégorie",
-        "columnProjectedAmount": "Montant prévu",
-        "columnActions": "Actions",
-        "actionButtons": {
-          "renameCategory": "Renommer une catégorie",
-          "deleteCategory": "Supprimer la catégorie",
-          "addBudgetLineItem": "Ajoute un poste budgétaire",
-          "editBudgetItem": "Editer",
-          "deleteBudgetItem": "Supprimer",
-          "changeCategory": "Changer de catégorie"
-        }
-      }
-    },
     "loanRepayment": {
       "title": "Calculatrice de remboursement de prêt",
       "description": "Ajouter ou sélectionner un prêt et afficher un tableau d'amortissement.",
@@ -314,6 +261,16 @@
         "deleteIncomeSourceError": "Échec de la suppression de l'élément : {{message}}",
         "refetchIncomeSourceError": "Échec de la récupération des sources de revenus : {{message}}",
         "unknownError": "Une erreur inconnue s'est produite. Veuillez réessayer."
+      }
+    }
+  },
+  "budget-transactions": {
+    "common": {
+      "columns": {
+        "date": "Date",
+        "category": "Catégorie",
+        "memo": "Mémo",
+        "outflow": "Sortie"
       }
     }
   }

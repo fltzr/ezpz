@@ -3,10 +3,11 @@ import { useSupabase } from '@/hooks/use-supabase';
 import { IncomeSourceInsert, IncomeSourceUpdate } from '../utils/api-types';
 
 export const fetchIncomeSources = async (
-  userId: string,
   budgetEntry: string,
-  supabase: ReturnType<typeof useSupabase>
+  supabase: ReturnType<typeof useSupabase>,
+  userId?: string
 ) => {
+  if (!userId) throw new Error('No User ID provided!');
   const orCondition = `budget_entry.eq.${budgetEntry},and(is_recurring.eq.true,budget_entry.lte.${budgetEntry})`;
 
   const { data, error } = await supabase

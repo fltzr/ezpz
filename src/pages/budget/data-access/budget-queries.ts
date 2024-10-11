@@ -8,10 +8,12 @@ import type {
 } from '../utils/api-types';
 
 export const fetchBudgetData = async (
-  userId: string,
   budgetEntry: string,
-  supabase: ReturnType<typeof useSupabase>
+  supabase: ReturnType<typeof useSupabase>,
+  userId?: string
 ) => {
+  if (!userId) throw new Error('User ID not provided!');
+
   const orCondition = `budget_entry.eq.${budgetEntry},and(is_recurring.eq.true,budget_entry.lte.${budgetEntry})`;
 
   const [
