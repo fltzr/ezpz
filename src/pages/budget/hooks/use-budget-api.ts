@@ -50,6 +50,7 @@ export const useBudgetApi = () => {
     errorMessage: (error: unknown) =>
       error instanceof Error ? error.message : t('unknownError'),
   });
+
   const addBudgetItemMutation = useNotifiedMutation({
     mutationFn: (item: BudgetItemInsert) => api.addBudgetItem(supabase, item),
     onSuccess: (newItem) => {

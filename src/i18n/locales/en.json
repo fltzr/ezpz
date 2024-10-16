@@ -3,6 +3,20 @@
     "or": "or",
     "lastUpdated": "Last updated"
   },
+  "api": {
+    "success": {
+      "create": "Created 1 {{item}} successfully.",
+      "update": "Updated {{item}} successfully.",
+      "delete": "{count, plural, one {Deleted 1 {{item}} successfully.} other {Deleted {count} {item_plural} succesully.}}",
+      "delete_one": "Deleted 1 {{item}} successfully.",
+      "delete_other": "Deleted {{count}} {{item}} successfully."
+    },
+    "error": {
+      "create": "Failed to create {{item}}. Error: {{message}}",
+      "update": "Failed to update {{item}}. Error: {{message}}",
+      "delete": "Failed to delete {{item}}. Error: {{message}}"
+    }
+  },
   "layout": {
     "header": {
       "items": {

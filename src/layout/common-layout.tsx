@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
-import { useLogger } from 'react-use';
 
 import {
   AppLayout,
@@ -13,7 +12,6 @@ import {
 import { nanoid } from 'nanoid';
 
 import { useDrawer } from '@/components/drawer-provider';
-import { LocaleProvider } from '@/components/locale-provider';
 import { SelectedUserProvider } from '@/components/selected-user-provider';
 import { SuspenseLoadingBar } from '@/components/suspense-loading-bar';
 import { useAuth } from '@/pages/auth/hooks/use-auth';
@@ -30,7 +28,6 @@ type LocationState = {
 };
 
 const CommonLayout = () => {
-  useLogger('CommonLayout');
   const { t } = useTranslation();
   const { contentType } = useLayoutState();
   const { activeDrawerId, drawerContent, closeDrawer, panelWidth } = useDrawer();
@@ -55,7 +52,7 @@ const CommonLayout = () => {
   }, [location, addNotification, t]);
 
   return (
-    <LocaleProvider>
+    <>
       <GlobalHeader />
       <div id='c'>
         {location.pathname.includes('auth') ? (
@@ -102,7 +99,7 @@ const CommonLayout = () => {
           </SelectedUserProvider>
         )}
       </div>
-    </LocaleProvider>
+    </>
   );
 };
 

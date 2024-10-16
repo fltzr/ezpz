@@ -10,6 +10,7 @@ export const transactionSchema = z
     date: z.string().date('A valid date is required.'),
     category: selectSchema,
     memo: z.string(),
+    outflow: z.coerce.number({ message: 'A valid numer is required.' }),
   })
   .required({ date: true });
 

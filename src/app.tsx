@@ -8,6 +8,9 @@ import { SupabaseProvider } from '@/components/supabase-provider';
 import { useTheme } from '@/hooks/use-theme';
 import { AuthProvider } from '@/pages/auth/components/auth-provider';
 
+import { LocaleProvider } from './components/locale-provider';
+import BudgetProvider from './pages/budget/components/budget-provider';
+
 const Router = lazy(() => import('./router'));
 
 const queryClient = new QueryClient({
@@ -36,25 +39,29 @@ const App = () => {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <SupabaseProvider>
-        <AuthProvider>
-          <DrawerProvider>
-            <Router />
-            <Modal
-              visible={initialPopup}
-              onDismiss={() => setInitialPopup(false)}
-              header={<Header variant='h1'>Coucou beautiful bABY</Header>}>
-              I{' '}
-              <Box variant='span'>
-                <StatusIndicator type='success'>LOVE</StatusIndicator>
-              </Box>{' '}
-              you!!!!!!!!
-            </Modal>
-          </DrawerProvider>
-        </AuthProvider>
-      </SupabaseProvider>
-    </QueryClientProvider>
+    <LocaleProvider>
+      <QueryClientProvider client={queryClient}>
+        <SupabaseProvider>
+          <AuthProvider>
+            <BudgetProvider>
+              <DrawerProvider>
+                <Router />
+                <Modal
+                  visible={initialPopup}
+                  onDismiss={() => setInitialPopup(false)}
+                  header={<Header variant='h1'>Coucou beautiful bABY</Header>}>
+                  I{' '}
+                  <Box variant='span'>
+                    <StatusIndicator type='success'>LOVE</StatusIndicator>
+                  </Box>{' '}
+                  you!!!!!!!!
+                </Modal>
+              </DrawerProvider>
+            </BudgetProvider>
+          </AuthProvider>
+        </SupabaseProvider>
+      </QueryClientProvider>
+    </LocaleProvider>
   );
 };
 

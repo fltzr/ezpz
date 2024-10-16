@@ -27,7 +27,7 @@ export const getColumnDefintions = (
       id: 'date',
       header: i18n.t('budget-transactions.common.columns.date'),
       cell: (item) => item.transaction_date,
-      width: 200,
+      width: 215,
       editConfig: {
         constraintText: 'The date follows `YYYY/MM/DD` format.',
         editingCell: (

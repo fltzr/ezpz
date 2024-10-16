@@ -22,7 +22,7 @@ export const useCategoriesApi = () => {
   const { selectedUser } = useSelectedUser();
 
   const { data, error, refetch, isFetching } = useQuery({
-    queryKey: ['categories', selectedUser?.userId],
+    queryKey: ['all-categories', selectedUser?.userId],
     queryFn: () => fetchCategories(supabase, selectedUser?.userId),
     enabled: !!selectedUser?.userId,
   });

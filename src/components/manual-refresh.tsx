@@ -1,8 +1,9 @@
 import { useTranslation } from 'react-i18next';
 
 import { Box, Button, SpaceBetween } from '@cloudscape-design/components';
-import getUserLocale from 'get-user-locale';
 import { DateTime } from 'luxon';
+
+import i18n from '@/i18n';
 
 export type ManualRefreshProps = {
   lastRefresh?: string | null;
@@ -16,8 +17,8 @@ export const ManualRefresh = ({
   onRefresh,
 }: ManualRefreshProps) => {
   const { t } = useTranslation(undefined, { keyPrefix: 'common' });
-  const locale = getUserLocale().includes('fr') ? 'fr' : 'en';
-  const zone = locale === 'fr' ? 'Europe/Pairs' : 'America/New_York';
+  const locale = i18n.resolvedLanguage ?? 'en';
+  const zone = locale === 'fr' ? 'Europe/Paris' : 'America/New_York';
 
   const formattedLastRefresh =
     lastRefresh &&
