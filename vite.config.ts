@@ -18,10 +18,6 @@ export default defineConfig({
 
   resolve: {
     alias: {
-      '@cloudscape-design/components/i18n': path.resolve(
-        __dirname,
-        'node_modules/@cloudscape-design/components/i18n'
-      ),
       '@cloudscape-design/components': path.resolve(__dirname, 'build/components'),
       '@cloudscape-design/design-tokens': path.resolve(__dirname, 'build/design-tokens'),
     },
