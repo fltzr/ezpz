@@ -4,6 +4,9 @@
     "lastUpdated": "Last updated"
   },
   "api": {
+    "common": {
+      "retry": "Retry"
+    },
     "success": {
       "create": "Created 1 {{item}} successfully.",
       "update": "Updated {{item}} successfully.",
@@ -267,9 +270,10 @@
       }
     }
   },
-  "budget-transactions": {
+  "budgetTransactions": {
     "common": {
       "columns": {
+        "id": "ID",
         "date": "Date",
         "category": "Category",
         "memo": "Memo",
@@ -277,7 +281,42 @@
       }
     },
     "table": {
-      "header": "Transactions"
+      "header": "Transactions",
+      "headerActions": {
+        "title": "Actions",
+        "add": "Add transaction",
+        "delete": "Delete transactions"
+      },
+      "fetchingItem": "Fetching {{item}}...",
+      "loadingError": "There was an issue loading {{item}}. Try again?",
+      "empty": "No transactions found!",
+      "pageSizeOption": "{{count}} transactions"
+    },
+    "drawer": {
+      "common": {
+        "submit": "Submit",
+        "cancel": "Cancel"
+      },
+      "add": {
+        "title": "Add transaction",
+        "formFields": {
+          "date": "Transaction date",
+          "category": "Category",
+          "categoryPlaceholder": "Select a category",
+          "memo": "Memo",
+          "memoPlaceholder": "Dinner at La Cigale",
+          "amount": "Amount",
+          "amountPlaceholder": "The amount you spent on this item. Current currency:\t{{currency}}"
+        }
+      }
+    },
+    "deleteModal": {
+      "title": "Delete transactions",
+      "cancel": "Cancel",
+      "delete": "Delete ({{count}})",
+      "confirmation_one": "Are you sure you want to delete the following transaction?",
+      "confirmation_other": "Are you sure you want to delete the following {{count}} transactions?",
+      "warning": "This action cannot be reversed."
     }
   }
 }

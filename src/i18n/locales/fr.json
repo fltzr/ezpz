@@ -3,6 +3,23 @@
     "or": "ou",
     "lastUpdated": "Dernière mise à jour"
   },
+  "api": {
+    "common": {
+      "retry": ""
+    },
+    "success": {
+      "create": "Created 1 {{item}} successfully.",
+      "update": "Updated {{item}} successfully.",
+      "delete": "{count, plural, one {Deleted 1 {{item}} successfully.} other {Deleted {count} {item_plural} succesully.}}",
+      "delete_one": "Deleted 1 {{item}} successfully.",
+      "delete_other": "Deleted {{count}} {{item}} successfully."
+    },
+    "error": {
+      "create": "Failed to create {{item}}. Error: {{message}}",
+      "update": "Failed to update {{item}}. Error: {{message}}",
+      "delete": "Failed to delete {{item}}. Error: {{message}}"
+    }
+  },
   "error": {
     "routeErrorTitle": "Oups !",
     "routeErrorMessage": "Nous sommes désolés. Une errur inattendue est survenue.",
@@ -264,9 +281,10 @@
       }
     }
   },
-  "budget-transactions": {
+  "budgetTransactions": {
     "common": {
       "columns": {
+        "id": "ID",
         "date": "Date",
         "category": "Catégorie",
         "memo": "Mémo",
@@ -274,7 +292,42 @@
       }
     },
     "table": {
-      "header": "Transactions"
+      "header": "Transactions",
+      "headerActions": {
+        "title": "Actions",
+        "add": "Ajouter une transaction",
+        "delete": "Supprimer des transactions"
+      },
+      "fetchingItem": "Recherche de transactions...",
+      "loadingError": "Il y a eu un problème de chargement des transactions. Essayez à nouveau ?",
+      "empty": "Acune transaction n'a été trouvée !",
+      "pageSizeOption": "{{count}} transactions"
+    },
+    "drawer": {
+      "common": {
+        "submit": "Soumettre",
+        "cancel": "Annuler"
+      },
+      "add": {
+        "title": "Ajouter une transaction",
+        "formFields": {
+          "date": "Date de la transaction",
+          "category": "Catégorie",
+          "categoryPlaceholder": "Sélectionner une catégorie",
+          "memo": "Mémo",
+          "memoPlaceholder": "Dîner à La Cigale",
+          "amount": "Montant",
+          "amountPlaceholder": "Le montant que vous avez dépensé pour cet article. Devise actuelle:\t{{currency}}"
+        }
+      }
+    },
+    "deleteModal": {
+      "title": "Supprimer des transactions",
+      "cancel": "Annuler",
+      "delete": "Supprimer ({{count}})",
+      "confirmation_one": "Êtes-vous sûr de vouloir supprimer la transaction suivante ?",
+      "confirmation_other": "Êtes-vous sûr de vouloir supprimer les {{count}} transactions suivantes ?",
+      "warning": "Cette action est irréversible."
     }
   }
 }

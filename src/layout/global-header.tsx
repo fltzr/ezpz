@@ -2,99 +2,58 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { TopNavigation, TopNavigationProps } from '@cloudscape-design/components';
-import { User } from '@supabase/supabase-js';
-import { TFunction } from 'i18next';
-import { nanoid } from 'nanoid';
 
-import { Locale, useLocale } from '@/components/locale-provider';
 import { useAuth } from '@/pages/auth/hooks/use-auth';
-import { useNotificationStore } from '@/state/notifications';
 import { supabase } from '@/utils/supabase';
 
 import styles from '../styles/top-navigation.module.scss';
 
-const generateUserHeaderItems = ({
-  t,
-  locale: { locale, localeOptions, setLocale },
-  user,
-  dropdownActions: { signOut, profile },
-}: {
-  t: TFunction<'translation', 'layout.header.items'>;
-  locale: ReturnType<typeof useLocale>;
-  user: User | null;
-  dropdownActions: {
-    signOut: () => Promise<void>;
-    profile: (event: CustomEvent) => void;
-  };
-}): TopNavigationProps['utilities'] => {
-  const selectedLocale = localeOptions.find((loc) => loc.code === locale);
-
-  const localeItems = localeOptions.map((opt) => ({
-    id: opt.code,
-    text: opt.label,
-  }));
-
-  const items: TopNavigationProps['utilities'] = [
-    {
-      type: 'menu-dropdown',
-      text: selectedLocale?.label,
-      items: localeItems,
-      onItemClick: (event) => {
-        event.preventDefault();
-        setLocale(event.detail.id as Locale);
-      },
-    },
-  ];
-
-  if (!user) return items;
-
-  return [
-    ...items,
-    {
-      type: 'menu-dropdown',
-      iconName: 'user-profile-active',
-      description: user.email,
-      items: [
-        {
-          id: 'profile',
-          text: t('profile'),
-          iconName: 'user-profile',
-        },
-        {
-          id: 'sign-out',
-          text: t('signOut'),
-          iconName: 'undo',
-        },
-      ],
-      onItemClick: (event) => {
-        event.preventDefault();
-
-        switch (event.detail.id) {
-          case 'sign-out':
-            signOut().catch((error: Error) => {
-              console.log(`Error signing out: ${error.message}`);
-            });
-            break;
-          case 'profile':
-            profile(event);
-            break;
-          default:
-            break;
-        }
-      },
-    },
-  ];
-};
-
 export const GlobalHeader = () => {
-  const { t } = useTranslation(undefined, { keyPrefix: 'layout.header.items' });
-  const { locale, localeOptions, setLocale } = useLocale();
+  const { t, i18n } = useTranslation(undefined, { keyPrefix: 'layout.header.items' });
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { addNotification } = useNotificationStore();
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    navigate('/auth', { replace: true, state: { reason: 'sign-out' } });
+  };
+
+  const handleLanguageChange = (language: string) => {
+    i18n.changeLanguage(language).catch(console.error);
+  };
+
+  const currentLanguage = i18n.language;
+
+  const utilitiesNew: TopNavigationProps['utilities'] = [
+    {
+      ariaLabel: 'Locale options',
+      type: 'menu-dropdown',
+      text: currentLanguage === 'en' ? '🇺🇸 English' : '🇫🇷 Français',
+      items: [
+        { id: 'en', text: '🇺🇸 English' },
+        { id: 'fr', text: '🇫🇷 Français' },
+      ],
+      onItemClick: (event: { detail: { id: string } }) => {
+        handleLanguageChange(event.detail.id);
+      },
+    },
+    {
+      ariaLabel: 'Profile settings',
+      type: 'menu-dropdown',
+      iconName: 'user-profile-active',
+      items: [
+        { id: 'profile', text: t('profile'), iconName: 'user-profile' },
+        { id: 'sign-out', text: t('signOut'), iconName: 'undo' },
+      ],
+      onItemClick: (event: { detail: { id: string } }) => {
+        if (event.detail.id === 'sign-out') handleSignOut().catch(console.error);
+        else if (event.detail.id === 'profile') navigate('/profile');
+      },
+    },
+  ];
 
   return (
-    <div id='h' className={styles.header}>
+    <div id='h' className={styles['header']}>
       <TopNavigation
         identity={{
           href: '/',
@@ -104,38 +63,7 @@ export const GlobalHeader = () => {
             navigate('/');
           },
         }}
-        utilities={generateUserHeaderItems({
-          t,
-          locale: {
-            locale,
-            localeOptions,
-            setLocale,
-          },
-          user,
-          dropdownActions: {
-            profile: (event) => {
-              event.preventDefault();
-              navigate('/profile', { replace: true });
-            },
-            signOut: async () => {
-              const { error } = await supabase.auth.signOut({ scope: 'global' });
-
-              if (error) {
-                addNotification({
-                  id: nanoid(5),
-                  type: 'error',
-                  message: t('layout.header.items.signOutError', {
-                    message: error.message,
-                  }),
-                });
-
-                return;
-              }
-
-              return navigate('/auth', { replace: true, state: { reason: 'sign-out' } });
-            },
-          },
-        })}
+        utilities={user ? utilitiesNew : [utilitiesNew[0]]}
       />
     </div>
   );
