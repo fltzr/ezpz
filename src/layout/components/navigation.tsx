@@ -14,6 +14,11 @@ export const Navigation = () => {
 
   return (
     <SideNavigation
+      header={
+        location.pathname.includes('budget')
+          ? { text: 'Budget', href: '/budget' }
+          : { href: '' }
+      }
       activeHref={activeHref}
       itemsControl={<UserSelector />}
       items={[

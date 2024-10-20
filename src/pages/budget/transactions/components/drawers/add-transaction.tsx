@@ -32,7 +32,7 @@ type AddTransactionProps = {
 };
 
 export const AddTransaction = ({ onAdd, onClose }: AddTransactionProps) => {
-  const { t } = useTranslation(undefined, { keyPrefix: 'budget.drawers' });
+  const { t } = useTranslation(undefined, { keyPrefix: 'budgetTransactions.drawer' });
   const { selectedUser } = useSelectedUser();
   const { data } = useCategoriesApi();
   const {
@@ -67,18 +67,18 @@ export const AddTransaction = ({ onAdd, onClose }: AddTransactionProps) => {
   });
 
   return (
-    <Drawer header={<Header variant='h2'>{t('addTransaction.title')}</Header>}>
+    <Drawer header={<Header variant='h2'>{t('add.title')}</Header>}>
       <Form
         actions={
           <Box float='right'>
             <SpaceBetween direction='horizontal' size='xs'>
               <Button variant='link' onClick={handleOnClose}>
-                {t('common.cancelButton')}
+                {t('common.cancel')}
               </Button>
               <Button
                 variant='primary'
                 onClick={() => void handleSubmit(handleOnSubmit)()}>
-                {t('common.addButton')}
+                {t('common.submit')}
               </Button>
             </SpaceBetween>
           </Box>
@@ -89,7 +89,7 @@ export const AddTransaction = ({ onAdd, onClose }: AddTransactionProps) => {
             control={control}
             render={({ field }) => (
               <FormField
-                label={t('common.fields.transactionDate')}
+                label={t('add.formFields.date')}
                 errorText={errors.date?.message}>
                 <DatePicker
                   {...field}
@@ -104,11 +104,11 @@ export const AddTransaction = ({ onAdd, onClose }: AddTransactionProps) => {
             control={control}
             render={({ field }) => (
               <FormField
-                label={t('addTransaction.fields.categoryName')}
+                label={t('add.formFields.category')}
                 errorText={errors.category?.message}>
                 <Select
                   {...field}
-                  placeholder={t('addTransaction.fields.categoryPlaceholder')}
+                  placeholder={t('add.formFields.categoryPlaceholder')}
                   options={data?.map((category) => ({
                     label: category.category_name,
                     value: category.id,
@@ -129,13 +129,13 @@ export const AddTransaction = ({ onAdd, onClose }: AddTransactionProps) => {
             control={control}
             render={({ field }) => (
               <FormField
-                label={t('addTransaction.fields.memo')}
+                label={t('add.formFields.memo')}
                 errorText={errors.memo?.message}>
                 <Input
                   {...field}
                   disableBrowserAutocorrect
                   autoComplete={false}
-                  placeholder={t('addTransaction.fields.itemNameExample')}
+                  placeholder={t('add.formFields.memoPlaceholder')}
                   onChange={({ detail }) => field.onChange(detail.value)}
                 />
               </FormField>
@@ -146,8 +146,8 @@ export const AddTransaction = ({ onAdd, onClose }: AddTransactionProps) => {
             control={control}
             render={({ field }) => (
               <FormField
-                label={t('addTransaction.fields.projectedAmount')}
-                description={t('addTransaction.fields.projectedAmountDescription', {
+                label={t('add.formFields.amount')}
+                description={t('add.formFields.amountPlaceholder', {
                   currency: getUserLocale().includes('fr') ? '€' : '$',
                 })}
                 errorText={errors.outflow?.message}>

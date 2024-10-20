@@ -1,3 +1,6 @@
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import {
   Box,
   Button,
@@ -24,28 +27,37 @@ export const DeleteTransactionModal = ({
   onConfirmDelete,
   onDismiss,
 }: DeleteTransactionModalProps) => {
+  const { t } = useTranslation(undefined, { keyPrefix: 'budgetTransactions' });
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (transactions.length !== count) {
+      setCount(transactions.length);
+    }
+  }, [count, transactions]);
+
   return (
     <Modal
       size='large'
       visible={visible}
       onDismiss={onDismiss}
-      header={<Header variant='h2'>Delete transactions</Header>}
+      header={<Header variant='h2'>{t('deleteModal.title')}</Header>}
       footer={
         <Box float='right'>
           <SpaceBetween size='xs' direction='horizontal'>
             <Button variant='normal' onClick={onDismiss}>
-              Cancel
+              {t('deleteModal.cancel')}
             </Button>
             <Button variant='primary' onClick={onConfirmDelete}>
-              Delete
+              {t('deleteModal.delete', { count })}
             </Button>
           </SpaceBetween>
         </Box>
       }>
       <SpaceBetween size='m'>
         <Box>
-          Are you sure you want to delete these transactions?
-          <Box variant='strong'> This action cannot be reversed.</Box>
+          {t('deleteModal.confirmation', { count })}{' '}
+          <Box variant='strong'>{t('deleteModal.warning')}</Box>
         </Box>
         <Table
           variant='container'
@@ -53,22 +65,22 @@ export const DeleteTransactionModal = ({
           columnDefinitions={[
             {
               id: 'id',
-              header: 'ID',
+              header: t('common.columns.id'),
               cell: (item) => item.id,
             },
             {
               id: 'date',
-              header: 'Date',
+              header: t('common.columns.date'),
               cell: (item) => item.transaction_date,
             },
             {
               id: 'category',
-              header: 'Category',
+              header: t('common.columns.category'),
               cell: (item) => item.category?.category_name,
             },
             {
               id: 'outflow',
-              header: 'Outflow',
+              header: t('common.columns.outflow'),
               cell: (item) => formatCurrency(item.outflow),
             },
           ]}

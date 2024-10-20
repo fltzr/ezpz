@@ -27,7 +27,7 @@ import { DeleteTransactionModal } from '../modals/delete-transaction';
 import { getColumnDefintions } from './config';
 
 export const TransactionsTable = () => {
-  const { t } = useTranslation(undefined, { keyPrefix: 'budget-transactions' });
+  const { t } = useTranslation(undefined);
   const [preferences, setPreferences] =
     useLocalStorage<CollectionPreferencesProps.Preferences>(
       'Transaction-Table-Preferences',
@@ -77,14 +77,26 @@ export const TransactionsTable = () => {
         {...preferences}
         variant='container'
         selectionType='multi'
-        loadingText='Fetching transactions...'
+        loadingText={t('budgetTransactions.table.fetchingItem', { item: 'transactions' })}
+        ariaLabels={{
+          selectionGroupLabel: 'Items selection',
+          allItemsSelectionLabel: () => 'select all',
+        }}
         loading={isFetching}
         selectedItems={selectedTransactions}
         items={data as Transaction[]}
         columnDefinitions={getColumnDefintions(categories)}
+        columnDisplay={preferences.contentDisplay}
         header={
           <Header
             variant='h1'
+            counter={
+              selectedTransactions && selectedTransactions.length > 0
+                ? `(${selectedTransactions.length}/${data?.length})`
+                : typeof data?.length !== 'undefined'
+                  ? `(${data.length})`
+                  : ''
+            }
             actions={
               <SpaceBetween size='xs' direction='horizontal'>
                 <ManualRefresh
@@ -99,7 +111,7 @@ export const TransactionsTable = () => {
                   items={[
                     {
                       id: 'delete-transactions',
-                      text: 'Delete transactions',
+                      text: t('budgetTransactions.table.headerActions.delete'),
                       disabled: selectedTransactions?.length <= 0,
                     },
                   ]}
@@ -130,46 +142,62 @@ export const TransactionsTable = () => {
                       ),
                     });
                   }}>
-                  Add transaction
+                  {t('budgetTransactions.table.headerActions.add')}
                 </Button>
               </SpaceBetween>
             }>
-            {t('table.header')}
+            {t('budgetTransactions.table.header')}
           </Header>
         }
         preferences={
           <CollectionPreferences
+            onConfirm={({ detail }) => setPreferences(detail)}
             preferences={preferences}
-            onConfirm={({ detail }) => setPreferences?.(detail)}
+            pageSizePreference={{
+              options: [
+                {
+                  value: 10,
+                  label: t('budgetTransactions.table.pageSizeOption', { count: 10 }),
+                },
+                {
+                  value: 20,
+                  label: t('budgetTransactions.table.pageSizeOption', { count: 20 }),
+                },
+              ],
+            }}
             wrapLinesPreference={{}}
             stripedRowsPreference={{}}
             contentDensityPreference={{}}
-            stickyColumnsPreference={{
-              firstColumns: {
-                title: 'Stick first column(s)',
-                description:
-                  'Keep the first column(s) visible while horizontally scrolling the table content.',
-                options: [
-                  { label: 'None', value: 0 },
-                  { label: 'First column', value: 1 },
-                  { label: 'First two columns', value: 2 },
-                ],
-              },
+            contentDisplayPreference={{
+              options: [
+                {
+                  id: 'date',
+                  label: t('budgetTransactions.common.columns.date'),
+                  alwaysVisible: true,
+                },
+                {
+                  id: 'category',
+                  label: t('budgetTransactions.common.columns.category'),
+                },
+                {
+                  id: 'memo',
+                  label: t('budgetTransactions.common.columns.memo'),
+                },
+                { id: 'outflow', label: t('budgetTransactions.common.columns.outflow') },
+              ],
             }}
           />
         }
         empty={
           error ? (
             <SpaceBetween size='m' direction='vertical'>
-              <Box variant='span'>
-                There was an issue loading transactions. Try again?
-              </Box>
+              <Box variant='span'>{t('budgetTransactions.table.loadingError')}</Box>
               <Button variant='primary' iconName='refresh' onClick={() => void refetch()}>
-                Retry
+                {t('api.common.retry')}
               </Button>
             </SpaceBetween>
           ) : (
-            <Box variant='span'>No transactions added!</Box>
+            <Box variant='span'>{t('budgetTransactions.table.empty')}</Box>
           )
         }
         filter={<TextFilter filteringText='' />}

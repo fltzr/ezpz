@@ -25,10 +25,11 @@ export const getColumnDefintions = (
   return [
     {
       id: 'date',
-      header: i18n.t('budget-transactions.common.columns.date'),
+      header: i18n.t('budgetTransactions.common.columns.date'),
       cell: (item) => item.transaction_date,
       width: 215,
       editConfig: {
+        ariaLabel: 'Edit transaction date',
         constraintText: 'The date follows `YYYY/MM/DD` format.',
         editingCell: (
           item,
@@ -49,9 +50,10 @@ export const getColumnDefintions = (
     },
     {
       id: 'category',
-      header: i18n.t('budget-transactions.common.columns.category'),
+      header: i18n.t('budgetTransactions.common.columns.category'),
       cell: (item) => item.category?.category_name,
       editConfig: {
+        ariaLabel: 'Edit category',
         editingCell: (
           item,
           ctx: {
@@ -82,10 +84,11 @@ export const getColumnDefintions = (
     },
     {
       id: 'memo',
-      header: i18n.t('budget-transactions.common.columns.memo'),
+      header: i18n.t('budgetTransactions.common.columns.memo'),
       cell: (item) => item.memo,
       width: '35%',
       editConfig: {
+        ariaLabel: 'Edit transaction memo',
         editingCell: (
           item,
           ctx: {
@@ -104,10 +107,11 @@ export const getColumnDefintions = (
     },
     {
       id: 'outflow',
-      header: i18n.t('budget-transactions.common.columns.outflow'),
+      header: i18n.t('budgetTransactions.common.columns.outflow'),
       cell: (item) => formatCurrency(item.outflow),
       width: 176,
       editConfig: {
+        ariaLabel: 'Edit outflow amount',
         editingCell: (
           item,
           ctx: {

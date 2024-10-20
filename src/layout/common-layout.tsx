@@ -33,7 +33,7 @@ const CommonLayout = () => {
   const { activeDrawerId, drawerContent, closeDrawer, panelWidth } = useDrawer();
 
   const { addNotification } = useNotificationStore();
-  const { user } = useAuth();
+  const { user, isLoading: isAuthLoading } = useAuth();
   const location = useLocation();
   const isAuthRoute = location.pathname.includes('/auth');
 
@@ -50,6 +50,10 @@ const CommonLayout = () => {
       });
     }
   }, [location, addNotification, t]);
+
+  if (isAuthLoading) {
+    return <SuspenseLoadingBar />;
+  }
 
   return (
     <>
