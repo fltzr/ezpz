@@ -1,12 +1,13 @@
 import { useTranslation } from 'react-i18next';
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { DateTime } from 'luxon';
 
 import { useNotifiedMutation } from '@/hooks/use-notified-mutation';
 import { useSelectedUser } from '@/hooks/use-selected-user';
 import { useSupabase } from '@/hooks/use-supabase';
 
-import type { Transaction, TransactionDBUpdate, TransactionInsert } from '../types/api';
+import type { Transaction, TransactionInsert, TransactionUpdate } from '../types/api';
 
 const transactionJoinStatement = `
 id,
@@ -14,6 +15,8 @@ transaction_date,
 memo,
 outflow,
 created_at,
+category_id,
+user_id,
 category:categories (
   id,
   category_name
@@ -22,11 +25,15 @@ category:categories (
 
 const fetchTransactions = async (
   supabase: ReturnType<typeof useSupabase>,
-  userId: string
+  userId: string,
+  startDate: string,
+  endDate: string
 ) => {
   const { data: transactions, error } = await supabase
     .from('transactions')
     .select(transactionJoinStatement)
+    .gte('transaction_date', startDate)
+    .lte('transaction_date', endDate)
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
@@ -54,19 +61,20 @@ const createTransaction = async (
   return data as Transaction;
 };
 
-const updateTransactionInline = async (
+const updateTransaction = async (
   supabase: ReturnType<typeof useSupabase>,
-  id: string,
-  updates: { [key: string]: string }
+  tx: TransactionUpdate
 ) => {
   const { data, error } = await supabase
     .from('transactions')
-    .update(updates)
-    .eq('category_id', id);
+    .update(tx)
+    .eq('id', tx.id)
+    .select(transactionJoinStatement)
+    .single();
 
   if (error)
     throw new Error(
-      `Error updating transaction. Please try again later. ${JSON.stringify(error, null, 2)}`
+      `Error updating transaction entry: ${JSON.stringify(error, null, 2)}`
     );
 
   return data;
@@ -84,15 +92,21 @@ const deleteTransaction = async (
   return transactionIds;
 };
 
-export const useTransactionsApi = () => {
+export const useTransactionsApi = ({ selectedDate }: { selectedDate: DateTime }) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const supabase = useSupabase();
+
   const { selectedUser } = useSelectedUser();
 
+  const startDate = selectedDate.startOf('month').toISODate()!;
+  const endDate = selectedDate.endOf('month').toISODate()!;
+
   const { data, error, refetch, isFetching, isRefetching, dataUpdatedAt } = useQuery({
-    queryKey: ['transactions', selectedUser?.userId],
-    queryFn: () => fetchTransactions(supabase, selectedUser?.userId ?? ''),
+    queryKey: ['transactions', selectedUser?.userId, startDate, endDate],
+    queryFn: () =>
+      fetchTransactions(supabase, selectedUser?.userId ?? '', startDate, endDate),
+    enabled: !!(selectedDate || startDate || endDate),
   });
 
   const addTransactionMutation = useNotifiedMutation({
@@ -109,8 +123,17 @@ export const useTransactionsApi = () => {
   });
 
   const updateTransactionInlineMutation = useNotifiedMutation({
-    mutationFn: (item: TransactionDBUpdate) =>
-      updateTransactionInline(supabase, item.id!, { ...item }),
+    mutationFn: (tx: TransactionUpdate) => updateTransaction(supabase, tx),
+    onSuccess: () => {
+      queryClient
+        .refetchQueries({
+          queryKey: ['transactions', selectedUser?.userId, startDate, endDate],
+        })
+        .catch(console.error);
+    },
+    successMessage: () => t('api.success.update', { item: 'transaction' }),
+    errorMessage: (error) =>
+      t('api.error.update', { item: 'transaction', message: error.message }),
   });
 
   const deleteTransactionMutation = useNotifiedMutation({
@@ -144,6 +167,10 @@ export const useTransactionsApi = () => {
     addTransactionMutation.mutate({ ...transaction });
   };
 
+  const handleUpdateTransaction = (transaction: TransactionUpdate) => {
+    updateTransactionInlineMutation.mutate({ ...transaction });
+  };
+
   const handleDeleteTransactions = async (ids: string[]) => {
     await deleteTransactionMutation.mutateAsync(ids);
   };
@@ -156,6 +183,7 @@ export const useTransactionsApi = () => {
     isRefetching,
     dataUpdatedAt,
     handleAddTransaction,
+    handleUpdateTransaction,
     handleDeleteTransactions,
   };
 };

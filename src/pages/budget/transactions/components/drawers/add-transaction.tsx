@@ -16,6 +16,7 @@ import {
 } from '@cloudscape-design/components';
 import { zodResolver } from '@hookform/resolvers/zod';
 import getUserLocale from 'get-user-locale';
+import { DateTime } from 'luxon';
 
 import { useSelectedUser } from '@/hooks/use-selected-user';
 
@@ -27,11 +28,12 @@ import {
 } from '../../validation/transaction-schema';
 
 type AddTransactionProps = {
+  selectedDate: DateTime;
   onAdd: (budgetItem: TransactionInsert) => void;
   onClose: () => void;
 };
 
-export const AddTransaction = ({ onAdd, onClose }: AddTransactionProps) => {
+export const AddTransaction = ({ selectedDate, onAdd, onClose }: AddTransactionProps) => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budgetTransactions.drawer' });
   const { selectedUser } = useSelectedUser();
   const { data } = useCategoriesApi();
@@ -44,6 +46,9 @@ export const AddTransaction = ({ onAdd, onClose }: AddTransactionProps) => {
   } = useForm<TransactionSchema>({
     resolver: zodResolver(transactionSchema),
   });
+
+  const startDate = selectedDate.startOf('month');
+  const endDate = selectedDate.endOf('month');
 
   const handleOnClose = () => {
     reset();
@@ -94,6 +99,10 @@ export const AddTransaction = ({ onAdd, onClose }: AddTransactionProps) => {
                 <DatePicker
                   {...field}
                   placeholder='YYYY/MM/DD'
+                  isDateEnabled={(dateObj) => {
+                    const dateTime = DateTime.fromJSDate(dateObj);
+                    return dateTime >= startDate && dateTime <= endDate;
+                  }}
                   onChange={({ detail }) => field.onChange(detail.value)}
                 />
               </FormField>

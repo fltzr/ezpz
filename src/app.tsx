@@ -6,6 +6,7 @@ import I18nProvider, { I18nProviderProps } from '@cloudscape-design/components/i
 import messages from '@cloudscape-design/components/i18n/messages/all.en';
 import messagesFr from '@cloudscape-design/components/i18n/messages/all.fr';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import { DrawerProvider } from '@/components/drawer-provider';
 import { SupabaseProvider } from '@/components/supabase-provider';
@@ -92,6 +93,7 @@ const App = () => {
             </BudgetProvider>
           </AuthProvider>
         </SupabaseProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </I18nProvider>
   );

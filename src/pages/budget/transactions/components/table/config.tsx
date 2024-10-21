@@ -24,7 +24,7 @@ export const getColumnDefintions = (
 
   return [
     {
-      id: 'date',
+      id: 'transaction_date',
       header: i18n.t('budgetTransactions.common.columns.date'),
       cell: (item) => item.transaction_date,
       width: 215,

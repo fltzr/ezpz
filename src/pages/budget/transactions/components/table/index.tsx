@@ -5,9 +5,11 @@ import {
   Box,
   Button,
   ButtonDropdown,
+  Calendar,
   CollectionPreferences,
   CollectionPreferencesProps,
   Header,
+  Popover,
   SpaceBetween,
   Table,
   TextFilter,
@@ -27,7 +29,13 @@ import { DeleteTransactionModal } from '../modals/delete-transaction';
 import { getColumnDefintions } from './config';
 
 export const TransactionsTable = () => {
-  const { t } = useTranslation(undefined);
+  const { t, i18n } = useTranslation(undefined);
+
+  const now = DateTime.now();
+  const [date, setDate] = useState(now);
+  const [lastRefresh, setLastRefresh] = useState<string | null>(null);
+  const [selectedTransactions, setSelectedTransactions] = useState<Transaction[]>([]);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [preferences, setPreferences] =
     useLocalStorage<CollectionPreferencesProps.Preferences>(
       'Transaction-Table-Preferences',
@@ -38,8 +46,8 @@ export const TransactionsTable = () => {
         wrapLines: false,
       }
     );
-  const { openDrawer, closeDrawer } = useDrawer();
 
+  const { openDrawer, closeDrawer } = useDrawer();
   const {
     data,
     error,
@@ -48,14 +56,10 @@ export const TransactionsTable = () => {
     dataUpdatedAt,
     isRefetching,
     handleAddTransaction,
+    handleUpdateTransaction,
     handleDeleteTransactions,
-  } = useTransactionsApi();
+  } = useTransactionsApi({ selectedDate: date });
   const { data: categories } = useCategoriesApi();
-
-  const [lastRefresh, setLastRefresh] = useState<string | null>(null);
-  const [selectedTransactions, setSelectedTransactions] = useState<Transaction[]>([]);
-
-  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
   const handleConfirmDeleteTransactions = () => {
     console.log('handling');
@@ -97,6 +101,30 @@ export const TransactionsTable = () => {
                   ? `(${data.length})`
                   : ''
             }
+            info={
+              <Popover
+                renderWithPortal
+                dismissButton={false}
+                position='bottom'
+                content={
+                  <Calendar
+                    locale={i18n.language}
+                    granularity='month'
+                    isDateEnabled={(dateObj) => {
+                      const dateTime = DateTime.fromJSDate(dateObj).endOf('month');
+                      return dateTime <= now.endOf('month');
+                    }}
+                    value={date.toFormat('yyyy-MM')}
+                    onChange={({ detail }) => {
+                      closeDrawer();
+                      const newDate = DateTime.fromFormat(detail.value, 'yyyy-MM');
+                      setDate(newDate as DateTime<true>);
+                    }}
+                  />
+                }>
+                {date.setLocale(i18n.language).toFormat('MMMM yyyy')}
+              </Popover>
+            }
             actions={
               <SpaceBetween size='xs' direction='horizontal'>
                 <ManualRefresh
@@ -136,6 +164,7 @@ export const TransactionsTable = () => {
                       drawerName: 'add-transaction',
                       content: (
                         <AddTransaction
+                          selectedDate={date}
                           onAdd={handleAddTransaction}
                           onClose={closeDrawer}
                         />
@@ -171,7 +200,7 @@ export const TransactionsTable = () => {
             contentDisplayPreference={{
               options: [
                 {
-                  id: 'date',
+                  id: 'transaction_date',
                   label: t('budgetTransactions.common.columns.date'),
                   alwaysVisible: true,
                 },
@@ -208,12 +237,18 @@ export const TransactionsTable = () => {
           console.log(JSON.stringify(newValue, null, 2));
           console.log('--------');
 
+          if (column.id?.includes('category')) {
+            column.id = 'category_id';
+          }
+
           const payload = {
             id: item.id,
             [column.id!]: newValue,
           };
 
           console.log('Payload: ', payload);
+
+          handleUpdateTransaction(payload);
         }}
         onSelectionChange={(event) => {
           setSelectedTransactions(event.detail.selectedItems);

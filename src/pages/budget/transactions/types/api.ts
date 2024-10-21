@@ -6,8 +6,9 @@ export type TransactionDBUpdate = Database['public']['Tables']['transactions']['
 
 type CategoriesDB = Database['public']['Tables']['categories']['Row'];
 
-export type Transaction = Omit<TransactionDB, 'category_id'> & {
+export type Transaction = TransactionDB & {
   category?: Pick<CategoriesDB, 'id' | 'category_name'>;
 };
 
 export type TransactionInsert = TransactionDBInsert;
+export type TransactionUpdate = { id: string } & Omit<TransactionDBUpdate, 'id'>;
