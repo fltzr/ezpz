@@ -123,6 +123,7 @@ export const getColumnDefintions = (
             autoFocus
             disableBrowserAutocorrect
             type='number'
+            step={0.01}
             autoComplete={false}
             placeholder={`${resolvedCurrencySymbol} ${item?.outflow ?? ''}`}
             value={ctx.currentValue ?? String(item.outflow || 0)}

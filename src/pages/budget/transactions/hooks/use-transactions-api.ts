@@ -113,7 +113,7 @@ export const useTransactionsApi = ({ selectedDate }: { selectedDate: DateTime })
     mutationFn: (item: TransactionInsert) => createTransaction(supabase, item),
     onSuccess: (newItem) => {
       queryClient.setQueryData<Transaction[]>(
-        ['transactions', selectedUser?.userId],
+        ['transactions', selectedUser?.userId, startDate, endDate],
         (old = []) => [newItem, ...old]
       );
     },
@@ -140,7 +140,7 @@ export const useTransactionsApi = ({ selectedDate }: { selectedDate: DateTime })
     mutationFn: (ids: string[]) => deleteTransaction(supabase, ids),
     onSuccess: (ids) => {
       queryClient.setQueryData<Transaction[]>(
-        ['transactions', selectedUser?.userId],
+        ['transactions', selectedUser?.userId, startDate, endDate],
         (old) => {
           if (!old) return [];
 

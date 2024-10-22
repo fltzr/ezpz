@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import {
   Box,
   Button,
-  ButtonDropdown,
   Calendar,
   CollectionPreferences,
   CollectionPreferencesProps,
@@ -29,7 +28,7 @@ import { DeleteTransactionModal } from '../modals/delete-transaction';
 import { getColumnDefintions } from './config';
 
 export const TransactionsTable = () => {
-  const { t, i18n } = useTranslation(undefined);
+  const { t, i18n } = useTranslation();
 
   const now = DateTime.now();
   const [date, setDate] = useState(now);
@@ -42,7 +41,7 @@ export const TransactionsTable = () => {
       {
         contentDensity: 'compact',
         stripedRows: true,
-        pageSize: 30,
+        pageSize: 10,
         wrapLines: false,
       }
     );
@@ -62,7 +61,6 @@ export const TransactionsTable = () => {
   const { data: categories } = useCategoriesApi();
 
   const handleConfirmDeleteTransactions = () => {
-    console.log('handling');
     const ids = selectedTransactions.map((item) => item.id);
 
     handleDeleteTransactions(ids)
@@ -135,27 +133,16 @@ export const TransactionsTable = () => {
                     refetch().catch(console.error);
                   }}
                 />
-                <ButtonDropdown
-                  items={[
-                    {
-                      id: 'delete-transactions',
-                      text: t('budgetTransactions.table.headerActions.delete'),
-                      disabled: selectedTransactions?.length <= 0,
-                    },
-                  ]}
-                  onItemClick={(event) => {
-                    const eventId = event.detail.id;
-
-                    switch (eventId) {
-                      case 'delete-transactions':
-                        setDeleteModalVisible(true);
-                        break;
-                      default:
-                        break;
-                    }
+                <Button
+                  variant='normal'
+                  disabled={selectedTransactions.length <= 0}
+                  onClick={() => {
+                    setDeleteModalVisible(true);
                   }}>
-                  Actions
-                </ButtonDropdown>
+                  {t('budgetTransactions.table.headerActions.delete', {
+                    count: selectedTransactions.length,
+                  })}
+                </Button>
                 <Button
                   variant='primary'
                   iconName='add-plus'
@@ -191,6 +178,10 @@ export const TransactionsTable = () => {
                 {
                   value: 20,
                   label: t('budgetTransactions.table.pageSizeOption', { count: 20 }),
+                },
+                {
+                  value: 30,
+                  label: t('budgetTransactions.table.pageSizeOption', { count: 30 }),
                 },
               ],
             }}
@@ -229,14 +220,16 @@ export const TransactionsTable = () => {
             <Box variant='span'>{t('budgetTransactions.table.empty')}</Box>
           )
         }
-        filter={<TextFilter filteringText='' />}
+        filter={
+          <TextFilter
+            disabled
+            filteringText=''
+            filteringPlaceholder={t(
+              'budgetTransactions.common.disabledFilteringPlaceholder'
+            )}
+          />
+        }
         submitEdit={(item, column, newValue) => {
-          console.log('Raw data:');
-          console.log(JSON.stringify(item, null, 2));
-          console.log(JSON.stringify(column, null, 2));
-          console.log(JSON.stringify(newValue, null, 2));
-          console.log('--------');
-
           if (column.id?.includes('category')) {
             column.id = 'category_id';
           }
@@ -245,8 +238,6 @@ export const TransactionsTable = () => {
             id: item.id,
             [column.id!]: newValue,
           };
-
-          console.log('Payload: ', payload);
 
           handleUpdateTransaction(payload);
         }}

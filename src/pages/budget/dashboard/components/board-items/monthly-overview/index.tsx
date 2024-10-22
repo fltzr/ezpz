@@ -8,6 +8,7 @@ import {
 } from '@cloudscape-design/components';
 import getUserLocale from 'get-user-locale';
 import type { TFunction } from 'i18next';
+import { DateTime } from 'luxon';
 
 import i18n from '@/i18n';
 import { formatCurrency } from '@/utils/format-currency';
@@ -63,6 +64,8 @@ const MonthlyOverview = () => {
   const { data: incomeSources } = useIncomeApi();
   const { data: budgetItems } = useBudgetApi();
 
+  const now = DateTime.now();
+
   const amountToBudget = incomeSources?.reduce(
     (acc, curr) => (acc = acc + curr.projected_amount),
     0
@@ -86,6 +89,10 @@ const MonthlyOverview = () => {
                 expandToViewport
                 locale={locale}
                 value={budgetEntry}
+                isDateEnabled={(dateObj) => {
+                  const dateTime = DateTime.fromJSDate(dateObj).endOf('month');
+                  return dateTime <= now.endOf('month');
+                }}
                 onChange={(e) => {
                   setBudgetEntry(e.detail.value);
                 }}

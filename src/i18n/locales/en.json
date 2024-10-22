@@ -272,11 +272,13 @@
   },
   "budgetTransactions": {
     "common": {
+      "disabledFilteringPlaceholder": "Filtering is not yet supported.",
       "columns": {
         "id": "ID",
         "date": "Date",
         "category": "Category",
         "memo": "Memo",
+        "inflow": "Inflow",
         "outflow": "Outflow"
       }
     },
@@ -284,8 +286,8 @@
       "header": "Transactions",
       "headerActions": {
         "title": "Actions",
-        "add": "Add transaction",
-        "delete": "Delete transactions"
+        "add": "Add",
+        "delete": "Delete ({{count}})"
       },
       "fetchingItem": "Fetching {{item}}...",
       "loadingError": "There was an issue loading {{item}}. Try again?",
