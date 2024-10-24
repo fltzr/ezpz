@@ -11,3 +11,5 @@ export const useSupabase = () => {
 
   return context;
 };
+
+export type UseSupabase = ReturnType<typeof useSupabase>;

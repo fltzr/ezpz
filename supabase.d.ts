@@ -33,22 +33,7 @@ export type Database = {
           updated_at?: string;
           user_id?: string;
         };
-        Relationships: [
-          {
-            foreignKeyName: 'plaid_balances_plaid_id_fkey';
-            columns: ['plaid_id'];
-            isOneToOne: false;
-            referencedRelation: 'plaid_link';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'plaid_balances_user_id_fkey';
-            columns: ['user_id'];
-            isOneToOne: true;
-            referencedRelation: 'users';
-            referencedColumns: ['id'];
-          },
-        ];
+        Relationships: [];
       };
     };
     Views: {
@@ -66,6 +51,36 @@ export type Database = {
   };
   public: {
     Tables: {
+      budget_category: {
+        Row: {
+          budget_entry: string;
+          budgeted: number;
+          created_at: string;
+          id: string;
+          is_recurring: boolean;
+          name: string;
+          user_id: string;
+        };
+        Insert: {
+          budget_entry?: string;
+          budgeted: number;
+          created_at?: string;
+          id?: string;
+          is_recurring?: boolean;
+          name: string;
+          user_id: string;
+        };
+        Update: {
+          budget_entry?: string;
+          budgeted?: number;
+          created_at?: string;
+          id?: string;
+          is_recurring?: boolean;
+          name?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       budget_items: {
         Row: {
           budget_entry: string | null;
@@ -108,13 +123,6 @@ export type Database = {
             referencedRelation: 'categories';
             referencedColumns: ['id'];
           },
-          {
-            foreignKeyName: 'budget_items_user_id_fkey';
-            columns: ['user_id'];
-            isOneToOne: false;
-            referencedRelation: 'users';
-            referencedColumns: ['id'];
-          },
         ];
       };
       categories: {
@@ -142,15 +150,7 @@ export type Database = {
           is_recurring?: boolean;
           user_id?: string;
         };
-        Relationships: [
-          {
-            foreignKeyName: 'categories_user_id_fkey';
-            columns: ['user_id'];
-            isOneToOne: false;
-            referencedRelation: 'users';
-            referencedColumns: ['id'];
-          },
-        ];
+        Relationships: [];
       };
       income_sources: {
         Row: {
@@ -180,15 +180,7 @@ export type Database = {
           projected_amount?: number;
           user_id?: string;
         };
-        Relationships: [
-          {
-            foreignKeyName: 'income_sources_user_id_fkey';
-            columns: ['user_id'];
-            isOneToOne: false;
-            referencedRelation: 'users';
-            referencedColumns: ['id'];
-          },
-        ];
+        Relationships: [];
       };
       loans: {
         Row: {
@@ -221,15 +213,7 @@ export type Database = {
           principal?: number;
           user_id?: string | null;
         };
-        Relationships: [
-          {
-            foreignKeyName: 'loans_user_id_fkey';
-            columns: ['user_id'];
-            isOneToOne: false;
-            referencedRelation: 'users';
-            referencedColumns: ['id'];
-          },
-        ];
+        Relationships: [];
       };
       plaid_link: {
         Row: {
@@ -253,19 +237,11 @@ export type Database = {
           item_id?: string;
           user_id?: string | null;
         };
-        Relationships: [
-          {
-            foreignKeyName: 'plaid_link_user_id_fkey';
-            columns: ['user_id'];
-            isOneToOne: false;
-            referencedRelation: 'users';
-            referencedColumns: ['id'];
-          },
-        ];
+        Relationships: [];
       };
       transactions: {
         Row: {
-          category_id: string | null;
+          budget_category_id: string | null;
           created_at: string;
           id: string;
           memo: string | null;
@@ -274,7 +250,7 @@ export type Database = {
           user_id: string;
         };
         Insert: {
-          category_id?: string | null;
+          budget_category_id?: string | null;
           created_at?: string;
           id?: string;
           memo?: string | null;
@@ -283,7 +259,7 @@ export type Database = {
           user_id: string;
         };
         Update: {
-          category_id?: string | null;
+          budget_category_id?: string | null;
           created_at?: string;
           id?: string;
           memo?: string | null;
@@ -293,17 +269,10 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'transactions_category_id_fkey';
-            columns: ['category_id'];
+            foreignKeyName: 'transactions_budget_category_id_fkey';
+            columns: ['budget_category_id'];
             isOneToOne: false;
-            referencedRelation: 'categories';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'transactions_user_id_fkey';
-            columns: ['user_id'];
-            isOneToOne: false;
-            referencedRelation: 'users';
+            referencedRelation: 'budget_category';
             referencedColumns: ['id'];
           },
         ];
@@ -324,15 +293,7 @@ export type Database = {
           name?: string;
           user?: string | null;
         };
-        Relationships: [
-          {
-            foreignKeyName: 'users_user_fkey';
-            columns: ['user'];
-            isOneToOne: false;
-            referencedRelation: 'users';
-            referencedColumns: ['id'];
-          },
-        ];
+        Relationships: [];
       };
     };
     Views: {
@@ -429,4 +390,19 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions['schema']]['Enums'][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema['Enums']
     ? PublicSchema['Enums'][PublicEnumNameOrOptions]
+    : never;
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema['CompositeTypes']
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database;
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema['CompositeTypes']
+    ? PublicSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
     : never;
