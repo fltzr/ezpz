@@ -51,6 +51,10 @@ const CommonLayout = () => {
     }
   }, [location, addNotification, t]);
 
+  useEffect(() => {
+    closeDrawer();
+  }, [location.pathname, closeDrawer]);
+
   if (isAuthLoading) {
     return <SuspenseLoadingBar />;
   }
