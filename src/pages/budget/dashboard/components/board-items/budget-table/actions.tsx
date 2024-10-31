@@ -6,21 +6,16 @@ import { DateTime } from 'luxon';
 
 import { useDrawer } from '@/components/drawer-provider';
 import { ManualRefresh } from '@/components/manual-refresh';
-import { useSelectedUser } from '@/hooks/use-selected-user';
+import { useBudgetCategoryApi } from '@/pages/budget/hooks/use-budget-category-api';
 
-import { useBudgetApi } from '../../../../hooks/use-budget-api';
-import { useBudgetProvider } from '../../../../hooks/use-budget-provider';
-import { AddBudgetItem } from '../../drawer/add-budget-item';
-import { AddCategory } from '../../drawer/add-category';
+import { AddBudgetCategory } from '../../drawer/add-budget-category';
 
 export const BudgetTableActions = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.budgetTable' });
 
   const { openDrawer, closeDrawer } = useDrawer();
-  const { selectedUser } = useSelectedUser();
-  const { budgetEntry } = useBudgetProvider();
-  const { isFetching, dataUpdatedAt, refetch, handleAddCategory, handleAddBudgetItem } =
-    useBudgetApi();
+  const { isFetching, dataUpdatedAt, refetch, handleAddBudgetCategory } =
+    useBudgetCategoryApi();
   const [lastRefresh, setLastRefresh] = useState<string | null>(null);
 
   const onClickAddCategoryDrawer = () => {
@@ -28,26 +23,7 @@ export const BudgetTableActions = () => {
       drawerName: 'add-category',
       width: 350,
       content: (
-        <AddCategory
-          selectedUserId={selectedUser?.userId}
-          onAdd={handleAddCategory}
-          onClose={closeDrawer}
-        />
-      ),
-    });
-  };
-
-  const onClickAddBudgetItemDrawer = () => {
-    openDrawer({
-      drawerName: 'add-budget-item',
-      width: 350,
-      content: (
-        <AddBudgetItem
-          budgetEntry={budgetEntry}
-          selectedUserId={selectedUser?.userId}
-          onAdd={handleAddBudgetItem}
-          onClose={closeDrawer}
-        />
+        <AddBudgetCategory onAdd={handleAddBudgetCategory} onCancel={closeDrawer} />
       ),
     });
   };
@@ -64,10 +40,6 @@ export const BudgetTableActions = () => {
       />
       <Button variant='primary' iconName='add-plus' onClick={onClickAddCategoryDrawer}>
         {t('addCategory')}
-      </Button>
-
-      <Button variant='normal' iconName='add-plus' onClick={onClickAddBudgetItemDrawer}>
-        {t('addBudgetItem')}
       </Button>
     </SpaceBetween>
   );

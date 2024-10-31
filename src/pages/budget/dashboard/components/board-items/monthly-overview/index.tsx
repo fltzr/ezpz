@@ -7,25 +7,25 @@ import {
   StatusIndicator,
 } from '@cloudscape-design/components';
 import getUserLocale from 'get-user-locale';
-import type { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
 
 import i18n from '@/i18n';
+import { useTransactionsApi } from '@/pages/budget/hooks/use-transactions-api';
 import { formatCurrency } from '@/utils/format-currency';
 
-import { useBudgetApi } from '../../../../hooks/use-budget-api';
 import { useBudgetProvider } from '../../../../hooks/use-budget-provider';
 import { useIncomeApi } from '../../../../hooks/use-income-api';
-import { isBudgetItem } from '../../../../utils/api-types';
 import { WidgetConfig } from '../../../../utils/widget-types';
 
 import styles from './styles.module.scss';
 
-const getBudgetStatus = (t: TFunction, amountSpent: number, budgetAmount?: number) => {
+const getBudgetStatus = (amountSpent: number, budgetAmount?: number) => {
   if (!budgetAmount) {
     return (
       <StatusIndicator type='warning' wrapText={true}>
-        <div className={styles['no-word-break']}>{t('status.noIncomeSet')}</div>
+        <div className={styles['no-word-break']}>
+          {i18n.t('budget.monthlyOverview.status.noIncomeSet')}
+        </div>
       </StatusIndicator>
     );
   }
@@ -37,7 +37,9 @@ const getBudgetStatus = (t: TFunction, amountSpent: number, budgetAmount?: numbe
     return (
       <div className={styles['no-word-break']}>
         <StatusIndicator type='success'>
-          {t('status.underBudget', { amount: differenceFormatted })}
+          {i18n.t('budget.monthlyOverview.status.underBudget', {
+            amount: differenceFormatted,
+          })}
         </StatusIndicator>
       </div>
     );
@@ -45,13 +47,15 @@ const getBudgetStatus = (t: TFunction, amountSpent: number, budgetAmount?: numbe
     return (
       <StatusIndicator type='error'>
         <div className={styles['no-word-break']}>
-          {t('status.overBudget', { amount: differenceFormatted })}
+          {i18n.t('budget.monthlyOverview.status.overBudget', {
+            amount: differenceFormatted,
+          })}
         </div>
       </StatusIndicator>
     );
   return (
     <StatusIndicator type='info' wrapText={true}>
-      {t('status.onBudget')}
+      {i18n.t('budget.monthlyOverview.status.onBudget')}
     </StatusIndicator>
   );
 };
@@ -62,7 +66,9 @@ const MonthlyOverview = () => {
   const locale = getUserLocale();
   const { budgetEntry, setBudgetEntry } = useBudgetProvider();
   const { data: incomeSources } = useIncomeApi();
-  const { data: budgetItems } = useBudgetApi();
+  const { data: budgetItems } = useTransactionsApi({
+    selectedDate: DateTime.fromFormat(budgetEntry, 'yyyy-MM'),
+  });
 
   const now = DateTime.now();
 
@@ -72,10 +78,7 @@ const MonthlyOverview = () => {
   );
 
   const amountSpent =
-    budgetItems?.reduce(
-      (acc, curr) => (isBudgetItem(curr) ? acc + curr.projected_amount : acc),
-      0
-    ) ?? 0;
+    budgetItems?.reduce((acc, curr) => (curr.outflow ? acc + curr.outflow : 0), 0) ?? 0;
 
   return (
     <KeyValuePairs
@@ -112,7 +115,7 @@ const MonthlyOverview = () => {
         },
         {
           label: t('amountLeft'),
-          value: getBudgetStatus(t, amountSpent, amountToBudget),
+          value: getBudgetStatus(amountSpent, amountToBudget),
         },
       ]}
     />

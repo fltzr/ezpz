@@ -13,7 +13,7 @@ type PageHeaderProps = {
 };
 
 export const PageHeader = ({ actions }: PageHeaderProps) => {
-  const { t } = useTranslation(undefined, { keyPrefix: 'budget' });
+  const { t } = useTranslation(['budget/dashboard']);
   const locale = getI18n().language;
   const { selectedUser } = useSelectedUser();
   const { budgetEntry } = useBudgetProvider();

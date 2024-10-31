@@ -1,51 +1,69 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useCollection } from '@cloudscape-design/collection-hooks';
 import { StatusIndicator, Table } from '@cloudscape-design/components';
+import { DateTime } from 'luxon';
 
-import { useDrawer } from '@/components/drawer-provider';
-import { useSelectedUser } from '@/hooks/use-selected-user';
+import { useBudgetCategoryApi } from '@/pages/budget/hooks/use-budget-category-api';
+import { useTransactionsApi } from '@/pages/budget/hooks/use-transactions-api';
 
-import { useBudgetApi } from '../../../../hooks/use-budget-api';
 import { useBudgetProvider } from '../../../../hooks/use-budget-provider';
-import { type BudgetTableItem, isCategoryItem } from '../../../../utils/api-types';
+import { type BudgetCategory } from '../../../../utils/api-types';
 import { DeleteItemModal } from '../../../components/modals/delete-item';
-import { AddBudgetItem } from '../../drawer/add-budget-item';
-import { EditBudgetItem } from '../../drawer/edit-budget-item';
-import { EditCategory } from '../../drawer/edit-category';
 
 import { createBudgetTableColumnDefinitions } from './table-configs';
 
 export const BudgetTable = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.budgetTable' });
-  const { openDrawer, closeDrawer } = useDrawer();
-  const { selectedUser } = useSelectedUser();
   const { budgetEntry } = useBudgetProvider();
 
   const {
     data: budgetItems,
     isFetching,
-    refetch,
-    handleAddBudgetItem,
-    handleUpdateBudgetItem,
-    handleDeleteItem,
-  } = useBudgetApi();
+    handleUpdateBudgetCategory,
+    handleDeleteBudgetCategory,
+  } = useBudgetCategoryApi();
+
+  const { data: transactions } = useTransactionsApi({
+    selectedDate: DateTime.fromFormat(budgetEntry, 'yyyy-MM'),
+  });
 
   const { items, collectionProps } = useCollection(budgetItems ?? [], {
     selection: {},
     sorting: {},
-    expandableRows: {
-      getId: (item: BudgetTableItem) => item.id,
-      getParentId: (item: BudgetTableItem) =>
-        isCategoryItem(item) ? null : String(item.category_id),
-    },
   });
 
   const [deleteItemProps, setDeleteItemProps] = useState<{
     visible: boolean;
-    item?: BudgetTableItem;
+    item?: BudgetCategory;
   }>({ visible: false });
+
+  const progressData = () => {
+    const categoryTotals = new Map<string, number>();
+
+    transactions?.map((tx) => {
+      const { outflow, budget_category_id } = tx;
+
+      if (!budget_category_id || !outflow) return;
+
+      if (categoryTotals.has(budget_category_id)) {
+        categoryTotals.set(
+          budget_category_id,
+          categoryTotals.get(budget_category_id)! + outflow
+        );
+      } else {
+        categoryTotals.set(budget_category_id, outflow);
+      }
+    });
+
+    const result = items?.map((c) => {
+      const total = categoryTotals.get(c.id) || 0;
+      return { title: c.id, value: total };
+    });
+
+    return result;
+  };
 
   const onCloseDeleteModal = () => {
     setDeleteItemProps({
@@ -53,12 +71,6 @@ export const BudgetTable = () => {
       item: undefined,
     });
   };
-
-  useEffect(() => {
-    refetch().catch(console.error);
-    // eslint-disable-next-line react-compiler/react-compiler
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [budgetEntry]);
 
   return (
     <>
@@ -68,65 +80,36 @@ export const BudgetTable = () => {
         variant='embedded'
         loading={isFetching}
         items={items ?? []}
-        columnDefinitions={createBudgetTableColumnDefinitions(t, {
-          handleEditCategory: (item) => {
-            openDrawer({
-              drawerName: 'edit-category-item',
-              width: 300,
-              content: (
-                <EditCategory
-                  selectedUserId={selectedUser?.userId}
-                  category={item}
-                  onEdit={handleUpdateBudgetItem}
-                  onClose={closeDrawer}
-                />
-              ),
-            });
+        columnDefinitions={createBudgetTableColumnDefinitions(
+          {
+            progressData: progressData(),
           },
-          handleAddBudgetLineItem: (item) => {
-            openDrawer({
-              drawerName: 'add-budget-item',
-              width: 300,
-              content: (
-                <AddBudgetItem
-                  budgetEntry={budgetEntry}
-                  selectedUserId={selectedUser?.userId}
-                  categoryId={item.id}
-                  onAdd={handleAddBudgetItem}
-                  onClose={closeDrawer}
-                />
-              ),
-            });
-          },
-          handleEditBudgetItem: (item) => {
-            openDrawer({
-              drawerName: 'edit-budget-item',
-              width: 300,
-              content: (
-                <EditBudgetItem
-                  item={item}
-                  budgetEntry={budgetEntry}
-                  selectedUserId={selectedUser?.userId}
-                  onEdit={handleUpdateBudgetItem}
-                  onClose={closeDrawer}
-                />
-              ),
-            });
-          },
-          handleDeleteItem: (item) => {
-            setDeleteItemProps({
-              visible: true,
-              item,
-            });
-          },
-        })}
+          {
+            handleDeleteItem: (item) => {
+              setDeleteItemProps({ visible: true, item });
+            },
+          }
+        )}
         empty={<StatusIndicator type='info'>{t('empty')}</StatusIndicator>}
+        submitEdit={(item, column, newValue) => {
+          if (column.id?.includes('category')) {
+            column.id = 'budget_category_id';
+          }
+
+          const payload = {
+            id: item.id,
+            [column.id!]: newValue,
+          };
+
+          handleUpdateBudgetCategory(payload);
+        }}
       />
+
       <DeleteItemModal
         visible={deleteItemProps.visible}
         item={deleteItemProps.item}
         onDelete={(item) => {
-          handleDeleteItem(item);
+          handleDeleteBudgetCategory(item);
           onCloseDeleteModal();
         }}
         onClose={onCloseDeleteModal}

@@ -4,7 +4,7 @@ import type {
   ItemsPaletteProps,
 } from '@cloudscape-design/board-components';
 
-import type { WidgetDataType } from './widget-types';
+import type { WidgetDataType } from '../utils/widget-types';
 
 export const boardItemI18nStrings: BoardItemProps.I18nStrings = {
   dragHandleAriaLabel: 'Drag handle',

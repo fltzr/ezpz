@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useCollection } from '@cloudscape-design/collection-hooks';
 import {
   Box,
   Button,
@@ -8,24 +9,26 @@ import {
   CollectionPreferences,
   CollectionPreferencesProps,
   Header,
+  Pagination,
   Popover,
+  PropertyFilter,
   SpaceBetween,
   Table,
-  TextFilter,
 } from '@cloudscape-design/components';
 import { DateTime } from 'luxon';
 
 import { useDrawer } from '@/components/drawer-provider';
 import { ManualRefresh } from '@/components/manual-refresh';
 import useLocalStorage from '@/hooks/use-local-storage';
+import { useBudgetCategoryApi } from '@/pages/budget/hooks/use-budget-category-api';
 
-import { useCategoriesApi } from '../../hooks/use-categories-api';
-import { useTransactionsApi } from '../../hooks/use-transactions-api';
+import { useTransactionsApi } from '../../../hooks/use-transactions-api';
 import type { Transaction } from '../../types/api';
 import { AddTransaction } from '../drawers/add-transaction';
 import { DeleteTransactionModal } from '../modals/delete-transaction';
 
 import { getColumnDefintions } from './config';
+import { FILTERING_PROPERTIES } from './configs/property-filter-config';
 
 export const TransactionsTable = () => {
   const { t, i18n } = useTranslation();
@@ -58,7 +61,7 @@ export const TransactionsTable = () => {
     handleUpdateTransaction,
     handleDeleteTransactions,
   } = useTransactionsApi({ selectedDate: date });
-  const { data: categories } = useCategoriesApi();
+  const { data: categories } = useBudgetCategoryApi();
 
   const handleConfirmDeleteTransactions = () => {
     const ids = selectedTransactions.map((item) => item.id);
@@ -73,9 +76,29 @@ export const TransactionsTable = () => {
       });
   };
 
+  const { items, collectionProps, propertyFilterProps, paginationProps } = useCollection(
+    data ?? [],
+    {
+      propertyFiltering: {
+        filteringProperties: FILTERING_PROPERTIES,
+        noMatch: <Box>No match!</Box>,
+        empty: <Box>Empty!</Box>,
+      },
+      pagination: {
+        pageSize: preferences.pageSize,
+      },
+      selection: {},
+    }
+  );
+
+  useEffect(() => {
+    console.log(`items.length: ${items.length}`);
+  }, [items.length]);
+
   return (
     <>
       <Table
+        {...collectionProps}
         {...preferences}
         variant='container'
         selectionType='multi'
@@ -86,7 +109,7 @@ export const TransactionsTable = () => {
         }}
         loading={isFetching}
         selectedItems={selectedTransactions}
-        items={data as Transaction[]}
+        items={items}
         columnDefinitions={getColumnDefintions(categories)}
         columnDisplay={preferences.contentDisplay}
         header={
@@ -152,6 +175,7 @@ export const TransactionsTable = () => {
                       content: (
                         <AddTransaction
                           selectedDate={date}
+                          categories={categories}
                           onAdd={handleAddTransaction}
                           onClose={closeDrawer}
                         />
@@ -165,6 +189,7 @@ export const TransactionsTable = () => {
             {t('budgetTransactions.table.header')}
           </Header>
         }
+        pagination={<Pagination {...paginationProps} />}
         preferences={
           <CollectionPreferences
             onConfirm={({ detail }) => setPreferences(detail)}
@@ -221,17 +246,18 @@ export const TransactionsTable = () => {
           )
         }
         filter={
-          <TextFilter
-            disabled
-            filteringText=''
-            filteringPlaceholder={t(
-              'budgetTransactions.common.disabledFilteringPlaceholder'
-            )}
+          <PropertyFilter
+            {...propertyFilterProps}
+            countText={
+              propertyFilterProps.query
+                ? `${items.length} transaction${items.length > 1 ? 's' : ''}`
+                : ''
+            }
           />
         }
         submitEdit={(item, column, newValue) => {
           if (column.id?.includes('category')) {
-            column.id = 'category_id';
+            column.id = 'budget_category_id';
           }
 
           const payload = {
@@ -243,9 +269,6 @@ export const TransactionsTable = () => {
         }}
         onSelectionChange={(event) => {
           setSelectedTransactions(event.detail.selectedItems);
-        }}
-        onColumnWidthsChange={(event) => {
-          console.log(event.detail.widths);
         }}
       />
       <DeleteTransactionModal

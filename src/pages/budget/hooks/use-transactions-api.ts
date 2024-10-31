@@ -7,7 +7,11 @@ import { useNotifiedMutation } from '@/hooks/use-notified-mutation';
 import { useSelectedUser } from '@/hooks/use-selected-user';
 import { useSupabase } from '@/hooks/use-supabase';
 
-import type { Transaction, TransactionInsert, TransactionUpdate } from '../types/api';
+import type {
+  Transaction,
+  TransactionInsert,
+  TransactionUpdate,
+} from '../transactions/types/api';
 
 const transactionJoinStatement = `
 id,
@@ -15,11 +19,11 @@ transaction_date,
 memo,
 outflow,
 created_at,
-category_id,
+budget_category_id,
 user_id,
-category:categories (
+category:budget_category (
   id,
-  category_name
+  name
 )
 `;
 
@@ -58,7 +62,7 @@ const createTransaction = async (
       `Error creating transaction entry: ${JSON.stringify(error, null, 2)}`
     );
 
-  return data as Transaction;
+  return data as unknown as Transaction;
 };
 
 const updateTransaction = async (
@@ -102,7 +106,11 @@ export const useTransactionsApi = ({ selectedDate }: { selectedDate: DateTime })
   const startDate = selectedDate.startOf('month').toISODate()!;
   const endDate = selectedDate.endOf('month').toISODate()!;
 
-  const { data, error, refetch, isFetching, isRefetching, dataUpdatedAt } = useQuery({
+  const { data, error, refetch, isFetching, isRefetching, dataUpdatedAt } = useQuery<
+    unknown,
+    Error,
+    ReadonlyArray<Transaction>
+  >({
     queryKey: ['transactions', selectedUser?.userId, startDate, endDate],
     queryFn: () =>
       fetchTransactions(supabase, selectedUser?.userId ?? '', startDate, endDate),

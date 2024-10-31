@@ -2,21 +2,28 @@ import { useTranslation } from 'react-i18next';
 
 import { PieChart, PieChartProps, StatusIndicator } from '@cloudscape-design/components';
 import getUserLocale from 'get-user-locale';
+import { DateTime } from 'luxon';
 
 import i18n from '@/i18n';
+import { useBudgetCategoryApi } from '@/pages/budget/hooks/use-budget-category-api';
+import { useBudgetProvider } from '@/pages/budget/hooks/use-budget-provider';
+import { useTransactionsApi } from '@/pages/budget/hooks/use-transactions-api';
 import { formatCurrency } from '@/utils/format-currency';
 
-import { useBudgetApi } from '../../../hooks/use-budget-api';
 import { useIncomeApi } from '../../../hooks/use-income-api';
-import { isBudgetItem, isCategoryItem } from '../../../utils/api-types';
 import { WidgetConfig } from '../../../utils/widget-types';
 
 // eslint-disable-next-line react-refresh/only-export-components
 const MonthlyBreakdown = () => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budget.monthlyBreakdown' });
 
+  const { budgetEntry } = useBudgetProvider();
+
   const { data: incomeSources } = useIncomeApi();
-  const { data, isFetching } = useBudgetApi();
+  const { data: transactions, isFetching: isFetchingTransactions } = useTransactionsApi({
+    selectedDate: DateTime.fromFormat(budgetEntry, 'yyyy-MM'),
+  });
+  const { data, isFetching } = useBudgetCategoryApi();
 
   const currencySymbol = getUserLocale().includes('US') ? '$' : '€';
 
@@ -28,20 +35,24 @@ const MonthlyBreakdown = () => {
   const chartData = (): PieChartProps.Datum[] | undefined => {
     const categoryTotals = new Map<string, number>();
 
-    data?.forEach((item) => {
-      if (isBudgetItem(item)) {
-        const currentTotal = categoryTotals.get(item.category_id) || 0;
-        categoryTotals.set(item.category_id, currentTotal + item.projected_amount);
+    transactions?.map((tx) => {
+      const { category, outflow } = tx;
+
+      if (!category || !category?.name || !outflow) return;
+
+      if (categoryTotals.has(category.name)) {
+        categoryTotals.set(category.name, categoryTotals.get(category.name)! + outflow);
+      } else {
+        categoryTotals.set(category.name, outflow);
       }
     });
 
-    return data
-      ?.filter((item) => isCategoryItem(item))
-      .map((category) => ({
-        title: category.category_name,
-        value: categoryTotals.get(category.id) || 0,
-      }))
-      .filter((item) => item.value > 0);
+    const result = data?.map((c) => {
+      const total = categoryTotals.get(c.name) || 0;
+      return { title: c.name, value: total };
+    });
+
+    return result;
   };
 
   return (
@@ -51,7 +62,7 @@ const MonthlyBreakdown = () => {
       variant='donut'
       size='small'
       data={chartData() ?? []}
-      statusType={isFetching ? 'loading' : 'finished'}
+      statusType={isFetching || isFetchingTransactions ? 'loading' : 'finished'}
       detailPopoverContent={(datum) => [
         { key: t('chart.popover.keyCategory'), value: datum.title },
         { key: t('chart.popover.keyAmount'), value: formatCurrency(datum.value) },

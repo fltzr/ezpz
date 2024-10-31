@@ -19,8 +19,8 @@ import getUserLocale from 'get-user-locale';
 import { DateTime } from 'luxon';
 
 import { useSelectedUser } from '@/hooks/use-selected-user';
+import { BudgetCategory } from '@/pages/budget/utils/api-types';
 
-import { useCategoriesApi } from '../../hooks/use-categories-api';
 import { TransactionInsert } from '../../types/api';
 import {
   TransactionSchema,
@@ -29,14 +29,20 @@ import {
 
 type AddTransactionProps = {
   selectedDate: DateTime;
+  categories?: BudgetCategory[];
   onAdd: (budgetItem: TransactionInsert) => void;
   onClose: () => void;
 };
 
-export const AddTransaction = ({ selectedDate, onAdd, onClose }: AddTransactionProps) => {
+export const AddTransaction = ({
+  selectedDate,
+  categories,
+  onAdd,
+  onClose,
+}: AddTransactionProps) => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budgetTransactions.drawer' });
   const { selectedUser } = useSelectedUser();
-  const { data } = useCategoriesApi();
+
   const {
     control,
     handleSubmit,
@@ -59,7 +65,7 @@ export const AddTransaction = ({ selectedDate, onAdd, onClose }: AddTransactionP
     if (!selectedUser?.userId) return;
     onAdd({
       user_id: selectedUser.userId,
-      category_id: data.category.value,
+      budget_category_id: data.category.value,
       transaction_date: data.date,
       memo: data.memo,
       outflow: data.outflow,
@@ -118,8 +124,8 @@ export const AddTransaction = ({ selectedDate, onAdd, onClose }: AddTransactionP
                 <Select
                   {...field}
                   placeholder={t('add.formFields.categoryPlaceholder')}
-                  options={data?.map((category) => ({
-                    label: category.category_name,
+                  options={categories?.map((category) => ({
+                    label: category.name,
                     value: category.id,
                   }))}
                   selectedOption={field.value}

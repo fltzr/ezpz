@@ -12,11 +12,11 @@ import { formatCurrency } from '@/utils/format-currency';
 import { Transaction } from '../../types/api';
 
 export const getColumnDefintions = (
-  categories?: { id: string; category_name: string }[]
+  categories?: { id: string; name: string }[]
 ): TableProps<Transaction>['columnDefinitions'] => {
   const convertedCategories: SelectProps['options'] =
     categories?.map((c) => ({
-      label: c.category_name,
+      label: c.name,
       value: c.id,
     })) ?? [];
 
@@ -27,7 +27,7 @@ export const getColumnDefintions = (
       id: 'transaction_date',
       header: i18n.t('budgetTransactions.common.columns.date'),
       cell: (item) => item.transaction_date,
-      width: 215,
+      width: 175,
       editConfig: {
         ariaLabel: 'Edit transaction date',
         constraintText: 'The date follows `YYYY/MM/DD` format.',
@@ -51,7 +51,8 @@ export const getColumnDefintions = (
     {
       id: 'category',
       header: i18n.t('budgetTransactions.common.columns.category'),
-      cell: (item) => item.category?.category_name,
+      cell: (item) => item.category?.name,
+      width: 150,
       editConfig: {
         ariaLabel: 'Edit category',
         editingCell: (
@@ -70,10 +71,9 @@ export const getColumnDefintions = (
               ctx.currentValue
                 ? {
                     value: ctx.currentValue,
-                    label: categories?.find((c) => c.id === ctx.currentValue)
-                      ?.category_name,
+                    label: categories?.find((c) => c.id === ctx.currentValue)?.name,
                   }
-                : { value: item.category?.id, label: item.category?.category_name }
+                : { value: item.category?.id, label: item.category?.name }
             }
             onChange={(event) => {
               ctx.setValue(event.detail.selectedOption.value!);

@@ -76,7 +76,7 @@ export const DeleteTransactionModal = ({
             {
               id: 'category',
               header: t('common.columns.category'),
-              cell: (item) => item.category?.category_name,
+              cell: (item) => item.category?.name,
             },
             {
               id: 'outflow',
