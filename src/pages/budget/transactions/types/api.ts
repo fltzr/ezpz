@@ -1,13 +1,11 @@
-import type { Database } from '../../../../../supabase';
+import type { Tables, TablesInsert, TablesUpdate } from '@/supabase';
 
-export type TransactionDB = Database['public']['Tables']['transactions']['Row'];
-export type TransactionDBInsert = Database['public']['Tables']['transactions']['Insert'];
-export type TransactionDBUpdate = Database['public']['Tables']['transactions']['Update'];
-
-type CategoriesDB = Database['public']['Tables']['categories']['Row'];
+export type TransactionDB = Tables<'transactions'>;
+export type TransactionDBInsert = TablesInsert<'transactions'>;
+export type TransactionDBUpdate = TablesUpdate<'transactions'>;
 
 export type Transaction = TransactionDB & {
-  category?: Pick<CategoriesDB, 'id' | 'category_name'>;
+  category?: { id: string; name: string };
 };
 
 export type TransactionInsert = TransactionDBInsert;

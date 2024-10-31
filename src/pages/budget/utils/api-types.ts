@@ -1,32 +1,26 @@
-import type { Database } from '@/supabase';
+import type { Tables, TablesInsert, TablesUpdate } from '@/supabase';
 
-export type IncomeSource = Database['public']['Tables']['income_sources']['Row'];
+export type IncomeSource = Tables<'income_sources'>;
 export type IncomeSourceInsert = Omit<
-  Database['public']['Tables']['income_sources']['Insert'],
+  TablesInsert<'income_sources'>,
   'id' | 'created_at'
 >;
-export type IncomeSourceUpdate = Database['public']['Tables']['income_sources']['Update'];
+export type IncomeSourceUpdate = TablesUpdate<'income_sources'>;
 
-export type Category = Database['public']['Tables']['categories']['Row'] & {
+export type Category = Tables<'categories'> & {
   total?: number;
 };
-export type CategoryInsert = Database['public']['Tables']['categories']['Insert'];
-export type CategoryUpdate = Database['public']['Tables']['categories']['Update'];
+export type CategoryInsert = TablesInsert<'categories'>;
+export type CategoryUpdate = TablesUpdate<'categories'>;
 
-export type BudgetItem = Database['public']['Tables']['budget_items']['Row'];
-export type BudgetItemInsert = Database['public']['Tables']['budget_items']['Insert'];
-export type BudgetItemUpdate = Database['public']['Tables']['budget_items']['Update'];
+export type BudgetItem = Tables<'budget_items'>;
+export type BudgetItemInsert = TablesInsert<'budget_items'>;
+export type BudgetItemUpdate = TablesUpdate<'budget_items'>;
+
+export type BudgetCategory = Tables<'budget_category'>;
+export type BudgetCategoryInsert = TablesInsert<'budget_category'>;
+export type BudgetCategoryUpdate = Omit<TablesUpdate<'budget_category'>, 'id'> & {
+  id: string;
+};
 
 export type BudgetTableItem = Category | BudgetItem;
-
-export const isCategoryItem = (item: BudgetTableItem): item is Category => {
-  return (item as Category).category_name !== undefined;
-};
-
-export const isBudgetItem = (item: BudgetTableItem): item is BudgetItem => {
-  return (item as BudgetItem)?.category_id !== undefined;
-};
-
-export const getItemName = (item: BudgetTableItem) => {
-  return isCategoryItem(item) ? item.category_name : (item?.budget_item_name ?? 'Item');
-};
