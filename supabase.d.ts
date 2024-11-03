@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-redundant-type-constituents */
-
 export type Json =
   | string
   | number
@@ -246,6 +245,7 @@ export type Database = {
           id: string;
           memo: string | null;
           outflow: number | null;
+          payee: string;
           transaction_date: string;
           user_id: string;
         };
@@ -255,6 +255,7 @@ export type Database = {
           id?: string;
           memo?: string | null;
           outflow?: number | null;
+          payee?: string;
           transaction_date: string;
           user_id: string;
         };
@@ -264,6 +265,7 @@ export type Database = {
           id?: string;
           memo?: string | null;
           outflow?: number | null;
+          payee?: string;
           transaction_date?: string;
           user_id?: string;
         };

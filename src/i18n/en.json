@@ -296,9 +296,9 @@
       "columns": {
         "id": "ID",
         "date": "Date",
+        "payee": "Payee",
         "category": "Category",
         "memo": "Memo",
-        "inflow": "Inflow",
         "outflow": "Outflow"
       }
     },

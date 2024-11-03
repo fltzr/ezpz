@@ -27,7 +27,7 @@ export const getColumnDefintions = (
       id: 'transaction_date',
       header: i18n.t('budgetTransactions.common.columns.date'),
       cell: (item) => item.transaction_date,
-      width: 175,
+      width: 205,
       editConfig: {
         ariaLabel: 'Edit transaction date',
         constraintText: 'The date follows `YYYY/MM/DD` format.',
@@ -65,7 +65,6 @@ export const getColumnDefintions = (
           <Select
             expandToViewport
             virtualScroll
-            inlineLabelText='Select a category'
             options={convertedCategories}
             selectedOption={
               ctx.currentValue
@@ -81,6 +80,12 @@ export const getColumnDefintions = (
           />
         ),
       },
+    },
+    {
+      id: 'payee',
+      header: i18n.t('budgetTransactions.common.columns.payee'),
+      cell: (item) => item.payee,
+      width: 176,
     },
     {
       id: 'memo',

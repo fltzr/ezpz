@@ -16,11 +16,12 @@ import type {
 const transactionJoinStatement = `
 id,
 transaction_date,
+payee,
 memo,
 outflow,
 created_at,
-budget_category_id,
 user_id,
+budget_category_id,
 category:budget_category (
   id,
   name
