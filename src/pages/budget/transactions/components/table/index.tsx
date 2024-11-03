@@ -1,41 +1,35 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useCollection } from '@cloudscape-design/collection-hooks';
 import {
   Box,
   Button,
-  Calendar,
   CollectionPreferences,
   CollectionPreferencesProps,
-  Header,
   Pagination,
-  Popover,
   PropertyFilter,
   SpaceBetween,
   Table,
 } from '@cloudscape-design/components';
 import { DateTime } from 'luxon';
 
-import { useDrawer } from '@/components/drawer-provider';
-import { ManualRefresh } from '@/components/manual-refresh';
 import useLocalStorage from '@/hooks/use-local-storage';
 import { useBudgetCategoryApi } from '@/pages/budget/hooks/use-budget-category-api';
 
 import { useTransactionsApi } from '../../../hooks/use-transactions-api';
 import type { Transaction } from '../../types/api';
-import { AddTransaction } from '../drawers/add-transaction';
 import { DeleteTransactionModal } from '../modals/delete-transaction';
 
-import { getColumnDefintions } from './config';
+import { TableHeader } from './components/header';
+import { getColumnDefintions } from './configs/column-defs';
 import { FILTERING_PROPERTIES } from './configs/property-filter-config';
 
 export const TransactionsTable = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const now = DateTime.now();
   const [date, setDate] = useState(now);
-  const [lastRefresh, setLastRefresh] = useState<string | null>(null);
   const [selectedTransactions, setSelectedTransactions] = useState<Transaction[]>([]);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [preferences, setPreferences] =
@@ -49,15 +43,11 @@ export const TransactionsTable = () => {
       }
     );
 
-  const { openDrawer, closeDrawer } = useDrawer();
   const {
     data,
     error,
     refetch,
     isFetching,
-    dataUpdatedAt,
-    isRefetching,
-    handleAddTransaction,
     handleUpdateTransaction,
     handleDeleteTransactions,
   } = useTransactionsApi({ selectedDate: date });
@@ -91,10 +81,6 @@ export const TransactionsTable = () => {
     }
   );
 
-  useEffect(() => {
-    console.log(`items.length: ${items.length}`);
-  }, [items.length]);
-
   return (
     <>
       <Table
@@ -113,81 +99,12 @@ export const TransactionsTable = () => {
         columnDefinitions={getColumnDefintions(categories)}
         columnDisplay={preferences.contentDisplay}
         header={
-          <Header
-            variant='h1'
-            counter={
-              selectedTransactions && selectedTransactions.length > 0
-                ? `(${selectedTransactions.length}/${data?.length})`
-                : typeof data?.length !== 'undefined'
-                  ? `(${data.length})`
-                  : ''
-            }
-            info={
-              <Popover
-                renderWithPortal
-                dismissButton={false}
-                position='bottom'
-                content={
-                  <Calendar
-                    locale={i18n.language}
-                    granularity='month'
-                    isDateEnabled={(dateObj) => {
-                      const dateTime = DateTime.fromJSDate(dateObj).endOf('month');
-                      return dateTime <= now.endOf('month');
-                    }}
-                    value={date.toFormat('yyyy-MM')}
-                    onChange={({ detail }) => {
-                      closeDrawer();
-                      const newDate = DateTime.fromFormat(detail.value, 'yyyy-MM');
-                      setDate(newDate as DateTime<true>);
-                    }}
-                  />
-                }>
-                {date.setLocale(i18n.language).toFormat('MMMM yyyy')}
-              </Popover>
-            }
-            actions={
-              <SpaceBetween size='xs' direction='horizontal'>
-                <ManualRefresh
-                  loading={isRefetching}
-                  lastRefresh={lastRefresh}
-                  onRefresh={() => {
-                    setLastRefresh(DateTime.fromMillis(dataUpdatedAt).toISO());
-                    refetch().catch(console.error);
-                  }}
-                />
-                <Button
-                  variant='normal'
-                  disabled={selectedTransactions.length <= 0}
-                  onClick={() => {
-                    setDeleteModalVisible(true);
-                  }}>
-                  {t('budgetTransactions.table.headerActions.delete', {
-                    count: selectedTransactions.length,
-                  })}
-                </Button>
-                <Button
-                  variant='primary'
-                  iconName='add-plus'
-                  onClick={() => {
-                    openDrawer({
-                      drawerName: 'add-transaction',
-                      content: (
-                        <AddTransaction
-                          selectedDate={date}
-                          categories={categories}
-                          onAdd={handleAddTransaction}
-                          onClose={closeDrawer}
-                        />
-                      ),
-                    });
-                  }}>
-                  {t('budgetTransactions.table.headerActions.add')}
-                </Button>
-              </SpaceBetween>
-            }>
-            {t('budgetTransactions.table.header')}
-          </Header>
+          <TableHeader
+            date={date}
+            selectedTransactions={selectedTransactions}
+            setDate={setDate}
+            setDeleteModalVisible={setDeleteModalVisible}
+          />
         }
         pagination={<Pagination {...paginationProps} />}
         preferences={

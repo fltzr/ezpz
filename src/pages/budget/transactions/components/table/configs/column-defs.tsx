@@ -9,7 +9,7 @@ import {
 import i18n from '@/i18n';
 import { formatCurrency } from '@/utils/format-currency';
 
-import { Transaction } from '../../types/api';
+import { Transaction } from '../../../types/api';
 
 export const getColumnDefintions = (
   categories?: { id: string; name: string }[]
