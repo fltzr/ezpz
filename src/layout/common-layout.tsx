@@ -111,4 +111,4 @@ const CommonLayout = () => {
   );
 };
 
-export const Component = CommonLayout;
+export default CommonLayout;

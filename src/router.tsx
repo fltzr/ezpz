@@ -1,3 +1,4 @@
+import { lazy } from 'react';
 import {
   createBrowserRouter,
   Navigate,
@@ -15,10 +16,12 @@ import { loanRepaymentRoutes } from '@/pages/loan-repayment/routes';
 import { profileRoutes } from '@/pages/profile/routes';
 import { transactionsRoutes } from '@/pages/transactions/routes';
 
+const Layout = lazy(() => import('./layout/common-layout'));
+
 const routes: RouteObject[] = [
   {
     path: '/',
-    lazy: () => import('./layout/common-layout'),
+    element: <Layout />,
     errorElement: <ErrorPage />,
     children: [
       {
