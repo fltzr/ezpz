@@ -45,6 +45,7 @@
       "transactions": "Transactions"
     }
   },
+
   "auth": {
     "welcome": "Bienvenue sur ezpz !",
     "signIn": "Se connecter !",
@@ -151,7 +152,7 @@
       }
     },
 
-    "budgetTable": {
+    "budgetTable_old": {
       "title": "Tableau du budget",
       "empty": "Aucune poste budgétaire ajouté !",
       "addCategory": "Ajouter une catégorie",
@@ -160,6 +161,27 @@
         "category": "Catégorie",
         "projectedAmount": "Montant projeté",
         "transactionDate": "Date de la transaction",
+        "actions": {
+          "columnName": "Actions",
+          "editCategory": "Modifier une catégorie",
+          "deleteCategory": "Supprimer la catégorie",
+          "addBudgetItem": "Ajoute un poste budgétaire",
+          "editBudgetItem": "Modifier le poste budgétaire",
+          "deleteBudgetItem": "Supprimer le poste budgétaire"
+        }
+      }
+    },
+
+    "budgetTable": {
+      "title": "Tableau du budget",
+      "empty": "Aucune poste budgétaire ajouté !",
+      "addCategory": "Ajouter une catégorie",
+      "addBudgetItem": "Ajoute un poste budgétaire",
+      "columns": {
+        "category": "Category",
+        "budgeted": "Budgétisé",
+        "actual": "Réel",
+        "remaining": "Restant",
         "actions": {
           "columnName": "Actions",
           "editCategory": "Modifier une catégorie",
@@ -202,7 +224,6 @@
           "categoryExample": "Par exemple, Factures, Épargne, Logement"
         }
       },
-
       "addIncomeSource": {
         "title": "Ajouter une source de revenus",
         "fields": {
@@ -212,7 +233,6 @@
           "projectedAmountDescription": "Le montant projeté que vous prévoyez de dépenser pour cet article. Devise actuelle : {{currency}}"
         }
       },
-
       "editBudgetItem": {
         "title": "Modifier le poste budgétaire",
         "fields": {
@@ -223,7 +243,6 @@
           "categoryName": "Nom de la catégorie"
         }
       },
-
       "editCategory": {
         "title": "Modifier une catégorie",
         "fields": {

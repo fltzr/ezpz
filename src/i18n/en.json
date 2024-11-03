@@ -20,6 +20,11 @@
       "delete": "Failed to delete {{item}}. Error: {{message}}"
     }
   },
+  "error": {
+    "routeErrorTitle": "Oops!",
+    "routeErrorMessage": "We're sorry, an unexpected error occured.",
+    "navigateBack": "Go back"
+  },
   "layout": {
     "header": {
       "items": {
@@ -39,11 +44,6 @@
       "loanCalculator": "Loan calculator",
       "transactions": "Transactions"
     }
-  },
-  "error": {
-    "routeErrorTitle": "Oops!",
-    "routeErrorMessage": "We're sorry, an unexpected error occured.",
-    "navigateBack": "Go back"
   },
   "auth": {
     "welcome": "Welcome to ezpz!",
@@ -71,7 +71,6 @@
       "coucou": "Welcome, beautiful baby!"
     }
   },
-
   "pages": {
     "loanRepayment": {
       "title": "Loan repayment calculator",
@@ -152,7 +151,7 @@
       }
     },
 
-    "budgetTable": {
+    "budgetTable_old": {
       "title": "Budget table",
       "empty": "No budget items added!",
       "addCategory": "Add category",
@@ -161,6 +160,27 @@
         "category": "Category",
         "projectedAmount": "Projected amount",
         "transactionDate": "Transaction date",
+        "actions": {
+          "columnName": "Actions",
+          "editCategory": "Edit category",
+          "deleteCategory": "Delete category",
+          "addBudgetItem": "Add budget item",
+          "editBudgetItem": "Edit budget item",
+          "deleteBudgetItem": "Delete budget item"
+        }
+      }
+    },
+
+    "budgetTable": {
+      "title": "Budget table",
+      "empty": "No budget items added!",
+      "addCategory": "Add category",
+      "addBudgetItem": "Add budget item",
+      "columns": {
+        "category": "Category",
+        "budgeted": "Budgeted",
+        "actual": "Actual",
+        "remaining": "Remaining",
         "actions": {
           "columnName": "Actions",
           "editCategory": "Edit category",
