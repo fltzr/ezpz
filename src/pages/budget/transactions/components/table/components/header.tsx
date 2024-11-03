@@ -102,6 +102,7 @@ export const TableHeader = ({
             onClick={() => {
               openDrawer({
                 drawerName: 'add-transaction',
+                width: 400,
                 content: (
                   <AddTransaction
                     selectedDate={date}

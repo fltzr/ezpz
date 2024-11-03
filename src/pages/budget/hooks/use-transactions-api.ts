@@ -1,11 +1,12 @@
 import { useTranslation } from 'react-i18next';
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { uniq } from 'lodash-es';
 import { DateTime } from 'luxon';
 
 import { useNotifiedMutation } from '@/hooks/use-notified-mutation';
 import { useSelectedUser } from '@/hooks/use-selected-user';
-import { useSupabase } from '@/hooks/use-supabase';
+import { UseSupabase, useSupabase } from '@/hooks/use-supabase';
 
 import type {
   Transaction,
@@ -29,7 +30,7 @@ category:budget_category (
 `;
 
 const fetchTransactions = async (
-  supabase: ReturnType<typeof useSupabase>,
+  supabase: UseSupabase,
   userId: string,
   startDate: string,
   endDate: string
@@ -47,10 +48,21 @@ const fetchTransactions = async (
   return transactions;
 };
 
-const createTransaction = async (
-  supabase: ReturnType<typeof useSupabase>,
-  tx: TransactionInsert
-) => {
+export const fetchPayees = async (supabase: UseSupabase, userId?: string) => {
+  if (!userId) return;
+
+  const { data, error } = await supabase
+    .from('transactions')
+    .select('payee')
+    .eq('user_id', userId);
+
+  if (error)
+    throw new Error(`Error fetching payees for user: ${JSON.stringify(error, null, 2)}`);
+
+  return data.map((d) => d.payee);
+};
+
+const createTransaction = async (supabase: UseSupabase, tx: TransactionInsert) => {
   const { data, error } = await supabase
     .from('transactions')
     .insert(tx)
@@ -66,10 +78,7 @@ const createTransaction = async (
   return data as unknown as Transaction;
 };
 
-const updateTransaction = async (
-  supabase: ReturnType<typeof useSupabase>,
-  tx: TransactionUpdate
-) => {
+const updateTransaction = async (supabase: UseSupabase, tx: TransactionUpdate) => {
   const { data, error } = await supabase
     .from('transactions')
     .update(tx)
@@ -85,10 +94,7 @@ const updateTransaction = async (
   return data;
 };
 
-const deleteTransaction = async (
-  supabase: ReturnType<typeof useSupabase>,
-  transactionIds: string[]
-) => {
+const deleteTransaction = async (supabase: UseSupabase, transactionIds: string[]) => {
   const response = await supabase.from('transactions').delete().in('id', transactionIds);
 
   if (response.error)
@@ -115,7 +121,14 @@ export const useTransactionsApi = ({ selectedDate }: { selectedDate: DateTime })
     queryKey: ['transactions', selectedUser?.userId, startDate, endDate],
     queryFn: () =>
       fetchTransactions(supabase, selectedUser?.userId ?? '', startDate, endDate),
-    enabled: !!(selectedDate || startDate || endDate),
+    enabled: !!(selectedUser || selectedDate || startDate || endDate),
+  });
+
+  const fetchPayeeQuery = useQuery({
+    queryKey: ['transactions', 'payee', selectedUser?.userId],
+    queryFn: () => fetchPayees(supabase, selectedUser?.userId ?? ''),
+    enabled: !!selectedUser,
+    select: (data) => uniq(data),
   });
 
   const addTransactionMutation = useNotifiedMutation({
@@ -191,6 +204,7 @@ export const useTransactionsApi = ({ selectedDate }: { selectedDate: DateTime })
     isFetching,
     isRefetching,
     dataUpdatedAt,
+    fetchPayeeQuery,
     handleAddTransaction,
     handleUpdateTransaction,
     handleDeleteTransactions,

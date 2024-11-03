@@ -335,8 +335,11 @@
           "date": "Date de la transaction",
           "category": "Catégorie",
           "categoryPlaceholder": "Sélectionner une catégorie",
+          "payee": "Bénéficiaire",
+          "payeePlaceholder": "Sélectionnez ou entrez un bénéficiaire",
+          "payeeEnd": "Fin de la sélection.",
           "memo": "Mémo",
-          "memoPlaceholder": "Dîner à La Cigale",
+          "memoPlaceholder": "Dîner",
           "amount": "Montant",
           "amountPlaceholder": "Le montant que vous avez dépensé pour cet article. Devise actuelle:\t{{currency}}"
         }

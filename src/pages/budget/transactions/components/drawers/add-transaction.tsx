@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useEffectOnce } from 'react-use';
 
 import {
+  Autosuggest,
   Box,
   Button,
   DatePicker,
@@ -19,6 +20,7 @@ import getUserLocale from 'get-user-locale';
 import { DateTime } from 'luxon';
 
 import { useSelectedUser } from '@/hooks/use-selected-user';
+import { useTransactionsApi } from '@/pages/budget/hooks/use-transactions-api';
 import { BudgetCategory } from '@/pages/budget/utils/api-types';
 
 import { TransactionInsert } from '../../types/api';
@@ -42,6 +44,7 @@ export const AddTransaction = ({
 }: AddTransactionProps) => {
   const { t } = useTranslation(undefined, { keyPrefix: 'budgetTransactions.drawer' });
   const { selectedUser } = useSelectedUser();
+  const { fetchPayeeQuery } = useTransactionsApi({ selectedDate });
 
   const {
     control,
@@ -67,6 +70,7 @@ export const AddTransaction = ({
       user_id: selectedUser.userId,
       budget_category_id: data.category.value,
       transaction_date: data.date,
+      payee: data.payee,
       memo: data.memo,
       outflow: data.outflow,
     });
@@ -135,6 +139,27 @@ export const AddTransaction = ({
                       value: detail.selectedOption.value,
                     })
                   }
+                />
+              </FormField>
+            )}
+          />
+          <Controller
+            name='payee'
+            control={control}
+            render={({ field }) => (
+              <FormField
+                label={t('add.formFields.payee')}
+                errorText={errors.payee?.message}>
+                <Autosuggest
+                  value={field.value ?? ''}
+                  options={fetchPayeeQuery.data?.map((payee) => ({
+                    label: payee,
+                    value: payee,
+                  }))}
+                  onChange={(event) => field.onChange(event.detail.value)}
+                  onSelect={(event) => field.onChange(event.detail.value)}
+                  placeholder={t('add.formFields.payeePlaceholder')}
+                  finishedText={t('add.formFields.payeeEnd')}
                 />
               </FormField>
             )}
