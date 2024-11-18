@@ -9,20 +9,35 @@ import pluginReactRefresh from 'eslint-plugin-react-refresh';
 import pluginImport from 'eslint-plugin-import';
 import pluginImportSort from 'eslint-plugin-simple-import-sort';
 
+/**
+ * Inspect how this eslint config is being applied by running `npx eslint --inspect-config`
+ */
+
 export default tseslint.config(
-  eslint.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
   {
+    name: 'ezpz/ignores',
     ignores: ['supabase/**', 'build', 'dist', 'scripts'],
   },
   {
+    name: 'ezpz/base',
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    extends: [eslint.configs.recommended],
+  },
+  {
+    name: 'ezpz/react',
     files: ['**/*.{ts,tsx}'],
+    extends: [...tseslint.configs.recommendedTypeChecked],
     languageOptions: {
       parserOptions: {
         project: ['./tsconfig.app.json', './tsconfig.node.json'],
         projectService: true,
         projectFolderIgnoreList: ['./supabase/functions/**'],
         tsconfigRootDir: import.meta.dirname,
+      },
+    },
+    settings: {
+      react: {
+        version: 'detect',
       },
     },
     plugins: {
@@ -60,13 +75,9 @@ export default tseslint.config(
       ],
       'simple-import-sort/exports': 'warn',
     },
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
   },
   {
+    name: 'ezpz/js',
     files: ['**/*.js'],
     ...tseslint.configs.disableTypeChecked,
   }

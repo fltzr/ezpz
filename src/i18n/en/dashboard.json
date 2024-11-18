@@ -1,0 +1,57 @@
+{
+  "monthlyOverview": {
+    "title": "Monthly overview",
+    "period": "Budget period",
+    "budgeted": "Amount budgeted",
+    "spent": "Amount spent",
+    "remaining": "Amount remaining",
+    "status": {
+      "empty": "No income set!",
+      "over": "{{amount}} over budget",
+      "under": "{{amount}} under budget"
+    }
+  },
+  "monthlyBreakdown": {
+    "title": "Monthly breakdown",
+    "empty": "No data to display. Start by adding budget categories and transactions.",
+    "percentageOfBudget": "Percentage of total budget"
+  },
+  "incomeSources": {
+    "title": "Income sources",
+    "empty": "No income sources found.",
+    "error": "Error while fetching income sources. {{error}}",
+    "name": "Name",
+    "addDrawer": {
+      "title": "Add a income source",
+      "fields": {
+        "name": "Name of income source",
+        "namePlaceholder": "e.g., Paycheck, Babysitting",
+        "amountDescription": "The amount you expect to earn from this source.",
+        "amountConstraintText": "Current currency: {{currency}}",
+        "isRecurring": "Is this income source recurring?",
+        "isRecurringDescription": "Marking this income source as recurring will automatically be visible in future budget periods. Be aware that as of now, deleting a recurring item for one month will propogate to every month."
+      }
+    }
+  },
+  "budgetTable": {
+    "title": "Budget table",
+    "empty": "No categories found!",
+    "columns": {
+      "budgeted": "Budgeted",
+      "actual": "Actual",
+      "remaining": "Remaining"
+    },
+    "addDrawer": {
+      "title": "Add a budget category",
+      "description": "A budget category is a logical group of categorized transactions. For example, \"Groceries\", or \"Bills\" would be the groups you want to allocate money each month towards.",
+      "fields": {
+        "name": "Name of category",
+        "namePlaceholder": "e.g., Groceries, Bills",
+        "budgetAmount": "Amount to budget",
+        "budgetAmountDescription": "The most amount of money you would like to spend on this category this month. Don't worry, you can adjust this value later.",
+        "isRecurring": "Is this budget category recurring?",
+        "isRecurringDescription": "Marking this category as recurring will automatically be visible in future budget periods. Be aware that as of now, deleting a recurring item for one month will propogate to every month."
+      }
+    }
+  }
+}
