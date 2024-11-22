@@ -8,7 +8,6 @@ import {
 } from 'react-router-dom';
 
 import { ErrorPage } from '@/components/error-page/error-page';
-import { SuspenseLoadingBar } from '@/components/suspense-loading-bar';
 import ProtectedRoute from '@/pages/auth/components/protected-route';
 import { authRoutes } from '@/pages/auth/routes';
 import { budgetRoutes } from '@/pages/budget/routes';

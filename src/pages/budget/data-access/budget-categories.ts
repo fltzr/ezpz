@@ -15,7 +15,8 @@ export const fetchBudgetCategories = async (
     .from('budget_category')
     .select('*')
     .eq('user_id', userId)
-    .or(orCondition);
+    .or(orCondition)
+    .order('created_at', { ascending: false });
 
   if (error) throw new Error(`Error fetching budget categories. Error: ${error.message}`);
 

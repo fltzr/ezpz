@@ -1,0 +1,36 @@
+{
+  "api": {
+    "createSuccess": "Successfully added {{item}}",
+    "createFail": "Failed to add {{item}}: {{error}}",
+    "updateSuccess": "Successfully updated {{item}}",
+    "updateFail": "Failed to update {{item}}: {{error}}",
+    "deleteSuccess": "Successfully deleted {{item}}",
+    "deleteFail": "Failed to delete {{item}}: {{error}}",
+    "fetching": "Loading resources"
+  },
+  "pages": {
+    "budget": {
+      "root": "Budget",
+      "dashboard": "Budget dashboard",
+      "transactions": "Transactions"
+    }
+  },
+  "buttons": {
+    "submit": "Submit",
+    "create": "Create {{item}}",
+    "update": "Update {{item}}",
+    "delete": "Delete {{item}}",
+    "cancel": "Cancel",
+    "retry": "Retry",
+    "refresh": "Refresh"
+  },
+  "words": {
+    "lastUpdated": "Last updated",
+    "date": "Date",
+    "budget": "Budget",
+    "category": "Category",
+    "transaction": "Transaction",
+    "payee": "Payee",
+    "amount": "Amount"
+  }
+}

@@ -15,6 +15,7 @@ type PageHeaderProps = {
 export const PageHeader = ({ actions }: PageHeaderProps) => {
   const { t } = useTranslation(['budget/dashboard']);
   const locale = getI18n().language;
+
   const { selectedUser } = useSelectedUser();
   const { budgetEntry } = useBudgetProvider();
 
@@ -23,13 +24,11 @@ export const PageHeader = ({ actions }: PageHeaderProps) => {
     .toFormat('LLLL yyyy');
 
   return (
-    <>
-      <Header
-        variant='awsui-h1-sticky'
-        info={<Box variant='span'>{formatedDate}</Box>}
-        actions={actions}>
-        {t('common.title', { name: selectedUser?.name })}
-      </Header>
-    </>
+    <Header
+      variant='awsui-h1-sticky'
+      info={<Box variant='span'>{formatedDate}</Box>}
+      actions={actions}>
+      {t('common.title', { name: selectedUser?.name })}
+    </Header>
   );
 };
