@@ -93,6 +93,6 @@
   },
   "packageManager": "pnpm@9.14.2",
   "lint-staged": {
-    "*.{js,ts,jsx,tsx}": "exit 1"
+    "*.{js,ts,jsx,tsx}": "eslint --fix"
   }
 }

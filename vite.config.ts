@@ -6,7 +6,9 @@ import { defineConfig } from 'vite';
 import babel from 'vite-plugin-babel';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 
-// https://vitejs.dev/config/
+/**
+ *  https://vitejs.dev/config/
+ */
 export default defineConfig({
   plugins: [
     react(),
