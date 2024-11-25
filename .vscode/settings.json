@@ -4,7 +4,6 @@
   },
   "deno.enablePaths": ["supabase/functions"],
   "deno.lint": true,
-  "deno.unstable": true,
   "deno.importMap": "../supabase/functions/import-map",
   "editor.codeActionsOnSave": {
     "source.addMissingImports.ts": "always",
@@ -12,5 +11,15 @@
     "source.fixAll.ts": "always"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+
+  "workbench.colorTheme": "Default Dark+",
+  "explorer.compactFolders": false,
+  "editor.fontFamily": "'Monaspace Argon', monospace",
+  "editor.fontWeight": "500",
+  "chat.editor.fontFamily": "'Monaspace Kyoto', monospace",
+  "editor.inlayHints.fontFamily": "'Monaspace Krypton', monospace",
+  "editor.fontLigatures": "'calt', 'ss01', 'ss02', 'ss03', 'ss04', 'ss05', 'ss06', 'ss07', 'ss08', 'ss09', 'liga'",
+  "workbench.iconTheme": "vscode-icons",
+  "vsicons.dontShowNewVersionMessage": true
 }

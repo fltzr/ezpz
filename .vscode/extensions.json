@@ -1,5 +1,12 @@
 {
   "recommendations": [
-    "denoland.vscode-deno"
+    "denoland.vscode-deno",
+    "openai.openai-chatgpt-adhoc",
+    "usernamehw.errorlens",
+    "dbaeumer.vscode-eslint",
+    "cardinal90.multi-cursor-case-preserve",
+    "esbenp.prettier-vscode",
+    "yoavbls.pretty-ts-errors",
+    "vscode-icons-team.vscode-icons"
   ]
 }
