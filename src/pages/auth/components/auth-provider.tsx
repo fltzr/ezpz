@@ -12,7 +12,7 @@ type AuthContextType = {
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: PropsWithChildren) => {
+const AuthProvider = ({ children }: PropsWithChildren) => {
   const supabase = useSupabase();
   const { addNotification } = useNotificationStore();
 
@@ -49,3 +49,5 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     <AuthContext.Provider value={{ user, isLoading }}>{children}</AuthContext.Provider>
   );
 };
+
+export default AuthProvider;

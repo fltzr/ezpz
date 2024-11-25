@@ -18,7 +18,7 @@ type DrawerContextProps = {
 
 const DrawerContext = createContext<DrawerContextProps | undefined>(undefined);
 
-export const DrawerProvider = ({ children }: PropsWithChildren) => {
+const DrawerProvider = ({ children }: PropsWithChildren) => {
   const [activeDrawerId, setActiveDrawerId] = useState<string | null>(null);
   const [drawerContent, setDrawerContent] = useState<AppLayoutProps.Drawer | undefined>(
     undefined
@@ -71,3 +71,5 @@ export const useDrawer = (): DrawerContextProps => {
 
   return context;
 };
+
+export default DrawerProvider;

@@ -24,8 +24,12 @@ const SignInPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const redirect = async () => {
+      await navigate('/budget');
+    };
+
     if (user) {
-      return navigate('/budget');
+      redirect().catch((e) => console.error(e));
     }
   }, [navigate, user]);
 

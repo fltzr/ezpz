@@ -10,6 +10,8 @@ export const SupabaseContext = createContext<SupabaseClient<Database> | undefine
   undefined
 );
 
-export const SupabaseProvider = ({ children }: PropsWithChildren) => (
+const SupabaseProvider = ({ children }: PropsWithChildren) => (
   <SupabaseContext.Provider value={supabase}>{children}</SupabaseContext.Provider>
 );
+
+export default SupabaseProvider;

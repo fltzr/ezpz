@@ -41,19 +41,9 @@ const routes: RouteObject[] = [
   },
 ];
 
-const router: RouterProviderProps['router'] = createBrowserRouter(routes, {
-  future: {
-    v7_fetcherPersist: true,
-    v7_normalizeFormMethod: true,
-    v7_relativeSplatPath: true,
-    v7_skipActionErrorRevalidation: true,
-    v7_partialHydration: true,
-  },
-});
+const router: RouterProviderProps['router'] = createBrowserRouter(routes);
 
-const Router = () => (
-  <RouterProvider router={router} future={{ v7_startTransition: true }} />
-);
+const Router = () => <RouterProvider router={router} />;
 
 export default Router;
 

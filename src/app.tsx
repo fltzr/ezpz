@@ -8,13 +8,12 @@ import messagesFr from '@cloudscape-design/components/i18n/messages/all.fr';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-import { DrawerProvider } from '@/components/drawer-provider';
-import { SupabaseProvider } from '@/components/supabase-provider';
 import { useTheme } from '@/hooks/use-theme';
-import { AuthProvider } from '@/pages/auth/components/auth-provider';
 
-import BudgetProvider from './pages/budget/components/budget-provider';
-
+const AuthProvider = lazy(() => import('@/pages/auth/components/auth-provider'));
+const DrawerProvider = lazy(() => import('@/components/drawer-provider'));
+const SupabaseProvider = lazy(() => import('@/components/supabase-provider'));
+const BudgetProvider = lazy(() => import('@/pages/budget/components/budget-provider'));
 const Router = lazy(() => import('./router'));
 
 export type Locale = 'en' | 'fr';
