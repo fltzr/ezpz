@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Header, StatusIndicator,Table } from '@cloudscape-design/components';
+import { Header, StatusIndicator, Table } from '@cloudscape-design/components';
 import { useQuery } from '@tanstack/react-query';
 
 import { ManualRefresh } from '@/components/manual-refresh';

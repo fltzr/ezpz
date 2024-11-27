@@ -15,7 +15,7 @@ export const GlobalHeader = () => {
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    navigate('/auth', { replace: true, state: { reason: 'sign-out' } });
+    void navigate('/auth', { replace: true, state: { reason: 'sign-out' } });
   };
 
   const handleLanguageChange = (language: string) => {
@@ -47,7 +47,7 @@ export const GlobalHeader = () => {
       ],
       onItemClick: (event: { detail: { id: string } }) => {
         if (event.detail.id === 'sign-out') handleSignOut().catch(console.error);
-        else if (event.detail.id === 'profile') navigate('/profile');
+        else if (event.detail.id === 'profile') void navigate('/profile');
       },
     },
   ];
@@ -60,7 +60,7 @@ export const GlobalHeader = () => {
           title: 'ezpz',
           onFollow: (event) => {
             event.preventDefault();
-            navigate('/');
+            void navigate('/');
           },
         }}
         utilities={user ? utilitiesNew : [utilitiesNew[0]]}

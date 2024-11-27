@@ -53,7 +53,7 @@ export const useSignIn = ({ setIsLoading, reset, setFocus }: UseSignInProps) => 
       });
     }
 
-    navigate('/', { replace: true });
+    void navigate('/', { replace: true });
   };
 
   return { handleSignIn };

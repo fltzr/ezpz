@@ -92,6 +92,7 @@
     "webdriverio": "^9.3.1"
   },
   "lint-staged": {
-    "*.{js,ts,jsx,tsx}": "eslint --fix"
+    "*.{js,ts,jsx,tsx,json,html,scss}": "npx prettier --write",
+    "*.{js,ts,jsx,tsx}": "npx eslint"
   }
 }

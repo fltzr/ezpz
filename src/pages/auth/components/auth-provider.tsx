@@ -1,16 +1,11 @@
-import { createContext, PropsWithChildren, useEffect, useState } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 
 import type { User } from '@supabase/supabase-js';
 
 import { useSupabase } from '@/hooks/use-supabase';
 import { useNotificationStore } from '@/state/notifications';
 
-type AuthContextType = {
-  user: User | null;
-  isLoading: boolean;
-};
-
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+import { AuthContext } from './auth-context';
 
 const AuthProvider = ({ children }: PropsWithChildren) => {
   const supabase = useSupabase();

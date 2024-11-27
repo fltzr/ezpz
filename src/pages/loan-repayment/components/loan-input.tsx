@@ -10,7 +10,7 @@ import {
 } from '@cloudscape-design/components';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { type LoanInputSchema,loanInputSchema } from '../schema';
+import { type LoanInputSchema, loanInputSchema } from '../schema';
 
 type LoanInputProps = {
   onSubmitLoanData: (loan: LoanInputSchema) => void;

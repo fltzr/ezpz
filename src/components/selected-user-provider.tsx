@@ -1,24 +1,10 @@
-import {
-  createContext,
-  Dispatch,
-  PropsWithChildren,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 
 import { useAuth } from '@/pages/auth/hooks/use-auth';
 
-type SelectedUser = { userId: string; name: string } | null;
+import { SelectedUserContext } from './selected-user-context';
 
-type SelectedUserContextProps = {
-  selectedUser: SelectedUser;
-  setSelectedUser: Dispatch<SetStateAction<SelectedUser>>;
-};
-
-export const SelectedUserContext = createContext<SelectedUserContextProps | undefined>(
-  undefined
-);
+export type SelectedUser = { userId: string; name: string } | null;
 
 export const SelectedUserProvider = ({ children }: PropsWithChildren) => {
   const { user } = useAuth();

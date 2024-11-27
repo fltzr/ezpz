@@ -1,4 +1,4 @@
-import { Select,type SelectProps } from '@cloudscape-design/components';
+import { Select, type SelectProps } from '@cloudscape-design/components';
 
 import { formatCurrency } from '@/utils/format-currency';
 

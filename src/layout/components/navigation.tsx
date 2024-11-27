@@ -57,7 +57,7 @@ export const Navigation = () => {
       ]}
       onFollow={(event) => {
         event.preventDefault();
-        navigate(event.detail.href);
+        void navigate(event.detail.href);
       }}
     />
   );

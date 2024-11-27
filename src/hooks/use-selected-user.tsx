@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { SelectedUserContext } from '@/components/selected-user-provider';
+import { SelectedUserContext } from '@/components/selected-user-context';
 
 export const useSelectedUser = () => {
   const context = useContext(SelectedUserContext);

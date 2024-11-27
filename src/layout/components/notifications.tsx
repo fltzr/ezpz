@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Button, Flashbar,type FlashbarProps } from '@cloudscape-design/components';
+import { Button, Flashbar, type FlashbarProps } from '@cloudscape-design/components';
 
 import { useNotificationStore } from '@/state/notifications';
 

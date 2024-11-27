@@ -16,7 +16,7 @@ export const Breadcrumbs = () => {
       }))}
       onClick={(event) => {
         event.preventDefault();
-        navigate(event.detail.href, { replace: true });
+        void navigate(event.detail.href, { replace: true });
       }}
     />
   );
