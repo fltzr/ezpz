@@ -7,16 +7,19 @@ import styles from './styles.module.scss';
 
 export const ErrorPage = () => {
   const { t } = useTranslation();
+  const errorTitle = t('error.routeErrorTitle');
+
   const error = useRouteError();
   const navigate = useNavigate();
 
   const isRouteError = isRouteErrorResponse(error);
-  const errorTitle = t('error.routeErrorTitle');
+
   const errorInfo = isRouteError
     ? error.status
     : error instanceof Error
       ? error.name
       : String(error);
+
   const errorMessage = isRouteError
     ? `${error.statusText} | ${error.data}`
     : error instanceof Error
@@ -34,7 +37,7 @@ export const ErrorPage = () => {
         footer={
           isRouteError && (
             <Box float='right'>
-              <Button variant='primary' iconName='undo' onClick={() => navigate(-1)}>
+              <Button variant='primary' iconName='undo' onClick={() => void navigate(-1)}>
                 {t('error.navigateBack')}
               </Button>
             </Box>
